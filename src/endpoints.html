@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Endpoints</title>
+  </head>
+  <body>
+    <h1>Box Database REST API Endpoints</h1>
+    <h2>Boxes</h2>
+    <ul>
+        <!-- GET /api/boxes - returns all boxes -->
+        <!-- GET /api/boxes/:id - returns a single box by id -->
+        <!-- POST /api/boxes - creates a new box -->
+        <!-- PUT /api/boxes/:id - updates a box -->
+        <!-- DELETE /api/boxes/:id - deletes a box -->
+        <!-- GET /api/boxes/filter/:size - returns boxes larger than the given size -->
+        <li><b>GET /api/boxes</b> - returns all boxes</li>
+        <li><b>GET /api/boxes/:id</b> - returns a single box by id</li>
+        <li><b>POST /api/boxes</b> - creates a new box</li>
+        <li><b>PUT /api/boxes/:id</b> - updates a box</li>
+        <li><b>DELETE /api/boxes/:id</b> - deletes a box</li>
+        <li><b>GET /api/boxes/filter/:size</b> - returns boxes larger than the given size</li>
+    </ul>
+
+    <h2>Wrappers</h2>
+    <!-- GET /api/wrappers - returns all wrappers
+    GET /api/wrappers/:id - returns a single wrapper by id
+    POST /api/wrappers - creates a new wrapper
+    PUT /api/wrappers/:id - updates a wrapper
+    DELETE /api/wrappers/:id - deletes a wrapper -->
+    <ul>
+        <li><b>GET /api/wrappers</b> - returns all wrappers</li>
+        <li><b>GET /api/wrappers/:id</b> - returns a single wrapper by id</li>
+        <li><b>POST /api/wrappers</b> - creates a new wrapper</li>
+        <li><b>PUT /api/wrappers/:id</b> - updates a wrapper</li>
+        <li><b>DELETE /api/wrappers/:id</b> - deletes a wrapper</li>
+    </ul>
+
+    <h2>Suppliers</h2>
+    <!-- GET /api/suppliers - returns all suppliers
+    GET /api/suppliers/:id - returns a single supplier by id
+    POST /api/suppliers - creates a new supplier
+    POST /api/suppliers/:id/:wrapperId - adds a wrapper to a supplier
+    PUT /api/suppliers - updates a supplier
+    DELETE /api/suppliers/:id - deletes a supplier -->
+    <ul>
+        <li><b>GET /api/suppliers</b> - returns all suppliers</li>
+        <li><b>GET /api/suppliers/:id</b> - returns a single supplier by id</li>
+        <li><b>POST /api/suppliers</b> - creates a new supplier</li>
+        <li><b>PUT /api/suppliers/:id/:wrapperId</b> - adds a wrapper to a supplier</li>
+        <li><b>PUT /api/suppliers</b> - updates a supplier </li>
+        <li><b>DELETE /api/suppliers/:id</b> - deletes a supplier</li>
+    </ul>
+
+    <h2>Wrapper Box Combos</h2>
+    <!-- GET /api/combos - returns all combos
+    GET /api/combos/:id - returns a single combo by id
+    POST /api/combos - creates a new combo
+    PUT /api/combos/:id - updates a combo
+    DELETE /api/combos/:id - deletes a combo -->
+    <ul>
+        <li><b>GET /api/combos</b> - returns all combos</li>
+        <li><b>GET /api/combos/:id</b> - returns a single combo by id</li>
+        <li><b>POST /api/combos</b> - creates a new combo</li>
+        <li><b>PUT /api/combos/:id</b> - updates a combo</li>
+        <li><b>DELETE /api/combos/:id</b> - deletes a combo</li>
+    </ul>
+
+    <h2>Stats</h2>
+    <!-- GET /api/stats - returns the average length of wrappers per supplier -->
+    <ul>
+        <li><b>GET /api/stats</b> - returns the average length of wrappers per supplier</li>
+    </ul>
+    </body>
+</html>

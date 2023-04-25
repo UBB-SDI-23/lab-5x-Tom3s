@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2023-03-30T13:43:45.439Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" etag="MDvH1A5bbW7XjYuAQ8p2" version="21.0.6" type="google">
+  <diagram name="Page-1" id="91Jtsgbv7L4JFyQvBjDE">
+    <mxGraphModel dx="2612" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-1" value="Box" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="140" y="180" width="180" height="138" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-2" value="&lt;div&gt;+length: number,&lt;/div&gt;&lt;div&gt;+width: number,&amp;nbsp;&lt;/div&gt;&lt;div&gt;+height: number,&amp;nbsp;&lt;/div&gt;&lt;div&gt;+material: string,&amp;nbsp;&lt;/div&gt;&lt;div&gt;+color: string,&lt;/div&gt;&lt;div&gt;+_id?: ObjectId&amp;nbsp;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-1">
+          <mxGeometry y="26" width="180" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-3" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-1">
+          <mxGeometry y="130" width="180" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-9" value="Wrapper" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="395" y="170" width="340" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-10" value="&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;+length: number,&lt;/div&gt;&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;+width: number,&lt;/div&gt;&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;+pattern: string,&lt;/div&gt;&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;+color: string,&lt;/div&gt;&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;+complementaryColor: string,&lt;/div&gt;&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;+_id?: ObjectId&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-9">
+          <mxGeometry y="26" width="340" height="114" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-11" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-9">
+          <mxGeometry y="140" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-12" value="+toComplexObject(obj: any, supplierId?: ObjectId): any&lt;br&gt;+toNestedObject(obj: any, supplier: Supplier): any" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-9">
+          <mxGeometry y="148" width="340" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-13" value="Supplier" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="370" width="290" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-14" value="&lt;div&gt;+name: string,&lt;/div&gt;&lt;div&gt;+address: string,&lt;/div&gt;&lt;div&gt;+phone: string,&lt;/div&gt;&lt;div&gt;+email: string,&lt;/div&gt;&lt;div&gt;+wrappers: string[],&lt;/div&gt;&lt;div&gt;+_id?: ObjectId&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-13">
+          <mxGeometry y="26" width="290" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-15" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-13">
+          <mxGeometry y="130" width="290" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-16" value="+toSimpleObject(s: any): any&lt;br&gt;+addWrapper(obj: any, wrapperId: string): Supplier" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-13">
+          <mxGeometry y="138" width="290" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-17" value="WrapperBoxCombo" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="390" width="350" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-18" value="&lt;div&gt;+wrapperId: string,&lt;/div&gt;&lt;div&gt;+boxId: string,&lt;/div&gt;&lt;div&gt;+name: string,&lt;/div&gt;&lt;div&gt;+price: number,&lt;/div&gt;&lt;div&gt;+_id?: ObjectId,&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-17">
+          <mxGeometry y="26" width="350" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-19" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-17">
+          <mxGeometry y="110" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-20" value="+toComplexObject(obj: any, wrapper: Wrapper, box: Box): any" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-17">
+          <mxGeometry y="118" width="350" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-21" value="Entities" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry y="140" width="830" height="460" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-22" value="BoxRepository" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-370" y="117" width="310" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-23" value="-boxes: mongoDB.Collection" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-22">
+          <mxGeometry y="26" width="310" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-24" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-22">
+          <mxGeometry y="52" width="310" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-25" value="+getAll(): Promise&amp;lt;Box[]&amp;gt;&lt;br&gt;+getById(id: ObjectId): Promise&amp;lt;Box | undefined&amp;gt;&amp;nbsp;&lt;br&gt;+add(box: Box): void&lt;br&gt;+update(box: Box): void&lt;br&gt;+delete(id: ObjectId): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-22">
+          <mxGeometry y="60" width="310" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-26" value="WrapperRepository" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-370" y="295" width="310" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-27" value="-wrappers: mongoDB.Collection" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-26">
+          <mxGeometry y="26" width="310" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-28" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-26">
+          <mxGeometry y="52" width="310" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-29" value="&lt;div&gt;+getAll(): Promise&amp;lt;Wrapper[]&amp;gt;&lt;/div&gt;&lt;div&gt;+getById(id: ObjectId): Promise&amp;lt;Wrapper | undefined&amp;gt;&amp;nbsp;&lt;/div&gt;&lt;div&gt;+add(wrapper: Wrapper): void&lt;/div&gt;&lt;div&gt;+update(wrapper: Wrapper): void&lt;/div&gt;&lt;div&gt;+delete(id: ObjectId): void&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-26">
+          <mxGeometry y="60" width="310" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-30" value="SupplierRepository" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-770" y="117" width="390" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-31" value="-suppliers: mongoDB.Collection" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-30">
+          <mxGeometry y="26" width="390" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-32" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-30">
+          <mxGeometry y="52" width="390" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-33" value="&lt;div&gt;+getAll(): Promise&amp;lt;Supplier[]&amp;gt;&lt;/div&gt;&lt;div&gt;+getById(id: ObjectId): Promise&amp;lt;Supplier | undefined&amp;gt;&amp;nbsp;&lt;/div&gt;&lt;div&gt;+add(supplier: Supplier): void&lt;/div&gt;&lt;div&gt;+update(supplier: Supplier): void&lt;/div&gt;&lt;div&gt;+delete(id: ObjectId): void&lt;/div&gt;&lt;div&gt;+addWrapper(supplierId: ObjectId, wrapperId: string): Promise&amp;lt;void&amp;gt;&amp;nbsp;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-30">
+          <mxGeometry y="60" width="390" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-38" value="WrapperBoxComboRepository" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-770" y="318" width="370" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-39" value="-combos: mongoDB.Collection" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-38">
+          <mxGeometry y="26" width="370" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-40" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-38">
+          <mxGeometry y="52" width="370" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-41" value="&lt;div&gt;+getAll(): Promise&amp;lt;WrapperBoxCombo[]&amp;gt;&lt;/div&gt;&lt;div&gt;+getById(id: ObjectId): Promise&amp;lt;WrapperBoxCombo | undefined&amp;gt;&amp;nbsp;&lt;/div&gt;&lt;div&gt;+add(combos: WrapperBoxCombo): void&lt;/div&gt;&lt;div&gt;+update(combos: WrapperBoxCombo): void&lt;/div&gt;&lt;div&gt;+delete(id: ObjectId): void&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-38">
+          <mxGeometry y="60" width="370" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-42" value="Repositories" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=120;height=30;" vertex="1" parent="1">
+          <mxGeometry x="-830" y="80" width="800" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-43" value="Service" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-660" y="710" width="370" height="456" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-44" value="&lt;div&gt;-boxRepository: BoxRepository;&lt;/div&gt;&lt;div&gt;-wrapperRepository: WrapperRepository;&lt;/div&gt;&lt;div&gt;-supplierRepository: SupplierRepository;&lt;/div&gt;&lt;div&gt;-comboRepository: WrapperBoxComboRepository;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-43">
+          <mxGeometry y="26" width="370" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-45" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-43">
+          <mxGeometry y="98" width="370" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-46" value="+getAllBoxes(): Promise&amp;lt;Box[]&amp;gt;&amp;nbsp;&lt;br&gt;+getBoxById(id: string): Promise&amp;lt;Box | undefined&amp;gt;&lt;br&gt;+addBox(box: Box): void&amp;nbsp;&lt;br&gt;+updateBox(box: Box): void&lt;br&gt;+deleteBox(id: string): void&lt;br&gt;+getAllWrappers(): Promise&amp;lt;Wrapper[]&amp;gt;&amp;nbsp;&lt;br&gt;+getWrapperById(id: string): Promise&amp;lt;Wrapper | undefined&amp;gt;&lt;br&gt;+addWrapper(wrapper: Wrapper): void&lt;br&gt;+updateWrapper(wrapper: Wrapper): void&lt;br&gt;+deleteWrapper(id: string): void&lt;br&gt;+getAllSuppliers(): Promise&amp;lt;Supplier[]&amp;gt;&lt;br&gt;+getSupplierById(id: string): Promise&amp;lt; Supplier | undefined&amp;gt;&lt;br&gt;+addSupplier(supplier: Supplier): void&lt;br&gt;+updateSupplier(supplier: Supplier): void&lt;br&gt;+deleteSupplier(id: string): void&lt;br&gt;+addWrapperToSupplier(supplierId: string, wrapperId: string): void&lt;br&gt;+addCombo(combo: WrapperBoxCombo): void&lt;br&gt;+getAllCombos(): Promise&amp;lt;WrapperBoxCombo[]&amp;gt;&lt;br&gt;+getComboById(id: string): Promise&amp;lt;WrapperBoxCombo | undefined&amp;gt;&lt;br&gt;+updateCombo(combo: WrapperBoxCombo): void&lt;br&gt;+deleteCombo(id: string): void&lt;br&gt;+getBoxesLargerThan(size: number): Promise&amp;lt;Box[]&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-43">
+          <mxGeometry y="106" width="370" height="350" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-47" value="Use" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;" edge="1" parent="1" source="fYmRdSrOM4PhN_Gn8b08-33">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="-810" y="610" as="sourcePoint" />
+            <mxPoint x="-660" y="770" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-800" y="240" />
+              <mxPoint x="-800" y="772" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-50" value="Use" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;entryX=-0.001;entryY=0.241;entryDx=0;entryDy=0;entryPerimeter=0;exitX=-0.003;exitY=0.171;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="fYmRdSrOM4PhN_Gn8b08-41" target="fYmRdSrOM4PhN_Gn8b08-44">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="-760" y="250" as="sourcePoint" />
+            <mxPoint x="-651" y="761" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-790" y="390" />
+              <mxPoint x="-790" y="753" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-51" value="Use" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="fYmRdSrOM4PhN_Gn8b08-25" target="fYmRdSrOM4PhN_Gn8b08-44">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="-270" y="640" as="sourcePoint" />
+            <mxPoint x="-110" y="640" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-40" y="222" />
+              <mxPoint x="-40" y="770" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-52" value="Use" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;entryX=1;entryY=0.285;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.53;exitY=1.035;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="fYmRdSrOM4PhN_Gn8b08-29" target="fYmRdSrOM4PhN_Gn8b08-44">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="-320" y="570" as="sourcePoint" />
+            <mxPoint x="-160" y="570" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-206" y="757" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-54" value="App" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="720" width="380" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-55" value="&lt;div&gt;GET /api/boxes - returns all boxes&lt;/div&gt;&lt;div&gt;GET /api/boxes/:id - returns a single box by id&lt;/div&gt;&lt;div&gt;POST /api/boxes - creates a new box&lt;/div&gt;&lt;div&gt;PUT /api/boxes/:id - updates a box&lt;/div&gt;&lt;div&gt;DELETE /api/boxes/:id - deletes a box&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;GET /api/boxes/filter/:size - returns boxes larger than the given size&lt;/div&gt;&lt;div&gt;GET /api/wrappers - returns all wrappers&lt;/div&gt;&lt;div&gt;GET /api/wrappers/:id - returns a single wrapper by id&lt;/div&gt;&lt;div&gt;POST /api/wrappers - creates a new wrapper&lt;/div&gt;&lt;div&gt;PUT /api/wrappers/:id - updates a wrapper&lt;/div&gt;&lt;div&gt;DELETE /api/wrappers/:id - deletes a wrapper&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;GET /api/suppliers - returns all suppliers&lt;/div&gt;&lt;div&gt;GET /api/suppliers/:id - returns a single supplier by id&lt;/div&gt;&lt;div&gt;POST /api/suppliers - creates a new supplier&lt;/div&gt;&lt;div&gt;PUT /api/suppliers/:id/:wrapperId - adds a wrapper to a supplier&lt;/div&gt;&lt;div&gt;PUT /api/suppliers - updates a supplier&lt;/div&gt;&lt;div&gt;DELETE /api/suppliers/:id - deletes a supplier&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;GET /api/combos - returns all combos&lt;/div&gt;&lt;div&gt;GET /api/combos/:id - returns a single combo by id&lt;/div&gt;&lt;div&gt;POST /api/combos - creates a new combo&lt;/div&gt;&lt;div&gt;PUT /api/combos/:id - updates a combo&lt;/div&gt;&lt;div&gt;DELETE /api/combos/:id - deletes a combo&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="fYmRdSrOM4PhN_Gn8b08-54">
+          <mxGeometry y="26" width="380" height="394" as="geometry" />
+        </mxCell>
+        <mxCell id="fYmRdSrOM4PhN_Gn8b08-58" value="Use" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;entryX=1;entryY=0.392;entryDx=0;entryDy=0;entryPerimeter=0;exitX=-0.009;exitY=0.529;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="fYmRdSrOM4PhN_Gn8b08-55" target="fYmRdSrOM4PhN_Gn8b08-46">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="-100" y="950" as="sourcePoint" />
+            <mxPoint x="60" y="950" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

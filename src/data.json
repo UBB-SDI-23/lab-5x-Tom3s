@@ -1,0 +1,136 @@
+{
+  "boxes": [
+    {
+      "id": 2,
+      "length": 42,
+      "width": 42,
+      "height": 42,
+      "material": "carbon",
+      "color": "black"
+    },
+    {
+      "id": 3,
+      "length": 15,
+      "width": 15,
+      "height": 15,
+      "material": "cardboard",
+      "color": "blue"
+    },
+    {
+      "id": 4,
+      "length": 8,
+      "width": 8,
+      "height": 8,
+      "material": "wood",
+      "color": "brown"
+    },
+    {
+      "id": 5,
+      "length": 20,
+      "width": 16,
+      "height": 16,
+      "material": "cardboard",
+      "color": "turqoise"
+    },
+    {
+      "id": 6,
+      "length": 10,
+      "width": 10,
+      "height": 10,
+      "material": "cardboard",
+      "color": "turqoise"
+    },
+    {
+      "id": 9,
+      "length": 5,
+      "width": 5,
+      "height": 5,
+      "material": "wood",
+      "color": "green"
+    },
+    {
+      "id": 10,
+      "length": 100,
+      "width": 69,
+      "height": 420,
+      "material": "waffle",
+      "color": "gyöngyházfehér"
+    }
+  ],
+  "wrappers": [
+    {
+      "id": 1,
+      "length": 10,
+      "width": 5,
+      "pattern": "striped",
+      "color": "blue",
+      "complementaryColor": "orange"
+    },
+    {
+      "id": 2,
+      "length": 15,
+      "width": 8,
+      "pattern": "polka dot",
+      "color": "red",
+      "complementaryColor": "green"
+    },
+    {
+      "id": 3,
+      "length": 20,
+      "width": 12,
+      "pattern": "chevron",
+      "color": "purple",
+      "complementaryColor": "yellow"
+    },
+    {
+      "id": 4,
+      "length": 7,
+      "width": 3,
+      "pattern": "solid",
+      "color": "pink",
+      "complementaryColor": "green"
+    },
+    {
+      "id": 5,
+      "length": 12,
+      "width": 6,
+      "pattern": "herringbone",
+      "color": "black",
+      "complementaryColor": "white"
+    }
+  ],
+  "suppliers": [
+    {
+      "id": 1,
+      "name": "ABC Suppliers",
+      "address": "123 Main St, Anytown USA",
+      "phone": "555-1234",
+      "email": "abc@suppliers.com",
+      "wrappers": [
+        1
+      ]
+    },
+    {
+      "id": 2,
+      "name": "XYZ Traders",
+      "address": "456 High St, Somewhere USA",
+      "phone": "555-5678",
+      "email": "xyz@traders.com",
+      "wrappers": [
+        2
+      ]
+    },
+    {
+      "id": 3,
+      "name": "123 Distributors",
+      "address": "789 Low St, Nowhere USA",
+      "phone": "555-9012",
+      "email": "123@distributors.com",
+      "wrappers": [
+        3,
+        4,
+        5
+      ]
+    }
+  ]
+}

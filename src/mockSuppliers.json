@@ -1,0 +1,43 @@
+[
+    {
+        "_id": "64000000abcdef0000140000",
+        "name": "supplier 1",
+        "address": "address",
+        "phone": "555-0000",
+        "email": "asd@asd.com",
+        "wrappers": [
+            "64000000abcdef0000130000",
+            "64000000abcdef0000130001"
+        ]
+    },
+    {
+        "_id": "64000000abcdef0000140001",
+        "name": "supplier 2",
+        "address": "address",
+        "phone": "555-0001",
+        "email": "asd@asd.com",
+        "wrappers": [
+            "64000000abcdef0000130002",
+            "64000000abcdef0000130003",
+            "64000000abcdef0000130004"
+        ]
+    },
+    {
+        "_id": "64000000abcdef0000140002",
+        "name": "supplier 3",
+        "address": "address",
+        "phone": "555-0002",
+        "email": "asd@asd.com",
+        "wrappers": [
+            "64000000abcdef0000130005"
+        ]
+    },
+    {
+        "_id": "64000000abcdef0000140003",
+        "name": "supplier 4",
+        "address": "address",
+        "phone": "555-0003",
+        "email": "asd@asd.com",
+        "wrappers": []
+    }
+]
