@@ -5,7 +5,7 @@
     "title": "REST API",
     "description": "API Documentation for Boxes app"
   },
-  "host": "localhost:3000",
+  "host": "13.48.137.148:80",
   "basePath": "/",
   "schemes": [
     "http"
