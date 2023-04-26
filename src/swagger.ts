@@ -19,7 +19,8 @@ import swaggerUi from 'swagger-ui-express';
 //   apis: ['./src/routes.ts'],
 // };
 
-const swaggerFile = require('./swagger_output.json');
+// const swaggerFile = require('./swagger_output.json');
+import swaggerFile from './swagger_output.json';
 
 import { Express, Request, Response } from 'express';
 
