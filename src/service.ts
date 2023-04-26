@@ -231,7 +231,7 @@ class Service {
 
     async getBoxesLargerThan(size: number): Promise<Box[]> {
         const boxes = await this.boxRepository.getAll();
-        return boxes.filter(b => Math.max(b.length, b.width, b.height) > size);
+        return boxes.filter(b => Math.min(b.length, b.width, b.height) > size);
     }
 
     async getAverageWrapperLengths(): Promise<AverageWrapperLength[]> {
