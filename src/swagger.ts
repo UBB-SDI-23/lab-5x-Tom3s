@@ -1,38 +1,60 @@
 import swaggerUi from 'swagger-ui-express';
-
-// const swaggerAutogen = require('swagger-autogen')()
-
-// const outputFile = './swagger_output.json'
-// const endpointsFiles = ['./lib/routes.js']
-
-// swaggerAutogen(outputFile, endpointsFiles)
-
-// const options: swaggerJsdoc.Options = {
-//   definition: {
-//     openapi: '3.0.0',
-//     info: {
-//       title: 'Box API Docs',
-//       version: '1.0.0',
-//       description: 'API Documentation for Boxes app',
-//     }
-//   },
-//   apis: ['./src/routes.ts'],
-// };
-
-// const swaggerFile = require('./swagger_output.json');
-import swaggerFile from './swagger_output.json';
-
 import { Express, Request, Response } from 'express';
 
-function setupSwagger(app: Express, port: number ) {
-  // Swagger UI
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+function initSwagger(app: Express, port: number) {
+    const swaggerAutogen = require('swagger-autogen')()
 
-  // Docs in JSON format
-  app.get('/api-docs.json', (req: Request, res: Response) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.send(swaggerFile);
-  });
+    const outputFile = './swagger_output.json'
+    const endpointsFiles = ['./src/routes.ts']
+
+    const apiDocs = {
+        swagger: '3.0',
+        info: {
+            title: 'API Documentation for Boxes app',
+            description: 'Description',
+        },
+        host: 'localhost:80',
+        schemes: ['http'],
+    };
+
+    swaggerAutogen(outputFile, endpointsFiles, apiDocs)
+}
+
+// import swaggerFile from './swagger_output.json';
+import fs from 'fs';
+
+function applySwagger(app: Express, port: number) {
+    var swaggerFile = JSON.parse(fs.readFileSync('./swagger_output.json', 'utf-8'))
+    // Swagger UI
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
+    // Docs in JSON format
+    app.get('/api-docs.json', (req: Request, res: Response) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(swaggerFile);
+    });
+}
+
+function setupSwagger(app: Express, port: number) {
+    initSwagger(app, port);
+    // applySwagger(app, port);
+    // try applying swagger every second until it works
+
+    var repeat: NodeJS.Timeout;
+
+    var tryApplySwagger = function () {
+        try {
+            applySwagger(app, port);
+            console.log('Swagger applied');
+            clearInterval(repeat);
+          } catch (error) {
+            console.log('./swagger_output.json not yet ready');
+        }
+    }
+
+    var repeat = setInterval(() => {
+        tryApplySwagger();
+    }, 1000);
 }
 
 export default setupSwagger;
