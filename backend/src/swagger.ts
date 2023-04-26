@@ -24,7 +24,7 @@ function initSwagger(app: Express, port: number) {
 import fs from 'fs';
 
 function applySwagger(app: Express, port: number) {
-    var swaggerFile = JSON.parse(fs.readFileSync('./swagger_output.json', 'utf-8'))
+    var swaggerFile = JSON.parse(fs.readFileSync('./src/swagger_output.json', 'utf-8'))
     // Swagger UI
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 

@@ -1,0 +1,106 @@
+.display-list {
+	/* width: 50%; */
+	height: 85vh;
+	overflow-y: scroll;
+}
+
+.display-list::-webkit-scrollbar {
+	display: none;
+}
+
+.list-element {
+	border-radius: 10px;
+	background-color: #bbc;
+	/* padding: 10px; */
+  	margin: 10px;
+	border: 3px solid black;
+	cursor: pointer;
+}
+
+.list-element-top {
+	display: flex;
+	/* justify-content: space-between; */
+	background-color: #556;
+	border-top-right-radius: 6px;
+	border-top-left-radius: 6px;
+
+	
+}
+
+.list-element-id {
+	flex-basis: 100%;
+	margin: 10px;
+	color: white;
+	text-shadow: 0px 0px 8px black;
+}
+
+.hr {
+	border: 0;
+	border-top: 1px solid #ccc;
+	margin: 0;
+	padding: 0;
+}
+
+.list-element-bottom {
+	display: flex;
+	flex-direction: row;
+	/* justify-content: space-between; */
+}
+
+.list-element-detail {
+	flex-basis: 33%;
+	margin-left: 10px;
+	color: #112;
+	margin: 5px;
+	padding: 10px;
+	background-color: #fff5;
+	border-radius: 5px;
+	/* text-shadow: 0px 0px 8px #white; */
+}
+
+.list-element-edit {
+	flex-basis: 10%;
+	margin-left: 10px;
+	background-color: darkslategrey;
+	margin: 5px;
+	padding: 10px;
+	border-radius: 5px;
+	color: white;
+	font-weight: bold;
+	font-size: 20px;
+	transition: 0.1s;
+	/* text-shadow: 0px 0px 8px #white; */
+}
+
+.list-element-delete {
+	flex-basis: 10%;
+	margin-left: 10px;
+	background-color: darkred;
+	margin: 5px;
+	padding: 10px;
+	border-radius: 5px;
+	color: white;
+	font-weight: bold;
+	font-size: 20px;
+	transition: 0.1s;
+	/* text-shadow: 0px 0px 8px #white; */
+}
+
+.list-element-delete:hover {
+	background-color: red;
+	color: #000;
+}
+
+.list-element-edit:hover {
+	background-color: slategray;
+	color: #000;
+}
+
+
+
+.display-list-title {
+	background: linear-gradient(90deg, #789 10%, #444 90%);	
+	margin: 0;
+	padding: 10px;
+	padding-left: 100px;
+}
