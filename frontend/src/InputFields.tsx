@@ -28,7 +28,10 @@ const InputFields = () => {
 
         fetch(new apiAccess().boxes().url, requestOptions)
             .then(response => response.json())
-            .then(data => console.log(data));
+            .then(data => {
+                console.log(data);
+                document.getElementById("refresh-button")!.click();
+            });
     }
 
     function updateButtonClicked() {
@@ -55,7 +58,10 @@ const InputFields = () => {
 
         fetch(new apiAccess().boxes().id(id.innerHTML).url, requestOptions)
             .then(response => response.json())
-            .then(data => console.log(data));
+            .then(data => {
+                console.log(data);
+                document.getElementById("refresh-button")!.click();
+            });
     }
 
     function deleteButtonClicked() {
@@ -70,7 +76,10 @@ const InputFields = () => {
 
         fetch(new apiAccess().boxes().id(id.innerHTML).url, requestOptions)
             .then(response => response.json())
-            .then(data => console.log(data));
+            .then(data => {
+                console.log(data);
+                document.getElementById("refresh-button")!.click();
+            });
     }
 
     return (
@@ -78,11 +87,11 @@ const InputFields = () => {
             <h2 className="input-field-name">Box Details</h2>
             <div className="text-fields">
                 ID: <i id="input-field-id"></i>
-                Width <textarea className="input-field" name="width" id="input-box-width" cols={30} rows={1} defaultValue={10}/>
-                Length <textarea className="input-field" name="length" id="input-box-length" cols={30} rows={1} defaultValue={10}/>
-                Height <textarea className="input-field" name="height" id="input-box-height" cols={30} rows={1} defaultValue={10}/>
-                Material <textarea className="input-field" name="material" id="input-box-material" cols={30} rows={1} />
-                Color <textarea className="input-field" name="color" id="input-box-color" cols={30} rows={1} />
+                Width <textarea className="input-field" name="width" id="input-box-width" cols={30} rows={1} defaultValue={10} placeholder={"Width"}/>
+                Length <textarea className="input-field" name="length" id="input-box-length" cols={30} rows={1} defaultValue={10} placeholder={"Length"} />
+                Height <textarea className="input-field" name="height" id="input-box-height" cols={30} rows={1} defaultValue={10} placeholder={"Height"}/>
+                Material <textarea className="input-field" name="material" id="input-box-material" cols={30} rows={1} placeholder={"Material"}/>
+                Color <textarea className="input-field" name="color" id="input-box-color" cols={30} rows={1} placeholder={"Color"}/>
             </div>
             <div className="field-buttons">
                 <button className="field-button" id="add-box-button" onClick={addBoxButtonClicked}>Create New</button>

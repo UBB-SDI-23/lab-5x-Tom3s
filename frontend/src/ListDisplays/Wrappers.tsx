@@ -6,8 +6,18 @@ import listElementFromEnity from './ListElement';
 function DisplayWrappers() {
   const [wrappers, setWrappers] = React.useState([]);
 
+
   useEffect(() => {
-    // setWrappers();
+    const emptyWrapper = {
+      _id: "",
+      length: 0,
+      width: 0,
+      pattern: "",
+      color: "",
+      complementaryColor: ""
+    };
+    const emptyWrapperArray: any = [emptyWrapper, emptyWrapper, emptyWrapper, emptyWrapper, emptyWrapper, emptyWrapper];
+    setWrappers(emptyWrapperArray);
     fetch(new apiAccess().wrappers().url)
       .then(response => response.json())
       .then(data => setWrappers(data));

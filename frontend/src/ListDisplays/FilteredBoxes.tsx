@@ -4,7 +4,7 @@ import { apiAccess } from '../models/endpoints';
 import { Box } from '../models/entities';
 import listElementFromEnity from './ListElement';
 
-function DisplayBoxes() {
+function DisplayFilteredBoxes() {
   const [boxes, setBoxes] = React.useState([]);
 
   useEffect(() => {
@@ -18,7 +18,14 @@ function DisplayBoxes() {
     };
     const emptyBoxArray: any = [emptyBox, emptyBox, emptyBox, emptyBox, emptyBox, emptyBox];
     setBoxes(emptyBoxArray);
-    fetch(new apiAccess().boxes().url)
+    var url = new apiAccess().boxes().url + "/filter/";
+    var filter = (document.getElementById("filter-textarea") as HTMLTextAreaElement).value;
+    if (filter !== "") {
+      url += filter;
+    } else {
+      url += "0";
+    }
+    fetch(url)
       .then(response => response.json())
       .then(data => setBoxes(data));
   }, []);
@@ -31,4 +38,4 @@ function DisplayBoxes() {
   );
 }
 
-export default DisplayBoxes;
+export default DisplayFilteredBoxes;

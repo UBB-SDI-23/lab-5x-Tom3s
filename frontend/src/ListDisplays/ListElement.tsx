@@ -90,6 +90,8 @@ function listElementFromEnity(entity: Box | Wrapper | Supplier | WrapperBoxCombo
         fetch(new apiAccess().boxes().id(id).url, requestOptions)
             .then(response => response.json())
             .then(data => console.log(data));
+        
+        document.getElementById("refresh-button")!.click();
     }
 
 
