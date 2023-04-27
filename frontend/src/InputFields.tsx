@@ -10,7 +10,7 @@ const InputFields = () => {
         const height = document.getElementById("input-box-height") as HTMLTextAreaElement;
         const material = document.getElementById("input-box-material") as HTMLTextAreaElement;
         const color = document.getElementById("input-box-color") as HTMLTextAreaElement;
-        const id = document.getElementById("input-field-id") as HTMLTextAreaElement;
+        // const id = document.getElementById("input-field-id") as HTMLTextAreaElement;
         const box = {
             // _id: id.innerHTML,
             width: width.value,

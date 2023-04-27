@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import logo from './logo.svg';
 import './Boxes.css';
 import { apiAccess } from '../models/endpoints';
 import { Box } from '../models/entities';

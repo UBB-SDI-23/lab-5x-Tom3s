@@ -8,7 +8,8 @@ import InputFields from "./InputFields";
 const App = () => {
     
     const [list, setList] = useState<JSX.Element>(<DisplayBoxes />);
-    const [inputFields, setInputFields] = useState<JSX.Element>(<InputFields />);
+    // const [inputFields, setInputFields] = useState<JSX.Element>(<InputFields />);
+    const [inputFields] = useState<JSX.Element>(<InputFields />);
     const [title, setTitle] = useState<string>("Box List");
     // setList(<DisplayBoxes />);
 
