@@ -38,11 +38,11 @@ import { BoxRepository, WrapperRepository, SupplierRepository, WrapperBoxComboRe
 const app = express();
 //     ^?
 
-// // setup CORS
-// const cors = require('cors');
-// app.use(cors({
-//     origin: '*'
-// }));
+// setup CORS
+const cors = require('cors');
+app.use(cors({
+    origin: '*'
+}));
 
 const port = 80;
 app.use(express.json());
