@@ -44,7 +44,7 @@ const app = express();
 //     origin: '*'
 // }));
 
-const port = 80;
+const port = 443;
 app.use(express.json());
 
 const filePath = join(__dirname, 'data.json');
