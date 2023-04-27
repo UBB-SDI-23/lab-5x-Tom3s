@@ -9,14 +9,14 @@ function DisplayBoxes() {
   const [boxes, setBoxes] = React.useState([]);
 
   useEffect(() => {
-    fetch(new apiAccess().boxes())
+    fetch(new apiAccess().boxes().url)
       .then(response => response.json())
       .then(data => setBoxes(data));
   }, []);
   return (
     <div className="display-list-div">
 			<div className="display-list">
-        {boxes.map((box: Box) => listElementFromEnity(box, new apiAccess().boxes()))}
+        {boxes.map((box: Box) => listElementFromEnity(box, new apiAccess().boxes().url))}
       </div>
     </div>
   );

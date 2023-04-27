@@ -8,7 +8,7 @@ function DisplayWrappers() {
 
   useEffect(() => {
     // setWrappers();
-    fetch(new apiAccess().wrappers())
+    fetch(new apiAccess().wrappers().url)
       .then(response => response.json())
       .then(data => setWrappers(data));
   }, []);

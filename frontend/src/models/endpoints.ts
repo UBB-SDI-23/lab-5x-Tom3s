@@ -4,24 +4,32 @@ export class apiAccess {
         this.url = "http://ec2-13-48-137-148.eu-north-1.compute.amazonaws.com/api";
     }
 
-    boxes(): string {
-        return this.url + "/boxes";
+    boxes(): apiAccess {
+        this.url += "/boxes";
+        return this;
     }
 
-    wrappers(): string {
-        return this.url + "/wrappers";
+    wrappers(): apiAccess {
+        this.url += "/wrappers";
+        return this;
+
     }
 
-    suppliers(): string {
-        return this.url + "/suppliers";
+    suppliers(): apiAccess {
+        this.url += "/suppliers";
+        return this;
+
     }
 
-    wrapperBoxCombos(): string {
-        return this.url + "/wrapperBoxCombos";
+    wrapperBoxCombos(): apiAccess {
+        this.url += "/wrapperBoxCombos";
+        return this;
+
     }
 
-    id(id: string): string {
-        return "/" + id;
+    id(id: string): apiAccess {
+        this.url += "/" + id;
+        return this;
     }
 
 }
