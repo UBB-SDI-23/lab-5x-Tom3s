@@ -13,7 +13,7 @@ function initSwagger(app: Express, port: number) {
             title: 'API Documentation for Boxes app',
             description: 'Description',
         },
-        host: 'localhost:80',
+        host: '13.48.137.148:80',
         schemes: ['http'],
     };
 
