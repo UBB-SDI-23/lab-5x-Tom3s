@@ -1,7 +1,7 @@
 export class apiAccess {
     public url: string;
     constructor() {
-        this.url = "http://ec2-13-48-137-148.eu-north-1.compute.amazonaws.com/api";
+        this.url = "http://34.147.67.182/api";
     }
 
     boxes(): apiAccess {

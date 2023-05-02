@@ -13,9 +13,9 @@ const InputFields = () => {
         // const id = document.getElementById("input-field-id") as HTMLTextAreaElement;
         const box = {
             // _id: id.innerHTML,
-            width: width.value,
-            length: length.value,
-            height: height.value,
+            width: parseInt(width.value),
+            length: parseInt(length.value),
+            height: parseInt(height.value),
             material: material.value,
             color: color.value
         }
@@ -43,9 +43,9 @@ const InputFields = () => {
         const id = document.getElementById("input-field-id") as HTMLTextAreaElement;
         const box = {
             // _id: id.innerHTML,
-            width: width.value,
-            length: length.value,
-            height: height.value,
+            width: parseInt(width.value),
+            length: parseInt(length.value),
+            height: parseInt(height.value),
             material: material.value,
             color: color.value
         }
