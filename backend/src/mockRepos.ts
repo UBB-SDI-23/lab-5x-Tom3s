@@ -26,6 +26,13 @@ class MockBoxRepository implements IBoxRepository {
     getAll(): Promise<Box[]>{
         return Promise.resolve(this.boxes);
     }
+
+    getPage(page: number, pageLength: number): Promise<Box[]>{
+        const startIndex = (page - 1) * pageLength;
+        const endIndex = startIndex + pageLength;
+        return Promise.resolve(this.boxes.slice(startIndex, endIndex));
+    }
+
     getById(id: ObjectId): Promise<Box | undefined>{
         return Promise.resolve(this.boxes.find(b => b._id === id));
     }
@@ -69,6 +76,15 @@ class MockWrapperRepository implements IWrapperRepository {
             resolve(this.wrappers);
         });
     }
+
+    getPage(page: number, pageLength: number): Promise<Wrapper[]>{
+        const startIndex = (page - 1) * pageLength;
+        const endIndex = startIndex + pageLength;
+        return new Promise((resolve, reject) => {
+            resolve(this.wrappers.slice(startIndex, endIndex));
+        });
+    }
+
     getById(id: ObjectId): Promise<Wrapper | undefined>{
         return new Promise((resolve, reject) => {
             resolve(this.wrappers.find(w => w._id === id));
@@ -112,6 +128,15 @@ class MockSupplierRepository implements ISupplierRepository {
             resolve(this.suppliers);
         });
     }
+
+    getPage(page: number, pageLength: number): Promise<Supplier[]>{
+        const startIndex = (page - 1) * pageLength;
+        const endIndex = startIndex + pageLength;
+        return new Promise((resolve, reject) => {
+            resolve(this.suppliers.slice(startIndex, endIndex));
+        });
+    }
+
     getById(id: ObjectId): Promise<Supplier | undefined>{
         return new Promise((resolve, reject) => {
             resolve(this.suppliers.find(s => s._id === id));
@@ -163,6 +188,15 @@ class MockWrapperBoxComboRepository implements IWrapperBoxComboRepository {
             resolve(this.combos);
         });
     }
+
+    getPage(page: number, pageLength: number): Promise<WrapperBoxCombo[]>{
+        const startIndex = (page - 1) * pageLength;
+        const endIndex = startIndex + pageLength;
+        return new Promise((resolve, reject) => {
+            resolve(this.combos.slice(startIndex, endIndex));
+        });
+    }
+    
 
     getById(id: ObjectId): Promise<WrapperBoxCombo | undefined>{
         return new Promise((resolve, reject) => {

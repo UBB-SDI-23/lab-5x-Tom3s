@@ -14,6 +14,8 @@ class Service {
     private supplierRepository: ISupplierRepository;
     private comboRepository: IWrapperBoxComboRepository;
 
+    private defaultPageLength: number = 15;
+
     constructor(boxRepo?: IBoxRepository, wrapperRepo?: IWrapperRepository, supplierRepo?: ISupplierRepository, comboRepo?: IWrapperBoxComboRepository) {        
         if (!boxRepo || !wrapperRepo || !supplierRepo || !comboRepo) {
             throw new Error("Error: Missing repositories");
@@ -191,8 +193,8 @@ class Service {
 
     async getAllCombos(): Promise<WrapperBoxCombo[]> {
         const combos = await this.comboRepository.getAll();
-        const boxes = await this.boxRepository.getAll();
-        const wrappers = await this.wrapperRepository.getAll();
+        // const boxes = await this.boxRepository.getAll();
+        // const wrappers = await this.wrapperRepository.getAll();
 
         return combos;
     }
@@ -227,6 +229,23 @@ class Service {
 
     deleteCombo(id: string): void {
         this.comboRepository.delete(new ObjectId(id));
+    }
+
+    
+    async getPageOfBoxes(page: number): Promise<Box[]> {
+        return this.boxRepository.getPage(page, this.defaultPageLength);
+    }
+
+    async getPageOfWrappers(page: number): Promise<Wrapper[]> {
+        return this.wrapperRepository.getPage(page, this.defaultPageLength);
+    }
+
+    async getPageOfSuppliers(page: number): Promise<Supplier[]> {
+        return this.supplierRepository.getPage(page, this.defaultPageLength);
+    }
+
+    async getPageOfCombos(page: number): Promise<WrapperBoxCombo[]> {
+        return this.comboRepository.getPage(page, this.defaultPageLength);
     }
 
     async getBoxesLargerThan(size: number): Promise<Box[]> {

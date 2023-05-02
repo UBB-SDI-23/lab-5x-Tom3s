@@ -6,6 +6,7 @@ import { Box, Wrapper, Supplier, WrapperBoxCombo } from "./entities";
 
 interface IBoxRepository {
     getAll(): Promise<Box[]>;
+    getPage(page: number, size: number): Promise<Box[]>;
     getById(id: ObjectId): Promise<Box | undefined>;
     add(box: Box): void;
     addBulk(boxes: Box[]): void;
@@ -22,7 +23,13 @@ class BoxRepository implements IBoxRepository {
 
     async getAll(): Promise<Box[]> {
         const response = (this.boxes.find({}).toArray()) as unknown;
-        console.log(response);
+        // console.log(response);
+        return response as Promise<Box[]>;
+    }
+
+    async getPage(page: number, size: number): Promise<Box[]> {
+        const response = (this.boxes.aggregate([ {$skip: page * size}, {$limit: size} ])).toArray() as unknown;
+        // console.log(response);
         return response as Promise<Box[]>;
     }
     
@@ -54,6 +61,7 @@ class BoxRepository implements IBoxRepository {
 
 interface IWrapperRepository {
     getAll(): Promise<Wrapper[]>;
+    getPage(page: number, size: number): Promise<Wrapper[]>;
     getById(id: ObjectId): Promise<Wrapper | undefined>;
     add(wrapper: Wrapper): void;
     update(wrapper: Wrapper): void;
@@ -69,6 +77,12 @@ class WrapperRepository implements IWrapperRepository {
 
     async getAll(): Promise<Wrapper[]> {
         const response = (this.wrappers.find({}).toArray()) as unknown;
+        // console.log(await response);
+        return response as Promise<Wrapper[]>;
+    }
+
+    async getPage(page: number, size: number): Promise<Wrapper[]> {
+        const response = (this.wrappers.aggregate([ {$skip: page * size}, {$limit: size} ])).toArray() as unknown;
         // console.log(await response);
         return response as Promise<Wrapper[]>;
     }
@@ -96,6 +110,7 @@ class WrapperRepository implements IWrapperRepository {
 
 interface ISupplierRepository {
     getAll(): Promise<Supplier[]>;
+    getPage(page: number, size: number): Promise<Supplier[]>;
     getById(id: ObjectId): Promise<Supplier | undefined>;
     add(supplier: Supplier): void;
     update(supplier: Supplier): void;
@@ -113,6 +128,11 @@ class SupplierRepository implements ISupplierRepository{
 
     async getAll(): Promise<Supplier[]> {
         const response = (this.suppliers.find({}).toArray()) as unknown;
+        return response as Promise<Supplier[]>;
+    }
+
+    async getPage(page: number, size: number): Promise<Supplier[]> {
+        const response = (this.suppliers.aggregate([ {$skip: page * size}, {$limit: size} ])).toArray() as unknown;
         return response as Promise<Supplier[]>;
     }
 
@@ -149,6 +169,7 @@ class SupplierRepository implements ISupplierRepository{
 
 interface IWrapperBoxComboRepository {
     getAll(): Promise<WrapperBoxCombo[]>;
+    getPage(page: number, size: number): Promise<WrapperBoxCombo[]>;
     getById(id: ObjectId): Promise<WrapperBoxCombo | undefined>;
     add(wrapperBoxCombo: WrapperBoxCombo): void;
     update(wrapperBoxCombo: WrapperBoxCombo): void;
@@ -167,6 +188,11 @@ class WrapperBoxComboRepository implements IWrapperBoxComboRepository {
         return response as Promise<WrapperBoxCombo[]>;
     }
     
+    async getPage(page: number, size: number): Promise<WrapperBoxCombo[]> {
+        const response = (this.combos.aggregate([ {$skip: page * size}, {$limit: size} ])).toArray() as unknown;
+        return response as Promise<WrapperBoxCombo[]>;
+    }
+
     async getById(id: ObjectId): Promise<WrapperBoxCombo | undefined> {
         const query = {_id: id};
         const response = (this.combos.findOne(query)) as unknown;

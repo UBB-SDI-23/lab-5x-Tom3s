@@ -12,8 +12,34 @@ function setupRoutes(app: Express, service: Service){
         #swagger.tags = ['Boxes']
         #swagger.description = 'Endpoint to get all boxes'
         #swagger.responses[200] = { description: 'Returned all Boxes' }
+        #swagger.responses[403] = { description: 'Deny returning all boxes if it\'s not confirmed' }
+        #swagger.parameters['page'] = {
+            in: 'query',
+            description: 'Page number',
+            type: 'integer'
+        }
+        #swagger.parameters['all'] = {
+            in: 'query',
+            description: 'Confirms that all boxes should be returned',
+            type: 'boolean'
+        }
         */
-        res.send(await service.getAllBoxes());
+        var query = req.query;
+        if (query.page) {
+            var pageNumber = parseInt(query.page as string);
+            res.send(await service.getPageOfBoxes(pageNumber));
+            return;
+        }
+
+        if (query.all && query.all == 'true') {
+            res.send(await service.getAllBoxes());
+            return;
+        }
+
+        // if no query parameters, return error 403 
+        res.sendStatus(403);
+
+
     });
 
     // GET /api/boxes/:id - returns a single box by id
@@ -136,8 +162,32 @@ function setupRoutes(app: Express, service: Service){
         #swagger.tags = ['Wrappers']
         #swagger.description = 'Endpoint to get all wrappers'
         #swagger.responses[200] = { description: 'Returned all Wrappers' }
+        #swagger.responses[403] = { description: 'Deny returning all wrappers if it\'s not confirmed' }
+        #swagger.parameters['page'] = {
+            in: 'query',
+            description: 'Page number',
+            type: 'integer'
+        }
+        #swagger.parameters['all'] = {
+            in: 'query',
+            description: 'Confirms that all wrappers should be returned',
+            type: 'boolean'
+        }
         */
-        res.send(await service.getAllWrappers());
+        var query = req.query;
+        if (query.page) {
+            var pageNumber = parseInt(query.page as string);
+            res.send(await service.getPageOfWrappers(pageNumber));
+            return;
+        }
+
+        if (query.all && query.all == 'true') {
+            res.send(await service.getAllWrappers());
+            return;
+        }
+
+        // if no query parameters, return error 403
+        res.sendStatus(403);
     });
 
     // GET /api/wrappers/:id - returns a single wrapper by id
@@ -249,8 +299,33 @@ function setupRoutes(app: Express, service: Service){
         #swagger.tags = ['Suppliers']
         #swagger.description = 'Endpoint to get all suppliers'
         #swagger.responses[200] = { description: 'Returned all Suppliers' }
+        #swagger.responses[403] = { description: 'Deny returning all suppliers if it\'s not confirmed' }
+        #swagger.parameters['page'] = {
+            in: 'query',
+            description: 'Page number',
+            type: 'integer'
+        }
+        #swagger.parameters['all'] = {
+            in: 'query',
+            description: 'Confirms that all suppliers should be returned',
+            type: 'boolean'
+        }
         */
-        res.send(await service.getAllSuppliers());
+        var query = req.query;
+        if (query.page) {
+            var pageNumber = parseInt(query.page as string);
+            res.send(await service.getPageOfSuppliers(pageNumber));
+            return;
+        }
+
+        if (query.all && query.all == 'true') {
+            res.send(await service.getAllSuppliers());
+            return;
+        }
+
+        // if no query parameters, return error 403
+        res.sendStatus(403);
+
     });
 
     // GET /api/suppliers/:id - returns a single supplier by id
@@ -406,8 +481,33 @@ function setupRoutes(app: Express, service: Service){
         #swagger.tags = ['Combos']
         #swagger.description = 'Endpoint to get all combos'
         #swagger.responses[200] = { description: 'Returned all combos' }
+        #swagger.responses[403] = { description: 'Deny returning all combos if it\'s not confirmed' }
+        #swagger.parameters['page'] = {
+            in: 'query',
+            description: 'Page number',
+            type: 'integer'
+        }
+        #swagger.parameters['all'] = {
+            in: 'query',
+            description: 'Confirms that all combos should be returned',
+            type: 'boolean'
+        }
         */
-        res.send(await service.getAllCombos());
+        var query = req.query;
+        if (query.page) {
+            var pageNumber = parseInt(query.page as string);
+            res.send(await service.getPageOfCombos(pageNumber));
+            return;
+        }
+
+        if (query.all && query.all == 'true') {
+            res.send(await service.getAllCombos());
+            return;
+        }
+
+        // if no query parameters, return error 403 
+        res.sendStatus(403);
+
     });
 
     // GET /api/combos/:id - returns a single combo by id
