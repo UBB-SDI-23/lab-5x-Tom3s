@@ -62,6 +62,7 @@ class BoxRepository implements IBoxRepository {
     async getSize(): Promise<number> {
         const response = (this.boxes.stats()) as any;
 
+        console.log(await response);
         return response.count;
     }
 }
