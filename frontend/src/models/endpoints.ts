@@ -22,7 +22,7 @@ export class apiAccess {
     }
 
     wrapperBoxCombos(): apiAccess {
-        this.url += "/wrapperBoxCombos";
+        this.url += "/combos";
         return this;
 
     }
@@ -34,6 +34,11 @@ export class apiAccess {
 
     page(page: number): apiAccess {
         this.url += "?page=" + page;
+        return this;
+    }
+
+    pageCount(): apiAccess {
+        this.url += "/pages";
         return this;
     }
 

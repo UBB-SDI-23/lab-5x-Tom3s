@@ -2,21 +2,21 @@ import { useState, useEffect, Fragment } from "react";
 import { Table, Pagination, Row, InputGroup, Button, FormControl, Col, Form } from "react-bootstrap";
 import { apiAccess } from "../models/endpoints";
 
-const BoxList = () => {
+const ComboList = () => {
     
-    const [boxes, setBoxes] = useState([]);
+    const [combos, setCombos] = useState([]);
     const [page, setPage] = useState(0);
     const [pageCount, setPageCount] = useState(13334);
     const [validGoToPage, setValidGoToPage] = useState(true);
 
     useEffect(() => {
-        fetch(new apiAccess().boxes().page(page).url)
+        fetch(new apiAccess().wrapperBoxCombos().page(page).url)
             .then(response => response.json())
-            .then(data => setBoxes(data));
+            .then(data => setCombos(data));
     }, [page]);
 
     useEffect(() => {
-        fetch(new apiAccess().boxes().pageCount().url)
+        fetch(new apiAccess().wrapperBoxCombos().pageCount().url)
             .then(response => response.json())
             .then(data => setPageCount(parseInt(data) - 1));
     }, []);
@@ -34,22 +34,24 @@ const BoxList = () => {
 
     return (
         <Fragment>
-            <Table striped bordered hover variant="dark" className="element-list" id="box-list" >
+            <Table striped bordered hover variant="dark" className="element-list" id="combo-list" >
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Dimensions (L x W x H)</th>
-                        <th>Material</th>
-                        <th>Color</th>
+                        <th>Wrapper ID</th>
+                        <th>Box ID</th>
+                        <th>Combo Name</th>
+                        <th>Price</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {boxes.map((box: any, index: number) => (
-                        <tr key={box._id}>
+                    {combos.map((combo: any, index: number) => (
+                        <tr key={combo._id}>
                             <td>{page * 15 + index}</td>
-                            <td>{box.length} x {box.width} x {box.height}</td>
-                            <td>{box.material}</td>
-                            <td>{box.color}</td>
+                            <td>{combo.wrapperId}</td>
+                            <td>{combo.boxId}</td>
+                            <td>{combo.name}</td>
+                            <td>{combo.price}$</td>
                         </tr>
                     ))}
                 </tbody>
@@ -86,4 +88,4 @@ const BoxList = () => {
     );
 };
 
-export default BoxList;
+export default ComboList;

@@ -2,21 +2,21 @@ import { useState, useEffect, Fragment } from "react";
 import { Table, Pagination, Row, InputGroup, Button, FormControl, Col, Form } from "react-bootstrap";
 import { apiAccess } from "../models/endpoints";
 
-const BoxList = () => {
+const SupplierList = () => {
     
-    const [boxes, setBoxes] = useState([]);
+    const [suppliers, setSuppliers] = useState([]);
     const [page, setPage] = useState(0);
     const [pageCount, setPageCount] = useState(13334);
     const [validGoToPage, setValidGoToPage] = useState(true);
 
     useEffect(() => {
-        fetch(new apiAccess().boxes().page(page).url)
+        fetch(new apiAccess().suppliers().page(page).url)
             .then(response => response.json())
-            .then(data => setBoxes(data));
+            .then(data => setSuppliers(data));
     }, [page]);
 
     useEffect(() => {
-        fetch(new apiAccess().boxes().pageCount().url)
+        fetch(new apiAccess().suppliers().pageCount().url)
             .then(response => response.json())
             .then(data => setPageCount(parseInt(data) - 1));
     }, []);
@@ -34,22 +34,26 @@ const BoxList = () => {
 
     return (
         <Fragment>
-            <Table striped bordered hover variant="dark" className="element-list" id="box-list" >
+            <Table striped bordered hover variant="dark" className="element-list" id="supplier-list" >
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Dimensions (L x W x H)</th>
-                        <th>Material</th>
-                        <th>Color</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Phone Number</th>
+                        <th>E-mail</th>
+                        <th>Nr. of Wrappers</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {boxes.map((box: any, index: number) => (
-                        <tr key={box._id}>
+                    {suppliers.map((supplier: any, index: number) => (
+                        <tr key={supplier._id}>
                             <td>{page * 15 + index}</td>
-                            <td>{box.length} x {box.width} x {box.height}</td>
-                            <td>{box.material}</td>
-                            <td>{box.color}</td>
+                            <td>{supplier.name}</td>
+                            <td>{supplier.address}</td>
+                            <td>{supplier.phone}</td>
+                            <td>{supplier.email}</td>
+                            <td>{supplier.wrappers.length}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -86,4 +90,4 @@ const BoxList = () => {
     );
 };
 
-export default BoxList;
+export default SupplierList;
