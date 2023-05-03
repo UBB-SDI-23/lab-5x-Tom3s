@@ -50,6 +50,9 @@ class MockBoxRepository implements IBoxRepository {
         const index = this.boxes.findIndex(b => b._id === id);
         this.boxes.splice(index, 1);
     }
+    getSize(): Promise<number>{
+        return Promise.resolve(this.boxes.length);
+    }
 }
 
 class MockWrapperRepository implements IWrapperRepository {
@@ -101,7 +104,11 @@ class MockWrapperRepository implements IWrapperRepository {
         const index = this.wrappers.findIndex(w => w._id === id);
         this.wrappers.splice(index, 1);
     }
-
+    getSize(): Promise<number>{
+        return new Promise((resolve, reject) => {
+            resolve(this.wrappers.length);
+        });
+    }
 }
 
 class MockSupplierRepository implements ISupplierRepository {
@@ -162,6 +169,12 @@ class MockSupplierRepository implements ISupplierRepository {
             resolve();
         });
     }
+    
+    getSize(): Promise<number> {
+        return new Promise((resolve, reject) => {
+            resolve(this.suppliers.length);
+        });
+    }
 }
 
 class MockWrapperBoxComboRepository implements IWrapperBoxComboRepository {
@@ -218,6 +231,11 @@ class MockWrapperBoxComboRepository implements IWrapperBoxComboRepository {
         this.combos.splice(index, 1);
     }
 
+    getSize(): Promise<number>{
+        return new Promise((resolve, reject) => {
+            resolve(this.combos.length);
+        });
+    }
 }
 
 export { MockBoxRepository, MockWrapperRepository, MockSupplierRepository, MockWrapperBoxComboRepository };
