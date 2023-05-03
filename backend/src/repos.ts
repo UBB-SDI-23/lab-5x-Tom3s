@@ -60,8 +60,14 @@ class BoxRepository implements IBoxRepository {
     }
 
     async getSize(): Promise<number> {
-        const response = (this.boxes.stats.length) as unknown;
-        return response as Promise<number>;
+        const response = (this.boxes.stats()) as unknown;
+        if ((response as any).hasOwnProperty("count")) {
+            return (response as any).count as Promise<number>;
+        }
+        //return promise that resolves to 0
+        return new Promise((resolve, reject) => {
+            resolve(0);
+        });
     }
 }
 
@@ -115,8 +121,14 @@ class WrapperRepository implements IWrapperRepository {
     }
 
     async getSize(): Promise<number> {
-        const response = (this.wrappers.stats.length) as unknown;
-        return response as Promise<number>;
+        const response = (this.wrappers.stats()) as unknown;
+        if ((response as any).hasOwnProperty("count")) {
+            return (response as any).count as Promise<number>;
+        }
+        //return promise that resolves to 0
+        return new Promise((resolve, reject) => {
+            resolve(0);
+        });
     }
 }
 
@@ -180,8 +192,14 @@ class SupplierRepository implements ISupplierRepository{
     }
 
     async getSize(): Promise<number> {
-        const response = (this.suppliers.stats.length) as unknown;
-        return response as Promise<number>;
+        const response = (this.suppliers.stats()) as unknown;
+        if ((response as any).hasOwnProperty("count")) {
+            return (response as any).count as Promise<number>;
+        }
+        //return promise that resolves to 0
+        return new Promise((resolve, reject) => {
+            resolve(0);
+        });
     }
 }
 
@@ -233,8 +251,14 @@ class WrapperBoxComboRepository implements IWrapperBoxComboRepository {
     }
 
     async getSize(): Promise<number> {
-        const response = (this.combos.stats.length) as unknown;
-        return response as Promise<number>;
+        const response = (this.combos.stats()) as unknown;
+        if ((response as any).hasOwnProperty("count")) {
+            return (response as any).count as Promise<number>;
+        }
+        //return promise that resolves to 0
+        return new Promise((resolve, reject) => {
+            resolve(0);
+        });
     }
 }
 
