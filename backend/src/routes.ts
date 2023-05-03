@@ -14,7 +14,8 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to get the number of pages of boxes'
         #swagger.responses[200] = { description: 'Returned the number of pages of boxes' }
         */
-        res.send(await service.getBoxPageCount());
+        const pages = await service.getBoxPageCount();
+        res.send(pages.toString());
     });
 
     // GET /api/boxes - returns all boxes
@@ -174,7 +175,8 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to get the number of pages of wrappers'
         #swagger.responses[200] = { description: 'Returned the number of pages of wrappers' }
         */
-        res.send(await service.getWrapperPageCount());
+        const pages = await service.getWrapperPageCount();
+        res.send(pages.toString());
     });
 
     // GET /api/wrappers - returns all wrappers
@@ -321,7 +323,8 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to get the number of pages of suppliers'
         #swagger.responses[200] = { description: 'Returned the number of pages of suppliers' }
         */
-        res.send(await service.getSupplierPageCount());
+        const pages = await service.getSupplierPageCount();
+        res.send(pages.toString());
     });
 
 
