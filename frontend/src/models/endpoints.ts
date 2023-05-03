@@ -32,4 +32,9 @@ export class apiAccess {
         return this;
     }
 
+    page(page: number): apiAccess {
+        this.url += "?page=" + page;
+        return this;
+    }
+
 }
