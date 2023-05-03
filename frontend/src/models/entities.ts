@@ -32,3 +32,9 @@ export interface WrapperBoxCombo {
     name: string;
     price: number;
 }
+
+export interface ToastDetails {
+    message: string;
+    type: string;
+    duration: number;
+}
