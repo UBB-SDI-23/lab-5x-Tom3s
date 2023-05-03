@@ -3,13 +3,23 @@ import { Table, Pagination, Row, InputGroup, Button, FormControl, Col, Form } fr
 import { apiAccess } from "../models/endpoints";
 
 const BoxList = () => {
-    
+
     const [boxes, setBoxes] = useState([]);
     const [page, setPage] = useState(0);
     const [pageCount, setPageCount] = useState(13334);
     const [validGoToPage, setValidGoToPage] = useState(true);
 
+    const emptyBox = {
+        _id: "",
+        length: 0,
+        width: 0,
+        height: 0,
+        material: "None",
+        color: "None"
+    };
+    const emptyBoxes: any = [emptyBox, emptyBox, emptyBox, emptyBox, emptyBox, emptyBox, emptyBox, emptyBox, emptyBox, emptyBox, emptyBox, emptyBox, emptyBox, emptyBox, emptyBox];
     useEffect(() => {
+        // setBoxes();
         fetch(new apiAccess().boxes().page(page).url)
             .then(response => response.json())
             .then(data => setBoxes(data));
@@ -62,17 +72,17 @@ const BoxList = () => {
                         <Pagination.Ellipsis />
                         <Pagination.Item onClick={() => setPage(page - 1)} disabled={page <= 0}>{page}</Pagination.Item>
                         <Pagination.Item active>{page + 1}</Pagination.Item>
-                        <Pagination.Item onClick={() => setPage(page + 1)} disabled={page + 1 === pageCount}>{page + 2}</Pagination.Item>
+                        <Pagination.Item onClick={() => setPage(page + 1)} disabled={page + 1 > pageCount}>{page + 2}</Pagination.Item>
                         <Pagination.Ellipsis />
-                        <Pagination.Next onClick={() => setPage(page + 1)} disabled={page === pageCount} />
+                        <Pagination.Next onClick={() => setPage(page + 1)} disabled={page + 1 > pageCount} />
                         <Pagination.Last onClick={() => setPage(pageCount)} disabled={page === pageCount} />
                     </Pagination>
                 </Col>
                 <Col xs={2}>
                     <Form noValidate onSubmit={handleGoToPage} >
                         <InputGroup className="mb-3">
-                        <Form.Control type="number" placeholder="Go to page" min={1} max={pageCount - 1} />
-                        <Button variant="primary" type="submit">Go</Button>
+                            <Form.Control type="number" placeholder="Go to page" min={1} max={pageCount - 1} />
+                            <Button variant="primary" type="submit">Go</Button>
                         </InputGroup>
                         <Form.Text className="text-muted">
                             {validGoToPage ? "" : "Invalid page number"}
@@ -81,7 +91,7 @@ const BoxList = () => {
                     </Form>
                 </Col>
             </Row>
-            
+
         </Fragment>
     );
 };

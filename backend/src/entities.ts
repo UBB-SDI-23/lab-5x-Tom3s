@@ -132,12 +132,12 @@ class Supplier {
     }
 
     static validatePhoneNumber(obj: any): boolean {
-        if (obj.phone === undefined) {
+        const regex = /^07[0-9]{2}( |-)[0-9]{3}( |-)?[0-9]{3}$/;
+        const phoneNumber = obj.phoneNumber;
+        if (!phoneNumber) {
             return false;
         }
-        var len = obj.phone.length;
-        var hyphenPos = obj.phone.indexOf("-");
-        return (len === 8 && hyphenPos === 3) || (len === 7 && hyphenPos === -1);
+        return regex.test(phoneNumber);
     }
 }
 
