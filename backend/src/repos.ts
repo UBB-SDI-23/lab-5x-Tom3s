@@ -12,6 +12,7 @@ interface IBoxRepository {
     addBulk(boxes: Box[]): void;
     update(box: Box): void;
     delete(id: ObjectId): void;
+    getSize(): Promise<number>;
 }
 
 class BoxRepository implements IBoxRepository {
@@ -57,6 +58,11 @@ class BoxRepository implements IBoxRepository {
         const query = {_id: id};
         this.boxes.deleteOne(query);
     }
+
+    async getSize(): Promise<number> {
+        const response = (this.boxes.stats.length) as unknown;
+        return response as Promise<number>;
+    }
 }
 
 interface IWrapperRepository {
@@ -66,6 +72,7 @@ interface IWrapperRepository {
     add(wrapper: Wrapper): void;
     update(wrapper: Wrapper): void;
     delete(id: ObjectId): void;
+    getSize(): Promise<number>;
 }
 
 class WrapperRepository implements IWrapperRepository {
@@ -106,6 +113,11 @@ class WrapperRepository implements IWrapperRepository {
         const query = {_id: id};
         this.wrappers.deleteOne(query);
     }
+
+    async getSize(): Promise<number> {
+        const response = (this.wrappers.stats.length) as unknown;
+        return response as Promise<number>;
+    }
 }
 
 interface ISupplierRepository {
@@ -115,6 +127,7 @@ interface ISupplierRepository {
     add(supplier: Supplier): void;
     update(supplier: Supplier): void;
     delete(id: ObjectId): void;
+    getSize(): Promise<number>;
     addWrapper(supplierId: ObjectId, wrapperId: string): Promise<void>;
 }
 
@@ -165,6 +178,11 @@ class SupplierRepository implements ISupplierRepository{
             this.update(supplier);
         }
     }
+
+    async getSize(): Promise<number> {
+        const response = (this.suppliers.stats.length) as unknown;
+        return response as Promise<number>;
+    }
 }
 
 interface IWrapperBoxComboRepository {
@@ -174,6 +192,7 @@ interface IWrapperBoxComboRepository {
     add(wrapperBoxCombo: WrapperBoxCombo): void;
     update(wrapperBoxCombo: WrapperBoxCombo): void;
     delete(id: ObjectId): void;
+    getSize(): Promise<number>;
 }
 
 class WrapperBoxComboRepository implements IWrapperBoxComboRepository {
@@ -211,6 +230,11 @@ class WrapperBoxComboRepository implements IWrapperBoxComboRepository {
     delete(id: ObjectId): void {
         const query = {_id: id};
         this.combos.deleteOne(query);
+    }
+
+    async getSize(): Promise<number> {
+        const response = (this.combos.stats.length) as unknown;
+        return response as Promise<number>;
     }
 }
 

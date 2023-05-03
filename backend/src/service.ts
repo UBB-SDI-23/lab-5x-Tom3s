@@ -253,6 +253,26 @@ class Service {
         return boxes.filter(b => Math.min(b.length, b.width, b.height) > size);
     }
 
+    async getBoxPageCount(): Promise<number> {
+        const nrOfBoxes = await this.boxRepository.getSize();    
+        return Math.ceil(nrOfBoxes / this.defaultPageLength);
+    }
+
+    async getWrapperPageCount(): Promise<number> {
+        const nrOfWrappers = await this.wrapperRepository.getSize();
+        return Math.ceil(nrOfWrappers / this.defaultPageLength);
+    }
+
+    async getSupplierPageCount(): Promise<number> {
+        const nrOfSuppliers = await this.supplierRepository.getSize();
+        return Math.ceil(nrOfSuppliers / this.defaultPageLength);
+    }
+
+    async getComboPageCount(): Promise<number> {
+        const nrOfCombos = await this.comboRepository.getSize();
+        return Math.ceil(nrOfCombos / this.defaultPageLength);
+    }
+
     async getAverageWrapperLengths(): Promise<AverageWrapperLength[]> {
         const wrappers = await this.wrapperRepository.getAll() as Wrapper[];
         const suppliers = await this.supplierRepository.getAll() as Supplier[];

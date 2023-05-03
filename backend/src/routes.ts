@@ -6,6 +6,17 @@ import { Service } from "./service";
 import { Express, Request, Response } from 'express';
 
 function setupRoutes(app: Express, service: Service){
+
+    // GET /api/boxes/pages - returns the number of pages of boxes
+    app.get('/api/boxes/pages', async (req, res) => {
+        /*
+        #swagger.tags = ['Boxes']
+        #swagger.description = 'Endpoint to get the number of pages of boxes'
+        #swagger.responses[200] = { description: 'Returned the number of pages of boxes' }
+        */
+        res.send(await service.getBoxPageCount());
+    });
+
     // GET /api/boxes - returns all boxes
     app.get('/api/boxes', async (req, res) => {
         /*
@@ -156,6 +167,16 @@ function setupRoutes(app: Express, service: Service){
         }
     });
 
+    // GET /api/wrappers/pages - returns the number of pages of wrappers
+    app.get('/api/wrappers/pages', async (req, res) => {
+        /*
+        #swagger.tags = ['Wrappers']
+        #swagger.description = 'Endpoint to get the number of pages of wrappers'
+        #swagger.responses[200] = { description: 'Returned the number of pages of wrappers' }
+        */
+        res.send(await service.getWrapperPageCount());
+    });
+
     // GET /api/wrappers - returns all wrappers
     app.get('/api/wrappers', async (req, res) => {
         /*
@@ -292,6 +313,17 @@ function setupRoutes(app: Express, service: Service){
             res.sendStatus(404);
         }
     });
+
+    // GET /api/suppliers/pages - returns the number of pages of suppliers
+    app.get('/api/suppliers/pages', async (req, res) => {
+        /*
+        #swagger.tags = ['Suppliers']
+        #swagger.description = 'Endpoint to get the number of pages of suppliers'
+        #swagger.responses[200] = { description: 'Returned the number of pages of suppliers' }
+        */
+        res.send(await service.getSupplierPageCount());
+    });
+
 
     // GET /api/suppliers - returns all suppliers
     app.get('/api/suppliers', async (req, res) => {
@@ -473,6 +505,17 @@ function setupRoutes(app: Express, service: Service){
         const size = Number(req.params.size);
         const boxes = await service.getBoxesLargerThan(size);
         res.send(boxes);
+    });
+
+    // GET /api/combos/pages - returns the number of pages of combos
+    app.get('/api/combos/pages', async (req, res) => {
+        /*
+        #swagger.tags = ['Combos']
+        #swagger.description = 'Endpoint to get the number of pages of combos'
+        #swagger.responses[200] = { description: 'Returned the number of pages of combos' }
+        */
+        const pages = await service.getComboPageCount();
+        res.send(pages.toString());
     });
 
     // GET /api/combos - returns all combos
