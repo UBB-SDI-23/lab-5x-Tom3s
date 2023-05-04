@@ -2,9 +2,13 @@ import { Fragment, useEffect, useState } from "react";
 import { Badge, Button, Col, Form, Row, Toast, ToastContainer } from "react-bootstrap";
 import { ToastDetails } from "../models/entities";
 import { apiAccess } from "../models/endpoints";
+import { useSearchParams } from "react-router-dom";
 
 
-const BoxEditor = (boxId: string = "") => {
+const BoxEditor = () => {
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const boxId = searchParams.get("id") || "";
 
     const [length, setLength] = useState(0);
     const [width, setWidth] = useState(0);

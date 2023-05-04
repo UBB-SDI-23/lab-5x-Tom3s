@@ -1,8 +1,11 @@
 import { useState, useEffect, Fragment } from "react";
 import { Table, Pagination, Row, InputGroup, Button, FormControl, Col, Form } from "react-bootstrap";
 import { apiAccess } from "../models/endpoints";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const BoxList = () => {
+
+    const navigate = useNavigate();
 
     const [boxes, setBoxes] = useState([]);
     const [page, setPage] = useState(0);
@@ -60,6 +63,7 @@ const BoxList = () => {
                             <td>{box.length} x {box.width} x {box.height}</td>
                             <td>{box.material}</td>
                             <td>{box.color}</td>
+                            <td><Link to={`/box?id=${box._id}`}>Edit</Link></td>
                         </tr>
                     ))}
                 </tbody>
@@ -89,6 +93,9 @@ const BoxList = () => {
                         </Form.Text>
 
                     </Form>
+                </Col>
+                <Col xs={1}>
+                    <Button variant="secondary" onClick={() => navigate("/box")}><strong>+</strong></Button>
                 </Col>
             </Row>
 
