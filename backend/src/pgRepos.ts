@@ -184,12 +184,26 @@ class PGWrapperRepository {
             }
         */
         var suppliers: Supplier[] = [];
-        var averageLengths: AverageWrapperLength[] = [];
+        // var averageLengths: AverageWrapperLength[] = [];
         const offset = page * pageLength;
         const result = await this.client.query('SELECT * FROM suppliers ORDER BY _id LIMIT $1 OFFSET $2', [pageLength, offset]);
         suppliers = result.rows as Supplier[];
+        
+        // suppliers.forEach(async (supplier: Supplier) => {
+        //     // SELECT suppliedWrappers.supplierId, AVG(wrappers.length) AS averageLength
+        //     // FROM suppliedWrappers
+        //     // JOIN wrappers ON suppliedWrappers.wrapperId = wrappers._id
+        //     // WHERE suppliedWrappers.supplierId = <your_supplier_id>
+        //     // GROUP BY suppliedWrappers.supplierId;
+        //     var averageLength: number | null = null;
+        //     const tempResult = await this.client.query('SELECT suppliedWrappers.supplierId, AVG(wrappers.length) AS averageLength FROM suppliedWrappers JOIN wrappers ON suppliedWrappers.wrapperId = wrappers._id WHERE suppliedWrappers.supplierId = $1 GROUP BY suppliedWrappers.supplierId', [supplier._id]);
+        //     if (tempResult.rows.length > 0) {
+        //         averageLength = tempResult.rows[0].averageLength;
+        //     }
+        //     averageLengths.push(new AverageWrapperLength(supplier, averageLength));
+        // });
 
-        suppliers.forEach(async (supplier: Supplier) => {
+        var averageLengths: Promise<AverageWrapperLength>[] = suppliers.map(async (supplier: Supplier) => {
             // SELECT suppliedWrappers.supplierId, AVG(wrappers.length) AS averageLength
             // FROM suppliedWrappers
             // JOIN wrappers ON suppliedWrappers.wrapperId = wrappers._id
@@ -197,13 +211,15 @@ class PGWrapperRepository {
             // GROUP BY suppliedWrappers.supplierId;
             var averageLength: number | null = null;
             const tempResult = await this.client.query('SELECT suppliedWrappers.supplierId, AVG(wrappers.length) AS averageLength FROM suppliedWrappers JOIN wrappers ON suppliedWrappers.wrapperId = wrappers._id WHERE suppliedWrappers.supplierId = $1 GROUP BY suppliedWrappers.supplierId', [supplier._id]);
+            console.log(tempResult.rows);
             if (tempResult.rows.length > 0) {
-                averageLength = tempResult.rows[0].averageLength;
+                averageLength = tempResult.rows[0].averagelength;
             }
-            averageLengths.push(new AverageWrapperLength(supplier, averageLength));
+            return new AverageWrapperLength(supplier, averageLength);
         });
 
-        return averageLengths;
+
+        return await Promise.all(averageLengths);
     }
 
 }
@@ -225,7 +241,7 @@ class PGSuppliedWrapperRepository {
         if (result.rows.length === 0) {
             throw new Error(`Supplier with wrapperId ${wrapperId} not found`);
         }
-        return result.rows[0].supplierId;
+        return result.rows[0].supplierid;
     }
 
     async getSuppliedWrapperObjects(supplierId: number): Promise<Wrapper[]> {

@@ -14,7 +14,7 @@ function setupRoutes(app: Express, service: PGService){
         #swagger.responses[200] = { description: 'Returned the number of pages of boxes' }
         */
         const pages = service.getBoxPageCount();
-        res.send(await pages.toString());
+        res.send((await pages).toString());
     });
 
     // GET /api/boxes - returns all boxes
