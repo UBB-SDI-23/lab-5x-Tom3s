@@ -202,12 +202,18 @@ class PGService {
 
     async getPageOfSuppliers(page: number, pageLength: number = this.defaultPageLength): Promise<Supplier[]> {
         const suppliers: Supplier[] = await this.supplierRepository.getPage(page, pageLength);
-        suppliers.forEach(async s => {
+        // suppliers.forEach(async s => {
+        //     const suppliedWrappers: number[] = await this.suppliedWrapperRepository.getSuppliedWrapperIds(s._id);
+        //     s.wrappers = suppliedWrappers;
+        // });
+
+        const suppliersWithWrappers: Promise<Supplier>[] = suppliers.map(async s => {
             const suppliedWrappers: Wrapper[] = await this.suppliedWrapperRepository.getSuppliedWrapperObjects(s._id);
             s.wrappers = suppliedWrappers;
+            return s;
         });
 
-        return suppliers;
+        return Promise.all(suppliersWithWrappers);
     }
 
     async getSupplierPageCount(pageLength: number = this.defaultPageLength): Promise<number> {

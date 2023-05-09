@@ -252,6 +252,11 @@ class PGSuppliedWrapperRepository {
         const result = await this.client.query('SELECT w.* FROM wrappers w JOIN suppliedWrappers sw ON w._id = sw.wrapperId WHERE sw.supplierId = $1', [supplierId]);
         return result.rows as Wrapper[];
     }
+    
+    async getSuppliedWrapperIds(supplierId: number): Promise<number[]> {
+        const result = await this.client.query('SELECT wrapperId FROM suppliedWrappers WHERE supplierId = $1', [supplierId]);
+        return result.rows as number[];
+    }
 
     add(supplierId: number, wrapperId: number): void {
         this.client.query('INSERT INTO suppliedWrappers (supplierId, wrapperId) VALUES ($1, $2)', [supplierId, wrapperId], (err: Error, res: QueryResult) => {
