@@ -12,48 +12,27 @@ class PGBoxRepository {
         this.client.connect();
     }
 
-    getAll(): Box[] {
-        var boxes: Box[] = [];
-        this.client.query('SELECT * FROM boxes', (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                boxes = res.rows as Box[];
-            }
-        });
-        return boxes;
+    async getAll(): Promise<Box[]> {
+        const result = await this.client.query('SELECT * FROM boxes');
+        return result.rows as Box[];
     }
 
-    getPage(page: number, pageSize: number): Box[] {
-        var boxes: Box[] = [];
-        const offset = page * pageSize;
-        this.client.query('SELECT * FROM boxes ORDER BY _id LIMIT $1 OFFSET $2', [pageSize, offset], (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                boxes = res.rows as Box[];
-            }
-        });
-        return boxes;
+    async getPage(page: number, pageLength: number): Promise<Box[]> {
+        const offset = page * pageLength;
+        const result = await this.client.query('SELECT * FROM boxes ORDER BY _id LIMIT $1 OFFSET $2', [pageLength, offset]);
+        return result.rows as Box[];
     }
 
-    getById(id: number): Box {
-        // var box: Box;
-        this.client.query('SELECT * FROM boxes WHERE _id = $1', [id], (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-                throw new Error(err.message);
-            } else {
-                if (res.rowCount <= 0) {
-                    throw new Error("Error: Box not found");
-                }
-                return res.rows[0] as Box;
-            }
-        });
-        throw new Error("Unknown error occurred");
+    async getById(id: number): Promise<Box> {
+        const result = await this.client.query('SELECT * FROM boxes WHERE _id = $1', [id]);
+        if (result.rows.length === 0) {
+            throw new Error(`Box with id ${id} not found`);
+        }
+        return result.rows[0] as Box;
     }
 
     add(box: Box): void {
+        // INSERT INTO boxes (width, height, length, color, material) VALUES ($1, $2, $3, $4, $5)
         this.client.query('INSERT INTO boxes (width, height, length, color, material) VALUES ($1, $2, $3, $4, $5)', [box.width, box.height, box.length, box.color, box.material], (err: Error, res: QueryResult) => {
             if (err) {
                 console.log(err.message);
@@ -100,38 +79,22 @@ class PGBoxRepository {
         });
     }
 
-    getCount(): number {
-        var count: number = 0;
-        this.client.query('SELECT COUNT(*) FROM boxes', (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                count = res.rows[0].count;
-            }
-        });
-        return count;
+    async getCount(): Promise<number> {
+        // SELECT COUNT(*) FROM boxes
+        const result = await this.client.query('SELECT COUNT(*) FROM boxes');
+        return parseInt(result.rows[0].count);
     }
 
-    getLargerThan(size: number, page: number, pageLength: number): Box[] {
-        // SELECT * FROM boxes 
-        // WHERE width > $size OR height > $size OR length > $size
-
+    async getLargerThan(size: number, page: number, pageLength: number): Promise<Box[]> {
         // SELECT * FROM boxes
         // WHERE width > $size OR height > $size OR length > $size
         // ORDER BY _id
         // LIMIT $pageLength
         // OFFSET $page * $pageLength
 
-        var boxes: Box[] = [];
         const offset = page * pageLength;
-        this.client.query('SELECT * FROM boxes WHERE width > $1 OR height > $1 OR length > $1 ORDER BY _id LIMIT $2 OFFSET $3', [size, pageLength, offset], (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                boxes = res.rows as Box[];
-            }
-        });
-        return boxes;
+        const result = await this.client.query('SELECT * FROM boxes WHERE width > $1 OR height > $1 OR length > $1 ORDER BY _id LIMIT $2 OFFSET $3', [size, pageLength, offset]);
+        return result.rows as Box[];
     }
 }
 
@@ -146,44 +109,23 @@ class PGWrapperRepository {
         this.client.connect();
     }
 
-    getAll(): Wrapper[] {
-        var wrappers: Wrapper[] = [];
-        this.client.query('SELECT * FROM wrappers', (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                wrappers = res.rows as Wrapper[];
-            }
-        });
-        return wrappers;
+    async getAll(): Promise<Wrapper[]> {
+        const result = await this.client.query('SELECT * FROM wrappers');
+        return result.rows as Wrapper[];
     }
 
-    getPage(page: number, pageSize: number): Wrapper[] {
-        var wrappers: Wrapper[] = [];
-        const offset = page * pageSize;
-        this.client.query('SELECT * FROM wrappers ORDER BY _id LIMIT $1 OFFSET $2', [pageSize, offset], (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                wrappers = res.rows as Wrapper[];
-            }
-        });
-        return wrappers;
+    async getPage(page: number, pageLength: number): Promise<Wrapper[]> {
+        const offset = page * pageLength;
+        const result = await this.client.query('SELECT * FROM wrappers ORDER BY _id LIMIT $1 OFFSET $2', [pageLength, offset]);
+        return result.rows as Wrapper[];
     }
 
-    getById(id: number): Wrapper {
-        this.client.query('SELECT * FROM wrappers WHERE _id = $1', [id], (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-                throw new Error(err.message);
-            } else {
-                if (res.rowCount <= 0) {
-                    throw new Error("Error: Wrapper not found");
-                }
-                return res.rows[0] as Wrapper;
-            }
-        });
-        throw new Error("Unknown error occurred");
+    async getById(id: number): Promise<Wrapper> {
+        const result = await this.client.query('SELECT * FROM wrappers WHERE _id = $1', [id]);
+        if (result.rows.length === 0) {
+            throw new Error(`Wrapper with id ${id} not found`);
+        }
+        return result.rows[0] as Wrapper;
     }
 
     add(wrapper: Wrapper): void {
@@ -221,19 +163,13 @@ class PGWrapperRepository {
         });
     }
 
-    getCount(): number {
-        var count: number = 0;
-        this.client.query('SELECT COUNT(*) FROM wrappers', (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                count = res.rows[0].count;
-            }
-        });
-        return count;
+    async getCount(): Promise<number> {
+        // SELECT COUNT(*) FROM wrappers
+        const result = await this.client.query('SELECT COUNT(*) FROM wrappers');
+        return parseInt(result.rows[0].count);
     }
 
-    getAverageLengths(page: number, pageLength: number): AverageWrapperLength[] {
+    async getAverageLengths(page: number, pageLength: number): Promise<AverageWrapperLength[]> {
         /*
         AverageWrapperLength: 
             {
@@ -250,28 +186,20 @@ class PGWrapperRepository {
         var suppliers: Supplier[] = [];
         var averageLengths: AverageWrapperLength[] = [];
         const offset = page * pageLength;
-        this.client.query('SELECT * FROM suppliers ORDER BY _id LIMIT $1 OFFSET $2', [pageLength, offset], (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                suppliers = res.rows as Supplier[];
-            }
-        });
+        const result = await this.client.query('SELECT * FROM suppliers ORDER BY _id LIMIT $1 OFFSET $2', [pageLength, offset]);
+        suppliers = result.rows as Supplier[];
 
-        suppliers.forEach((supplier: Supplier) => {
+        suppliers.forEach(async (supplier: Supplier) => {
             // SELECT suppliedWrappers.supplierId, AVG(wrappers.length) AS averageLength
             // FROM suppliedWrappers
             // JOIN wrappers ON suppliedWrappers.wrapperId = wrappers._id
             // WHERE suppliedWrappers.supplierId = <your_supplier_id>
             // GROUP BY suppliedWrappers.supplierId;
             var averageLength: number | null = null;
-            this.client.query('SELECT suppliedWrappers.supplierId, AVG(wrappers.length) AS averageLength FROM suppliedWrappers JOIN wrappers ON suppliedWrappers.wrapperId = wrappers._id WHERE suppliedWrappers.supplierId = $1 GROUP BY suppliedWrappers.supplierId', [supplier._id], (err: Error, res: QueryResult) => {
-                if (err) {
-                    console.log(err.message);
-                } else {
-                    averageLength = res.rows[0].averageLength;
-                }
-            });
+            const tempResult = await this.client.query('SELECT suppliedWrappers.supplierId, AVG(wrappers.length) AS averageLength FROM suppliedWrappers JOIN wrappers ON suppliedWrappers.wrapperId = wrappers._id WHERE suppliedWrappers.supplierId = $1 GROUP BY suppliedWrappers.supplierId', [supplier._id]);
+            if (tempResult.rows.length > 0) {
+                averageLength = tempResult.rows[0].averageLength;
+            }
             averageLengths.push(new AverageWrapperLength(supplier, averageLength));
         });
 
@@ -291,34 +219,22 @@ class PGSuppliedWrapperRepository {
         this.client.connect();
     }
 
-    getSupplierId(wrapperId: number): number {
-        this.client.query('SELECT supplierId FROM suppliedWrappers WHERE wrapperId = $1', [wrapperId], (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-                throw new Error(err.message);
-            } else {
-                if (res.rowCount <= 0) {
-                    throw new Error("Error: Wrapper not found");
-                }
-                return res.rows[0].supplierId as number;
-            }
-        });
-        throw new Error("Unknown error occurred");
+    async getSupplierId(wrapperId: number): Promise<number> {
+        // SELECT supplierId FROM suppliedWrappers WHERE wrapperId = $1
+        const result = await this.client.query('SELECT supplierId FROM suppliedWrappers WHERE wrapperId = $1', [wrapperId]);
+        if (result.rows.length === 0) {
+            throw new Error(`Supplier with wrapperId ${wrapperId} not found`);
+        }
+        return result.rows[0].supplierId;
     }
 
-    getSuppliedWrapperObjects(supplierId: number): Wrapper[] {
+    async getSuppliedWrapperObjects(supplierId: number): Promise<Wrapper[]> {
         // SELECT w.* 
         // FROM wrappers w 
         // JOIN suppliedWrappers sw ON w._id = sw.wrapperId 
         // WHERE sw.supplierId = 1
-        this.client.query('SELECT w.* FROM wrappers w JOIN suppliedWrappers sw ON w._id = sw.wrapperId WHERE sw.supplierId = $1', [supplierId], (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                return res.rows as Wrapper[];
-            }
-        });
-        throw new Error("Unknown error occurred");
+        const result = await this.client.query('SELECT w.* FROM wrappers w JOIN suppliedWrappers sw ON w._id = sw.wrapperId WHERE sw.supplierId = $1', [supplierId]);
+        return result.rows as Wrapper[];
     }
 
     add(supplierId: number, wrapperId: number): void {
@@ -344,43 +260,26 @@ class PGSupplierRepository {
         this.client.connect();
     }
 
-    getAll(): Supplier[] {
-        var suppliers: Supplier[] = [];
-        this.client.query('SELECT * FROM suppliers', (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                suppliers = res.rows as Supplier[];
-            }
-        });
-        return suppliers;
+    async getAll(): Promise<Supplier[]> {
+        // SELECT * FROM suppliers
+        const result = await this.client.query('SELECT * FROM suppliers');
+        return result.rows as Supplier[];
     }
 
-    getPage(pageSize: number, offset: number): Supplier[] {
-        var suppliers: Supplier[] = [];
-        this.client.query('SELECT * FROM suppliers LIMIT $1 OFFSET $2', [pageSize, offset], (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                suppliers = res.rows as Supplier[];
-            }
-        });
-        return suppliers;
+    async getPage(pageSize: number, pageLength: number): Promise<Supplier[]> {
+        // SELECT * FROM suppliers ORDER BY _id LIMIT 10 OFFSET 0
+        const offset = pageSize * pageLength;
+        const result = await this.client.query('SELECT * FROM suppliers ORDER BY _id LIMIT $1 OFFSET $2', [pageLength, offset]);
+        return result.rows as Supplier[];
     }
 
-    getById(id: number): Supplier {
-        this.client.query('SELECT * FROM suppliers WHERE _id = $1', [id], (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-                throw new Error(err.message);
-            } else {
-                if (res.rowCount <= 0) {
-                    throw new Error("Error: Supplier not found");
-                }
-                return res.rows[0] as Supplier;
-            }
-        });
-        throw new Error("Unknown error occurred");
+    async getById(id: number): Promise<Supplier> {
+        // SELECT * FROM suppliers WHERE _id = $1
+        const result = await this.client.query('SELECT * FROM suppliers WHERE _id = $1', [id]);
+        if (result.rows.length === 0) {
+            throw new Error(`Supplier with id ${id} not found`);
+        }
+        return result.rows[0] as Supplier;
     }
 
     add(supplier: Supplier): void {
@@ -418,16 +317,10 @@ class PGSupplierRepository {
         });
     }
 
-    getCount(): number {
-        var count: number = 0;
-        this.client.query('SELECT COUNT(*) FROM suppliers', (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                count = res.rows[0].count;
-            }
-        });
-        return count;
+    async getCount(): Promise<number> {
+        // SELECT COUNT(*) FROM suppliers
+        const result = await this.client.query('SELECT COUNT(*) FROM suppliers');
+        return result.rows[0].count;
     }
 }
 
@@ -442,28 +335,15 @@ class PGComboRepository {
         this.client.connect();
     }
 
-    getAll(): WrapperBoxCombo[] {
-        var combos: WrapperBoxCombo[] = [];
-        this.client.query('SELECT * FROM combos', (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                combos = res.rows as WrapperBoxCombo[];
-            }
-        });
-        return combos;
+    async getAll(): Promise<WrapperBoxCombo[]> {
+        const result = await this.client.query('SELECT * FROM combos');
+        return result.rows as WrapperBoxCombo[];
     }
 
-    getPage(pageSize: number, offset: number): WrapperBoxCombo[] {
-        var combos: WrapperBoxCombo[] = [];
-        this.client.query('SELECT * FROM combos LIMIT $1 OFFSET $2', [pageSize, offset], (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                combos = res.rows as WrapperBoxCombo[];
-            }
-        });
-        return combos;
+    async getPage(pageSize: number, pageLength: number): Promise<WrapperBoxCombo[]> {
+        const offset = pageSize * pageLength;
+        const result = await this.client.query('SELECT * FROM combos ORDER BY _id LIMIT $1 OFFSET $2', [pageLength, offset]);
+        return result.rows as WrapperBoxCombo[];
     }
 
     add(combo: WrapperBoxCombo): void {
@@ -478,19 +358,12 @@ class PGComboRepository {
             });
     }
 
-    getById(id: number): WrapperBoxCombo {
-        this.client.query('SELECT * FROM combos WHERE _id = $1', [id], (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-                throw new Error(err.message);
-            } else {
-                if (res.rowCount <= 0) {
-                    throw new Error("Error: Combo not found");
-                }
-                return res.rows[0] as WrapperBoxCombo;
-            }
-        });
-        throw new Error("Unknown error occurred");
+    async getById(id: number): Promise<WrapperBoxCombo> {
+        const result = await this.client.query('SELECT * FROM combos WHERE _id = $1', [id]);
+        if (result.rows.length === 0) {
+            throw new Error(`Combo with id ${id} not found`);
+        }
+        return result.rows[0] as WrapperBoxCombo;
     }
 
     update(combo: WrapperBoxCombo): void {
@@ -516,16 +389,9 @@ class PGComboRepository {
         });
     }
 
-    getCount(): number {
-        var count: number = 0;
-        this.client.query('SELECT COUNT(*) FROM combos', (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                count = res.rows[0].count;
-            }
-        });
-        return count;
+    async getCount(): Promise<number> {
+        const result = await this.client.query('SELECT COUNT(*) FROM combos');
+        return result.rows[0].count;
     }
 }
 

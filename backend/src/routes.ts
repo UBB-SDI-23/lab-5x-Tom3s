@@ -14,7 +14,7 @@ function setupRoutes(app: Express, service: PGService){
         #swagger.responses[200] = { description: 'Returned the number of pages of boxes' }
         */
         const pages = service.getBoxPageCount();
-        res.send(pages.toString());
+        res.send(await pages.toString());
     });
 
     // GET /api/boxes - returns all boxes
@@ -38,12 +38,12 @@ function setupRoutes(app: Express, service: PGService){
         var query = req.query;
         if (query.page) {
             var pageNumber = parseInt(query.page as string);
-            res.send(service.getPageOfBoxes(pageNumber));
+            res.send(await service.getPageOfBoxes(pageNumber));
             return;
         }
 
         if (query.all && query.all == 'true') {
-            res.send(service.getAllBoxes());
+            res.send(await service.getAllBoxes());
             return;
         }
 
@@ -69,7 +69,7 @@ function setupRoutes(app: Express, service: PGService){
         const id = parseInt(req.params.id);
         const box = service.getBoxById(id);
         if (box) {
-            res.send(box);
+            res.send(await box);
         } else {
             res.sendStatus(404);
         }
@@ -175,7 +175,7 @@ function setupRoutes(app: Express, service: PGService){
         #swagger.responses[200] = { description: 'Returned the number of pages of wrappers' }
         */
         const pages = service.getWrapperPageCount();
-        res.send(pages.toString());
+        res.send(await pages.toString());
     });
 
     // GET /api/wrappers - returns all wrappers
@@ -199,12 +199,12 @@ function setupRoutes(app: Express, service: PGService){
         var query = req.query;
         if (query.page) {
             var pageNumber = parseInt(query.page as string);
-            res.send(service.getPageOfWrappers(pageNumber));
+            res.send(await service.getPageOfWrappers(pageNumber));
             return;
         }
 
         if (query.all && query.all == 'true') {
-            res.send(service.getAllWrappers());
+            res.send(await service.getAllWrappers());
             return;
         }
 
@@ -227,7 +227,7 @@ function setupRoutes(app: Express, service: PGService){
         const id = parseInt(req.params.id)
         const wrapper = service.getWrapperById(id);
         if (wrapper) {
-            res.send(wrapper);
+            res.send(await wrapper);
         } else {
             res.sendStatus(404);
         }
@@ -323,7 +323,7 @@ function setupRoutes(app: Express, service: PGService){
         #swagger.responses[200] = { description: 'Returned the number of pages of suppliers' }
         */
         const pages = service.getSupplierPageCount();
-        res.send(pages.toString());
+        res.send(await pages.toString());
     });
 
 
@@ -348,12 +348,12 @@ function setupRoutes(app: Express, service: PGService){
         var query = req.query;
         if (query.page) {
             var pageNumber = parseInt(query.page as string);
-            res.send(service.getPageOfSuppliers(pageNumber));
+            res.send(await service.getPageOfSuppliers(pageNumber));
             return;
         }
 
         if (query.all && query.all == 'true') {
-            res.send(service.getAllSuppliers());
+            res.send(await service.getAllSuppliers());
             return;
         }
 
@@ -377,7 +377,7 @@ function setupRoutes(app: Express, service: PGService){
         const id = parseInt(req.params.id)
         const supplier = service.getSupplierById(id);
         if (supplier) {
-            res.send(supplier);
+            res.send(await supplier);
         } else {
             res.sendStatus(404);
         }
@@ -520,16 +520,16 @@ function setupRoutes(app: Express, service: PGService){
         var query = req.query;
         if (query.page) {
             var pageNumber = parseInt(query.page as string);
-            res.send(service.getBoxesLargerThan(size, pageNumber));
+            res.send(await service.getBoxesLargerThan(size, pageNumber));
             return;
         }
 
         if (query.all && query.all == 'true') {
-            res.send(service.getBoxesLargerThan(size, 0, service.getBoxPageCount(1)));
+            res.send(await service.getBoxesLargerThan(size, 0, await service.getBoxPageCount(1)));
             return;
         }
 
-        res.send(403);
+        res.sendStatus(403);
     });
 
     // GET /api/combos/pages - returns the number of pages of combos
@@ -540,7 +540,7 @@ function setupRoutes(app: Express, service: PGService){
         #swagger.responses[200] = { description: 'Returned the number of pages of combos' }
         */
         const pages = service.getComboPageCount();
-        res.send(pages.toString());
+        res.send(await pages.toString());
     });
 
     // GET /api/combos - returns all combos
@@ -564,12 +564,12 @@ function setupRoutes(app: Express, service: PGService){
         var query = req.query;
         if (query.page) {
             var pageNumber = parseInt(query.page as string);
-            res.send(service.getPageOfCombos(pageNumber));
+            res.send(await service.getPageOfCombos(pageNumber));
             return;
         }
 
         if (query.all && query.all == 'true') {
-            res.send(service.getAllCombos());
+            res.send(await service.getAllCombos());
             return;
         }
 
@@ -593,7 +593,7 @@ function setupRoutes(app: Express, service: PGService){
         const id = parseInt(req.params.id)
         const combo = service.getComboById(id);
         if (combo) {
-            res.send(combo);
+            res.send(await combo);
         } else {
             res.sendStatus(404);
         }
@@ -697,12 +697,12 @@ function setupRoutes(app: Express, service: PGService){
         var query = req.query;
         if (query.page) {
             var pageNumber = parseInt(query.page as string);
-            res.send(service.getAverageWrapperLengths(pageNumber));
+            res.send(await service.getAverageWrapperLengths(pageNumber));
             return;
         }
 
         if (query.all && query.all == 'true') {
-            res.send(service.getAverageWrapperLengths(0, service.getSupplierPageCount(1)));
+            res.send(await service.getAverageWrapperLengths(0, await service.getSupplierPageCount(1)));
             return;
         }
 

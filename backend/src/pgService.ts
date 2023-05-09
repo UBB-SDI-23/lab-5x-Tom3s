@@ -20,11 +20,11 @@ class PGService {
     }
 
     // Box Actions
-    getAllBoxes(): Box[] {
+    async getAllBoxes(): Promise<Box[]> {
         return this.boxRepository.getAll();
     }
 
-    getBoxById(id: number): Box {
+    async getBoxById(id: number): Promise<Box> {
         return this.boxRepository.getById(id);
     }
 
@@ -56,10 +56,10 @@ class PGService {
     }
 
     // Wrapper Actions
-    getAllWrappers(): Wrapper[] {
-        const wrappers: Wrapper[] = this.wrapperRepository.getAll();
-        wrappers.forEach(w => {
-            const supplierId: number = this.suppliedWrapperRepository.getSupplierId(w._id);
+    async getAllWrappers(): Promise<Wrapper[]> {
+        const wrappers: Wrapper[] = await this.wrapperRepository.getAll();
+        wrappers.forEach(async w => {
+            const supplierId: number = await this.suppliedWrapperRepository.getSupplierId(w._id);
             if (supplierId) {
                 w.supplierId = supplierId;
             }
@@ -68,9 +68,9 @@ class PGService {
         return wrappers;
     }
 
-    getWrapperById(id: number): Wrapper {
-        const wrapper: Wrapper = this.wrapperRepository.getById(id);
-        const supplierId: number = this.suppliedWrapperRepository.getSupplierId(id);
+    async getWrapperById(id: number): Promise<Wrapper> {
+        const wrapper: Wrapper = await this.wrapperRepository.getById(id);
+        const supplierId: number = await this.suppliedWrapperRepository.getSupplierId(id);
         if (supplierId) {
             wrapper.supplierId = supplierId;
         } else {
@@ -99,13 +99,13 @@ class PGService {
     }
 
     // Supplier Actions
-    getAllSuppliers(): Supplier[] {
+    async getAllSuppliers(): Promise<Supplier[]> {
         return this.supplierRepository.getAll();
     }
 
-    getSupplierById(id: number): Supplier {
-        const supplier: Supplier = this.supplierRepository.getById(id);
-        const suppliedWrappers: Wrapper[] = this.suppliedWrapperRepository.getSuppliedWrapperObjects(id);
+    async getSupplierById(id: number): Promise<Supplier> {
+        const supplier: Supplier = await this.supplierRepository.getById(id);
+        const suppliedWrappers: Wrapper[] = await this.suppliedWrapperRepository.getSuppliedWrapperObjects(id);
 
         supplier.wrappers = suppliedWrappers;
 
@@ -148,12 +148,12 @@ class PGService {
         this.comboRepository.add(combo);
     }
 
-    getAllCombos(): WrapperBoxCombo[] {
+    async getAllCombos(): Promise<WrapperBoxCombo[]> {
         return this.comboRepository.getAll();
     }
 
-    getComboById(id: number): WrapperBoxCombo {
-        const combo: WrapperBoxCombo = this.comboRepository.getById(id);
+    async getComboById(id: number): Promise<WrapperBoxCombo> {
+        const combo: WrapperBoxCombo = await this.comboRepository.getById(id);
         if (combo == undefined) {
             throw new Error("Combo with ID" + id + "does not exist");
         }
@@ -162,8 +162,8 @@ class PGService {
             throw new Error("Combo with ID" + id + "is invalid");
         }
 
-        const box: Box = this.boxRepository.getById(combo.boxId);
-        const wrapper: Wrapper = this.wrapperRepository.getById(combo.wrapperId);
+        const box: Box = await this.boxRepository.getById(combo.boxId);
+        const wrapper: Wrapper = await this.wrapperRepository.getById(combo.wrapperId);
 
         return WrapperBoxCombo.toComplexObject(combo, wrapper, box);
     }
@@ -176,18 +176,18 @@ class PGService {
         this.comboRepository.delete(id);
     }
 
-    getPageOfBoxes(page: number, pageLength: number = this.defaultPageLength): Box[] {
+    async getPageOfBoxes(page: number, pageLength: number = this.defaultPageLength): Promise<Promise<Box[]>> {
         return this.boxRepository.getPage(page, pageLength);
     }
 
-    getBoxPageCount(pageLength: number = this.defaultPageLength): number {
-        return Math.ceil(this.boxRepository.getCount() / pageLength);
+    async getBoxPageCount(pageLength: number = this.defaultPageLength): Promise<number> {
+        return Math.ceil(await this.boxRepository.getCount() / pageLength);
     }
 
-    getPageOfWrappers(page: number, pageLength: number = this.defaultPageLength): Wrapper[] {
-        const wrappers: Wrapper[] = this.wrapperRepository.getPage(page, pageLength);
-        wrappers.forEach(w => {
-            const supplierId: number = this.suppliedWrapperRepository.getSupplierId(w._id);
+    async getPageOfWrappers(page: number, pageLength: number = this.defaultPageLength): Promise<Wrapper[]> {
+        const wrappers: Wrapper[] = await this.wrapperRepository.getPage(page, pageLength);
+        wrappers.forEach(async w => {
+            const supplierId: number = await this.suppliedWrapperRepository.getSupplierId(w._id);
             if (supplierId) {
                 w.supplierId = supplierId;
             }
@@ -196,38 +196,38 @@ class PGService {
         return wrappers;
     }
 
-    getWrapperPageCount(pageLength: number = this.defaultPageLength): number {
-        return Math.ceil(this.wrapperRepository.getCount() / pageLength);
+    async getWrapperPageCount(pageLength: number = this.defaultPageLength): Promise<number> {
+        return Math.ceil(await this.wrapperRepository.getCount() / pageLength);
     }
 
-    getPageOfSuppliers(page: number, pageLength: number = this.defaultPageLength): Supplier[] {
-        const suppliers: Supplier[] = this.supplierRepository.getPage(page, pageLength);
-        suppliers.forEach(s => {
-            const suppliedWrappers: Wrapper[] = this.suppliedWrapperRepository.getSuppliedWrapperObjects(s._id);
+    async getPageOfSuppliers(page: number, pageLength: number = this.defaultPageLength): Promise<Supplier[]> {
+        const suppliers: Supplier[] = await this.supplierRepository.getPage(page, pageLength);
+        suppliers.forEach(async s => {
+            const suppliedWrappers: Wrapper[] = await this.suppliedWrapperRepository.getSuppliedWrapperObjects(s._id);
             s.wrappers = suppliedWrappers;
         });
 
         return suppliers;
     }
 
-    getSupplierPageCount(pageLength: number = this.defaultPageLength): number {
-        return Math.ceil(this.supplierRepository.getCount() / pageLength);
+    async getSupplierPageCount(pageLength: number = this.defaultPageLength): Promise<number> {
+        return Math.ceil(await this.supplierRepository.getCount() / pageLength);
     }
 
-    getPageOfCombos(page: number, pageLength: number = this.defaultPageLength): WrapperBoxCombo[] {
+    async getPageOfCombos(page: number, pageLength: number = this.defaultPageLength): Promise<WrapperBoxCombo[]> {
         return this.comboRepository.getPage(page, pageLength);
     }
 
-    getComboPageCount(pageLength: number = this.defaultPageLength): number {
-        return Math.ceil(this.comboRepository.getCount() / pageLength);
+    async getComboPageCount(pageLength: number = this.defaultPageLength): Promise<number> {
+        return Math.ceil(await this.comboRepository.getCount() / pageLength);
     }
 
-    getBoxesLargerThan(size: number, page: number, pageLength: number = this.defaultPageLength): Box[] {
+    async getBoxesLargerThan(size: number, page: number, pageLength: number = this.defaultPageLength): Promise<Box[]> {
         // at least one dimension must be larger than size
         return this.boxRepository.getLargerThan(size, page, pageLength);
     }
 
-    getAverageWrapperLengths(page: number, pageLength: number = this.defaultPageLength): AverageWrapperLength[] {
+    async getAverageWrapperLengths(page: number, pageLength: number = this.defaultPageLength): Promise<AverageWrapperLength[]> {
         return this.wrapperRepository.getAverageLengths(page, pageLength);
     }
 }
