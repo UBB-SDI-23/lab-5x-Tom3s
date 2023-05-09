@@ -209,7 +209,7 @@ class PGService {
 
         const suppliersWithWrappers: Promise<Supplier>[] = suppliers.map(async s => {
             const suppliedWrappers: Wrapper[] = await this.suppliedWrapperRepository.getSuppliedWrapperObjects(s._id);
-            s.wrappers = suppliedWrappers;
+            s.wrappers = suppliedWrappers.map(w => w._id);
             return s;
         });
 
