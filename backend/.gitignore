@@ -1,3 +1,5 @@
 node_modules/**/*
 lib/**/*
-mockData/**/*
+mockData/*
+!mockData/boxes
+!mockData/wrappers
