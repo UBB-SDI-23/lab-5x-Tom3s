@@ -175,7 +175,7 @@ function setupRoutes(app: Express, service: PGService){
         #swagger.responses[200] = { description: 'Returned the number of pages of wrappers' }
         */
         const pages = service.getWrapperPageCount();
-        res.send(await pages.toString());
+        res.send((await pages).toString());
     });
 
     // GET /api/wrappers - returns all wrappers
@@ -323,7 +323,7 @@ function setupRoutes(app: Express, service: PGService){
         #swagger.responses[200] = { description: 'Returned the number of pages of suppliers' }
         */
         const pages = service.getSupplierPageCount();
-        res.send(await pages.toString());
+        res.send((await pages).toString());
     });
 
 
@@ -540,7 +540,7 @@ function setupRoutes(app: Express, service: PGService){
         #swagger.responses[200] = { description: 'Returned the number of pages of combos' }
         */
         const pages = service.getComboPageCount();
-        res.send(await pages.toString());
+        res.send((await pages).toString());
     });
 
     // GET /api/combos - returns all combos
