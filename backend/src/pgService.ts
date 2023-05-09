@@ -59,7 +59,7 @@ class PGService {
     async getAllWrappers(): Promise<Wrapper[]> {
         const wrappers: Wrapper[] = await this.wrapperRepository.getAll();
         wrappers.forEach(async w => {
-            const supplierId: number = await this.suppliedWrapperRepository.getSupplierId(w._id);
+            const supplierId: number | undefined = await this.suppliedWrapperRepository.getSupplierId(w._id);
             if (supplierId) {
                 w.supplierId = supplierId;
             }
@@ -70,7 +70,7 @@ class PGService {
 
     async getWrapperById(id: number): Promise<Wrapper> {
         const wrapper: Wrapper = await this.wrapperRepository.getById(id);
-        const supplierId: number = await this.suppliedWrapperRepository.getSupplierId(id);
+        const supplierId: number | undefined = await this.suppliedWrapperRepository.getSupplierId(id);
         if (supplierId) {
             wrapper.supplierId = supplierId;
         } else {
@@ -187,7 +187,7 @@ class PGService {
     async getPageOfWrappers(page: number, pageLength: number = this.defaultPageLength): Promise<Wrapper[]> {
         const wrappers: Wrapper[] = await this.wrapperRepository.getPage(page, pageLength);
         wrappers.forEach(async w => {
-            const supplierId: number = await this.suppliedWrapperRepository.getSupplierId(w._id);
+            const supplierId: number | undefined = await this.suppliedWrapperRepository.getSupplierId(w._id);
             if (supplierId) {
                 w.supplierId = supplierId;
             }

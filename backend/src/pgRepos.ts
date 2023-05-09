@@ -235,11 +235,11 @@ class PGSuppliedWrapperRepository {
         this.client.connect();
     }
 
-    async getSupplierId(wrapperId: number): Promise<number> {
+    async getSupplierId(wrapperId: number): Promise<number | undefined> {
         // SELECT supplierId FROM suppliedWrappers WHERE wrapperId = $1
         const result = await this.client.query('SELECT supplierId FROM suppliedWrappers WHERE wrapperId = $1', [wrapperId]);
         if (result.rows.length === 0) {
-            throw new Error(`Supplier with wrapperId ${wrapperId} not found`);
+            return undefined;
         }
         return result.rows[0].supplierid;
     }
