@@ -4,16 +4,9 @@ import * as mongoDB from "mongodb";
 import { ObjectId } from "mongodb";
 import { Box, Wrapper, Supplier, WrapperBoxCombo } from "./entities";
 
-interface IBoxRepository {
-    getAll(): Promise<Box[]>;
-    getPage(page: number, size: number): Promise<Box[]>;
-    getById(id: ObjectId): Promise<Box | undefined>;
-    add(box: Box): void;
-    addBulk(boxes: Box[]): void;
-    update(box: Box): void;
-    delete(id: ObjectId): void;
-    getSize(): Promise<number>;
-}
+import { IBoxRepository, IWrapperRepository, ISupplierRepository, IWrapperBoxComboRepository } from "./entities";
+
+
 
 class BoxRepository implements IBoxRepository {
     private boxes: mongoDB.Collection;
@@ -65,15 +58,7 @@ class BoxRepository implements IBoxRepository {
     }
 }
 
-interface IWrapperRepository {
-    getAll(): Promise<Wrapper[]>;
-    getPage(page: number, size: number): Promise<Wrapper[]>;
-    getById(id: ObjectId): Promise<Wrapper | undefined>;
-    add(wrapper: Wrapper): void;
-    update(wrapper: Wrapper): void;
-    delete(id: ObjectId): void;
-    getSize(): Promise<number>;
-}
+
 
 class WrapperRepository implements IWrapperRepository {
     private wrappers: mongoDB.Collection;
@@ -120,16 +105,6 @@ class WrapperRepository implements IWrapperRepository {
     }
 }
 
-interface ISupplierRepository {
-    getAll(): Promise<Supplier[]>;
-    getPage(page: number, size: number): Promise<Supplier[]>;
-    getById(id: ObjectId): Promise<Supplier | undefined>;
-    add(supplier: Supplier): void;
-    update(supplier: Supplier): void;
-    delete(id: ObjectId): void;
-    getSize(): Promise<number>;
-    addWrapper(supplierId: ObjectId, wrapperId: string): Promise<void>;
-}
 
 class SupplierRepository implements ISupplierRepository{
     
@@ -185,15 +160,7 @@ class SupplierRepository implements ISupplierRepository{
     }
 }
 
-interface IWrapperBoxComboRepository {
-    getAll(): Promise<WrapperBoxCombo[]>;
-    getPage(page: number, size: number): Promise<WrapperBoxCombo[]>;
-    getById(id: ObjectId): Promise<WrapperBoxCombo | undefined>;
-    add(wrapperBoxCombo: WrapperBoxCombo): void;
-    update(wrapperBoxCombo: WrapperBoxCombo): void;
-    delete(id: ObjectId): void;
-    getSize(): Promise<number>;
-}
+
 
 class WrapperBoxComboRepository implements IWrapperBoxComboRepository {
     private combos: mongoDB.Collection;
@@ -239,4 +206,3 @@ class WrapperBoxComboRepository implements IWrapperBoxComboRepository {
 }
 
 export { BoxRepository, WrapperRepository, SupplierRepository, WrapperBoxComboRepository };
-export type { IBoxRepository, IWrapperRepository, ISupplierRepository, IWrapperBoxComboRepository };

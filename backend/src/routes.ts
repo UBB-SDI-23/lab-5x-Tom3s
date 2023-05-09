@@ -1,11 +1,10 @@
 // REST API
 
-import { ObjectId } from "mongodb";
 import { Box, Wrapper, Supplier, WrapperBoxCombo } from "./entities";
-import { Service } from "./service";
-import { Express, Request, Response } from 'express';
+import { Express } from 'express';
+import PGService from "./pgService";
 
-function setupRoutes(app: Express, service: Service){
+function setupRoutes(app: Express, service: PGService){
 
     // GET /api/boxes/pages - returns the number of pages of boxes
     app.get('/api/boxes/pages', async (req, res) => {
@@ -14,7 +13,7 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to get the number of pages of boxes'
         #swagger.responses[200] = { description: 'Returned the number of pages of boxes' }
         */
-        const pages = await service.getBoxPageCount();
+        const pages = service.getBoxPageCount();
         res.send(pages.toString());
     });
 
@@ -39,12 +38,12 @@ function setupRoutes(app: Express, service: Service){
         var query = req.query;
         if (query.page) {
             var pageNumber = parseInt(query.page as string);
-            res.send(await service.getPageOfBoxes(pageNumber));
+            res.send(service.getPageOfBoxes(pageNumber));
             return;
         }
 
         if (query.all && query.all == 'true') {
-            res.send(await service.getAllBoxes());
+            res.send(service.getAllBoxes());
             return;
         }
 
@@ -62,13 +61,13 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to get a box by id'
         #swagger.parameters['id'] = { 
             in: 'path',
-            description: 'Box id (mongoDB ObjectID String)'
+            description: 'Box id (int)'
         }
         #swagger.responses[200] = { description: 'Box found' }
         #swagger.responses[404] = { description: 'Box not found' }
         */
-        const id = String(req.params.id);
-        const box = await service.getBoxById(id);
+        const id = parseInt(req.params.id);
+        const box = service.getBoxById(id);
         if (box) {
             res.send(box);
         } else {
@@ -120,7 +119,7 @@ function setupRoutes(app: Express, service: Service){
         #swagger.tags = ['Boxes']
         #swagger.description = 'Endpoint to update a box'
         #swagger.parameters['id'] = { 
-            description: 'Box id (mongoDB ObjectID String)',
+            description: 'Box id (int)',
             type: 'string',
             default: '6419faf56b23d736edce7bd6'
         }
@@ -137,11 +136,11 @@ function setupRoutes(app: Express, service: Service){
             }
         }
         */
-        const id = String(req.params.id);
+        const id = parseInt(req.params.id);
 
         var box = (req.body) as Box;
 
-        box._id = new ObjectId(id);
+        box._id = id;
         
         try {
             service.updateBox(box);
@@ -156,10 +155,10 @@ function setupRoutes(app: Express, service: Service){
         /*
         #swagger.tags = ['Boxes']
         #swagger.description = 'Endpoint to delete a box'
-        #swagger.parameters['id'] = { description: 'Box id (mongoDB ObjectID String)' }
+        #swagger.parameters['id'] = { description: 'Box id (int)' }
         */
 
-        const id = String(req.params.id);
+        const id = parseInt(req.params.id)
         try {
             service.deleteBox(id);
             res.sendStatus(200);
@@ -175,7 +174,7 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to get the number of pages of wrappers'
         #swagger.responses[200] = { description: 'Returned the number of pages of wrappers' }
         */
-        const pages = await service.getWrapperPageCount();
+        const pages = service.getWrapperPageCount();
         res.send(pages.toString());
     });
 
@@ -200,12 +199,12 @@ function setupRoutes(app: Express, service: Service){
         var query = req.query;
         if (query.page) {
             var pageNumber = parseInt(query.page as string);
-            res.send(await service.getPageOfWrappers(pageNumber));
+            res.send(service.getPageOfWrappers(pageNumber));
             return;
         }
 
         if (query.all && query.all == 'true') {
-            res.send(await service.getAllWrappers());
+            res.send(service.getAllWrappers());
             return;
         }
 
@@ -220,13 +219,13 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to get a wrapper by id'
         #swagger.parameters['id'] = {
             in: 'path',
-            description: 'Wrapper id (mongoDB ObjectID String)'
+            description: 'Wrapper id (int)'
         }
         #swagger.responses[200] = { description: 'Wrapper found' }
         #swagger.responses[404] = { description: 'Wrapper not found' }
         */
-        const id = String(req.params.id);
-        const wrapper = await service.getWrapperById(id);
+        const id = parseInt(req.params.id)
+        const wrapper = service.getWrapperById(id);
         if (wrapper) {
             res.send(wrapper);
         } else {
@@ -269,7 +268,7 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to update a wrapper'
         #swagger.parameters['id'] = {
             in: 'path',
-            description: 'Wrapper id (mongoDB ObjectID String)'
+            description: 'Wrapper id (int)'
         }
         #swagger.parameters['wrapper'] = {
             in: 'body',
@@ -284,10 +283,10 @@ function setupRoutes(app: Express, service: Service){
             }
         }
         */
-        const id = Number(req.params.id);
+        const id = parseInt(req.params.id);
         var wrapper = (req.body) as Wrapper;
 
-        wrapper._id = new ObjectId(id);
+        wrapper._id = id;
 
         try {
             service.updateWrapper(wrapper);
@@ -304,10 +303,10 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to delete a wrapper'
         #swagger.parameters['id'] = {
             in: 'path',
-            description: 'Wrapper id (mongoDB ObjectID String)'
+            description: 'Wrapper id (int)'
         }
         */
-        const id = String(req.params.id);
+        const id = parseInt(req.params.id)
         try {
             service.deleteWrapper(id);
             res.sendStatus(200);
@@ -323,7 +322,7 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to get the number of pages of suppliers'
         #swagger.responses[200] = { description: 'Returned the number of pages of suppliers' }
         */
-        const pages = await service.getSupplierPageCount();
+        const pages = service.getSupplierPageCount();
         res.send(pages.toString());
     });
 
@@ -349,12 +348,12 @@ function setupRoutes(app: Express, service: Service){
         var query = req.query;
         if (query.page) {
             var pageNumber = parseInt(query.page as string);
-            res.send(await service.getPageOfSuppliers(pageNumber));
+            res.send(service.getPageOfSuppliers(pageNumber));
             return;
         }
 
         if (query.all && query.all == 'true') {
-            res.send(await service.getAllSuppliers());
+            res.send(service.getAllSuppliers());
             return;
         }
 
@@ -370,13 +369,13 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to get a supplier by id'
         #swagger.parameters['id'] = {
             in: 'path',
-            description: 'Supplier id (mongoDB ObjectID String)'
+            description: 'Supplier id (int)'
         }
         #swagger.responses[200] = { description: 'Supplier found' }
         #swagger.responses[404] = { description: 'Supplier not found' }
         */
-        const id = String(req.params.id);
-        const supplier = await service.getSupplierById(id);
+        const id = parseInt(req.params.id)
+        const supplier = service.getSupplierById(id);
         if (supplier) {
             res.send(supplier);
         } else {
@@ -405,7 +404,7 @@ function setupRoutes(app: Express, service: Service){
         var supplier = (req.body) as Supplier;
 
         if (!supplier.wrappers) {
-            supplier.wrappers = new Array<string>();
+            supplier.wrappers = new Array<number>();
         }
 
         try {
@@ -423,15 +422,15 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to add a wrapper to a supplier'
         #swagger.parameters['id'] = {
             in: 'path',
-            description: 'Supplier id (mongoDB ObjectID String)'
+            description: 'Supplier id (int)'
         }
         #swagger.parameters['wrapperId'] = {
             in: 'path',
-            description: 'Wrapper id (mongoDB ObjectID String)'
+            description: 'Wrapper id (int)'
         }
         */
-        const id = String(req.params.id);
-        const wrapperId = String(req.params.wrapperId);
+        const id = parseInt(req.params.id)
+        const wrapperId = parseInt(req.params.wrapperId);
 
         try {
             service.addWrapperToSupplier(id, wrapperId);
@@ -449,7 +448,7 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to update a supplier'
         #swagger.parameters['id'] = {
             in: 'path',
-            description: 'Supplier id (mongoDB ObjectID String)'
+            description: 'Supplier id (int)'
         }
         #swagger.parameters['supplier'] = {
             in: 'body',
@@ -464,10 +463,10 @@ function setupRoutes(app: Express, service: Service){
             }
         }
         */
-        const id = String(req.params.id);
+        const id = parseInt(req.params.id)
         var supplier = (req.body) as Supplier;
 
-        supplier._id = new ObjectId(id);
+        supplier._id = id;
 
         service.updateSupplier(supplier);
         res.sendStatus(200);
@@ -480,10 +479,10 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to delete a supplier'
         #swagger.parameters['id'] = {
             in: 'path',
-            description: 'Supplier id (mongoDB ObjectID String)'
+            description: 'Supplier id (int)'
         }
         */
-        const id = String(req.params.id);
+        const id = parseInt(req.params.id)
         try {
             service.deleteSupplier(id);
             res.sendStatus(200);
@@ -503,11 +502,34 @@ function setupRoutes(app: Express, service: Service){
             required: true,
             default: 10
         }
+        #swagger.parameters['page'] = {
+            in: 'query',
+            description: 'Page number',
+            type: 'integer'
+        }
+        #swagger.parameters['all'] = {
+            in: 'query',
+            description: 'Confirms that all boxes should be returned',
+            type: 'boolean'
+        }
         #swagger.responses[200] = { description: 'Returned all boxes larger than the given size' }
+        #swagger.responses[403] = { description: 'Deny returning all boxes if all is not set to true' }
         */
-        const size = Number(req.params.size);
-        const boxes = await service.getBoxesLargerThan(size);
-        res.send(boxes);
+        const size = parseInt(req.params.size);
+        
+        var query = req.query;
+        if (query.page) {
+            var pageNumber = parseInt(query.page as string);
+            res.send(service.getBoxesLargerThan(size, pageNumber));
+            return;
+        }
+
+        if (query.all && query.all == 'true') {
+            res.send(service.getBoxesLargerThan(size, 0, service.getBoxPageCount(1)));
+            return;
+        }
+
+        res.send(403);
     });
 
     // GET /api/combos/pages - returns the number of pages of combos
@@ -517,7 +539,7 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to get the number of pages of combos'
         #swagger.responses[200] = { description: 'Returned the number of pages of combos' }
         */
-        const pages = await service.getComboPageCount();
+        const pages = service.getComboPageCount();
         res.send(pages.toString());
     });
 
@@ -542,12 +564,12 @@ function setupRoutes(app: Express, service: Service){
         var query = req.query;
         if (query.page) {
             var pageNumber = parseInt(query.page as string);
-            res.send(await service.getPageOfCombos(pageNumber));
+            res.send(service.getPageOfCombos(pageNumber));
             return;
         }
 
         if (query.all && query.all == 'true') {
-            res.send(await service.getAllCombos());
+            res.send(service.getAllCombos());
             return;
         }
 
@@ -563,13 +585,13 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to get a single combo by id'
         #swagger.parameters['id'] = {
             in: 'path',
-            description: 'Combo id (mongoDB ObjectID String)'
+            description: 'Combo id (int)'
         }
         #swagger.responses[200] = { description: 'Returned a single combo by id' }
         #swagger.responses[404] = { description: 'Combo not found' }
         */
-        const id = String(req.params.id);
-        const combo = await service.getComboById(id);
+        const id = parseInt(req.params.id)
+        const combo = service.getComboById(id);
         if (combo) {
             res.send(combo);
         } else {
@@ -607,7 +629,7 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to update a combo'
         #swagger.parameters['id'] = {
             in: 'path',
-            description: 'Combo id (mongoDB ObjectID String)'
+            description: 'Combo id (int)'
         }
         #swagger.parameters['combo'] = {
             in: 'body',
@@ -621,10 +643,10 @@ function setupRoutes(app: Express, service: Service){
             }
         }
         */
-        const id = String(req.params.id);
+        const id = parseInt(req.params.id)
         var combo = (req.body) as WrapperBoxCombo;
 
-        combo._id = new ObjectId(id);
+        combo._id = id;
 
         try {
             service.updateCombo(combo);
@@ -641,10 +663,10 @@ function setupRoutes(app: Express, service: Service){
         #swagger.description = 'Endpoint to delete a combo'
         #swagger.parameters['id'] = {
             in: 'path',
-            description: 'Combo id (mongoDB ObjectID String)'
+            description: 'Combo id (int)'
         }
         */
-        const id = String(req.params.id);
+        const id = parseInt(req.params.id)
         try {
             service.deleteCombo(id);
             res.sendStatus(200);
@@ -659,9 +681,33 @@ function setupRoutes(app: Express, service: Service){
         #swagger.tags = ['Statistics']
         #swagger.description = 'Endpoint to get average length statistics'
         #swagger.responses[200] = { description: 'Returned average length statistics' }
+        #swagger.responses[403] = { description: 'Deny returning average length statistics if it\'s not confirmed' }
+        #swagger.parameters['page'] = {
+            in: 'query',
+            description: 'Page number',
+            type: 'integer'
+        }
+        #swagger.parameters['all'] = {
+            in: 'query',
+            description: 'Confirms that all supplier stats should be returned',
+            type: 'boolean'
+        }
         */
-        const stats = await service.getAverageWrapperLengths();
-        res.send(stats);
+
+        var query = req.query;
+        if (query.page) {
+            var pageNumber = parseInt(query.page as string);
+            res.send(service.getAverageWrapperLengths(pageNumber));
+            return;
+        }
+
+        if (query.all && query.all == 'true') {
+            res.send(service.getAverageWrapperLengths(0, service.getSupplierPageCount(1)));
+            return;
+        }
+
+        // if no query parameters, return error 403
+        res.sendStatus(403);
     });
 }
 

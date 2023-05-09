@@ -20,20 +20,12 @@
 // Use try/catch/throw
 // Use typescript
 
-import { runTests } from './tests';
+// import { runTests } from './tests';
 
-runTests();
-
-
+// runTests();
 
 import express from 'express';
-import { readFileSync, writeFileSync } from 'fs';
-import { join, resolve } from 'path';
-
-import { Box, Wrapper, Supplier, WrapperBoxCombo, AverageWrapperLength } from "./entities";
-import { BoxRepository, WrapperRepository, SupplierRepository, WrapperBoxComboRepository } from './repos';
-
-// import cors from 'cors';
+import { join } from 'path';
 
 const app = express();
 //     ^?
@@ -49,79 +41,81 @@ app.use(express.json());
 
 const filePath = join(__dirname, 'data.json');
 
-import { MongoClient } from 'mongodb';
-import { ObjectId } from "mongodb";
-import * as dotenv from "dotenv";
 import * as mongoDB from "mongodb";
 import { Service } from './service';
-import { exit } from 'process';
+import { IBoxRepository, IWrapperRepository, ISupplierRepository, IWrapperBoxComboRepository } from './entities';
 
 
-var collections: { 
-    boxes?: mongoDB.Collection,
-    wrappers?: mongoDB.Collection,
-    suppliers?: mongoDB.Collection 
-    combos?: mongoDB.Collection
-} = {}
+// var collections: { 
+//     boxes?: mongoDB.Collection,
+//     wrappers?: mongoDB.Collection,
+//     suppliers?: mongoDB.Collection 
+//     combos?: mongoDB.Collection
+// } = {}
 
 var repositories: {
-    boxes?: BoxRepository,
-    wrappers?: WrapperRepository,
-    suppliers?: SupplierRepository
-    combos?: WrapperBoxComboRepository
+    boxes?: IBoxRepository,
+    wrappers?: IWrapperRepository,
+    suppliers?: ISupplierRepository
+    combos?: IWrapperBoxComboRepository
 } = {}
 
-function connectToDatabase() { 
-    require('dotenv').config();
+require('dotenv').config();
 
-    console.log("Created dotenv config");
+// function connectToDatabase() { 
 
-    const { MongoClient, ServerApiVersion } = require('mongodb');
-    const uri = process.env.DB_CONN_STRING;
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+//     console.log("Created dotenv config");
 
-    client.connect();
-    console.log("Connected to MongoDB");
+//     const { MongoClient, ServerApiVersion } = require('mongodb');
+//     const uri = process.env.DB_CONN_STRING;
+//     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-    const database_name = process.env.DB_NAME;
-    const box_collection_name = process.env.DB_COLLECTION_BOXES;
-    const wrapper_collection_name = process.env.DB_COLLECTION_WRAPPERS;
-    const supplier_collection_name = process.env.DB_COLLECTION_SUPPLIERS;
-    const combo_collection_name = process.env.DB_COLLECTION_COMBOS;
+//     client.connect();
+//     console.log("Connected to MongoDB");
 
-    if (!box_collection_name || !wrapper_collection_name || !supplier_collection_name || !combo_collection_name) {
-        // console.log("Error: Missing collection name in .env file");
-        throw new Error("Error: Missing collection name in .env file");
-    }
+//     const database_name = process.env.DB_NAME;
+//     const box_collection_name = process.env.DB_COLLECTION_BOXES;
+//     const wrapper_collection_name = process.env.DB_COLLECTION_WRAPPERS;
+//     const supplier_collection_name = process.env.DB_COLLECTION_SUPPLIERS;
+//     const combo_collection_name = process.env.DB_COLLECTION_COMBOS;
+
+//     if (!box_collection_name || !wrapper_collection_name || !supplier_collection_name || !combo_collection_name) {
+//         // console.log("Error: Missing collection name in .env file");
+//         throw new Error("Error: Missing collection name in .env file");
+//     }
     
-    const database: mongoDB.Db = client.db(database_name);
+//     const database: mongoDB.Db = client.db(database_name);
 
-    const boxCollection = database.collection(box_collection_name);
-    const wrapperCollection = database.collection(wrapper_collection_name);
-    const supplierCollection = database.collection(supplier_collection_name);
-    const comboCollection = database.collection(combo_collection_name);
+//     const boxCollection = database.collection(box_collection_name);
+//     const wrapperCollection = database.collection(wrapper_collection_name);
+//     const supplierCollection = database.collection(supplier_collection_name);
+//     const comboCollection = database.collection(combo_collection_name);
 
-    collections.boxes = boxCollection;
-    collections.wrappers = wrapperCollection;
-    collections.suppliers = supplierCollection;
-    collections.combos = comboCollection;
+//     collections.boxes = boxCollection;
+//     collections.wrappers = wrapperCollection;
+//     collections.suppliers = supplierCollection;
+//     collections.combos = comboCollection;
     
-    console.log("Connected to collections");
+//     console.log("Connected to collections");
 
-    repositories.boxes = new BoxRepository(boxCollection);
-    repositories.wrappers = new WrapperRepository(wrapperCollection);
-    repositories.suppliers = new SupplierRepository(supplierCollection);
-    repositories.combos = new WrapperBoxComboRepository(comboCollection);
-}
+//     repositories.boxes = new BoxRepository(boxCollection);
+//     repositories.wrappers = new WrapperRepository(wrapperCollection);
+//     repositories.suppliers = new SupplierRepository(supplierCollection);
+//     repositories.combos = new WrapperBoxComboRepository(comboCollection);
+// }
 
-connectToDatabase();
-const service = new Service(repositories.boxes, repositories.wrappers, repositories.suppliers, repositories.combos);
+// connectToDatabase();
+
+// const service = new Service(repositories.boxes, repositories.wrappers, repositories.suppliers, repositories.combos);
+
+const service = new PGService();
 
 import setupRoutes from './routes';
 
 setupRoutes(app, service);
 
 import setupSwagger from './swagger';
+import PGService from './pgService';
 
 setupSwagger(app, port);
 

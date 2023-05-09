@@ -63,6 +63,20 @@ class Service {
     }
 
     async getAllWrappers(): Promise<Wrapper[]> {
+        /*
+            [
+                {
+                    _id: ObjectId("..."),
+                    length: 10,
+                    width: 10,
+                    color: "red",
+                    complementaryColor: "blue",
+                    pattern: "stripes",
+                    supplierId?: ObjectId("...")
+                },
+                ...
+            ]
+        */
         var originalWrappers: Wrapper[] = await this.wrapperRepository.getAll() as Wrapper[];
         var wrappers: Wrapper[] = [];
         var suppliers: Supplier[] = await this.supplierRepository.getAll() as Supplier[];
@@ -89,6 +103,22 @@ class Service {
     }
 
     async getWrapperById(id: string): Promise<Wrapper | undefined> {
+        /*
+            {
+                _id: ObjectId("..."),
+                length: 10,
+                width: 10,
+                color: "red",
+                complementaryColor: "blue",
+                pattern: "stripes",
+                supplier: null | {
+                    _id: ObjectId("..."),
+                    name: "Supplier 1",
+                    address: "123 Main St",
+                    phone: "123-456-7890",
+                }
+            }
+        */
         const wrapper = await this.wrapperRepository.getById(new ObjectId(id));
         const suppliers = await this.supplierRepository.getAll();
         if (!wrapper) return undefined;
@@ -117,6 +147,17 @@ class Service {
     }
 
     async getAllSuppliers(): Promise<Supplier[]> {
+        /*
+            [
+                {
+                    _id: ObjectId("..."),
+                    name: "Supplier 1",
+                    address: "123 Main St",
+                    phone: "123-456-7890",
+                },
+                ...
+            ]
+        */
         var originalSuppliers = await this.supplierRepository.getAll();
         var suppliers: Supplier[] = [];
         
@@ -127,6 +168,26 @@ class Service {
     }
 
     async getSupplierById(id: string): Promise< Supplier | undefined> {
+        /*
+        {
+            "_id": ObjectId("..."),
+            "name": "Centric Smart Institute 360 SpA",
+            "address": "766 Champs-Élysées, Utah USA",
+            "phone": "0754 140112",
+            "email": "smartinstitute@hushmail.com",
+            "wrappers": [
+                {
+                    "_id": ObjectId("..."),
+                    "width": 23,
+                    "length": 29,
+                    "color": "Seashell",
+                    "complementaryColor": "Blanched Almond",
+                    "pattern": "Spiral"
+                },
+                ...
+            ]
+        }
+        */
         // var supplierCopy = Supplier.fromObject(this.supplierRepository.getById(id)?.toObject());
         var supplierCopy = deepCopy(await this.supplierRepository.getById(new ObjectId(id))) as Supplier;
 
@@ -192,6 +253,18 @@ class Service {
     }
 
     async getAllCombos(): Promise<WrapperBoxCombo[]> {
+        /*
+            [
+                {
+                    _id: ObjectId("..."),
+                    wrapperId: ObjectId("..."),
+                    boxId: ObjectId("..."),
+                    name: "Combo 1",
+                    price: 10.00,
+                },
+                ...
+            ]
+        */
         const combos = await this.comboRepository.getAll();
         // const boxes = await this.boxRepository.getAll();
         // const wrappers = await this.wrapperRepository.getAll();
@@ -200,6 +273,32 @@ class Service {
     }
 
     async getComboById(id: string): Promise<WrapperBoxCombo | undefined> {
+        /*
+            [
+                {
+                    _id: ObjectId("..."),
+                    box: {
+                        _id: ObjectId("..."),
+                        width: 23,
+                        length: 29,
+                        height: 29,
+                        color: "Seashell",
+                        material: "Cardboard"
+                    },
+                    wrapper: {
+                        _id: ObjectId("..."),
+                        width: 23,
+                        length: 29,
+                        color: "Seashell",
+                        complementaryColor: "Blanched Almond",
+                        pattern: "Spiral"
+                    },
+                    name: "Combo 1",
+                    price: 10.00,
+                },
+                ...
+            ]
+        */
         var temp = await this.comboRepository.getById(new ObjectId(id));
         if (temp == undefined) {
             throw new Error("Combo with ID" + id + "does not exist");

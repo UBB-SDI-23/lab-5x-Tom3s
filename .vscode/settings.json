@@ -1,0 +1,13 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "34.32.135.255",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "box_db",
+            "database": "box_db",
+            "username": "postgres"
+        }
+    ]
+}

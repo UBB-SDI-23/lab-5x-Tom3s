@@ -1,28 +1,13 @@
-import { ObjectId } from "mongodb";
 
 class Box {
     constructor(
+        public _id: number,
         public length: number, 
         public width: number, 
         public height: number, 
         public material: string, 
-        public color: string,
-        public _id?: ObjectId 
+        public color: string
     ) {}
-
-    getId(): ObjectId {
-        if (this._id === undefined) {
-            throw new Error("Supplier ID is undefined");
-        }
-        return this._id;
-    }
-
-    static retrieveId(obj: any): ObjectId {
-        if (obj._id === undefined) {
-            throw new Error("Wrapper ID is undefined");
-        }
-        return obj._id;
-    }
 
     static validateDimensions(obj: any): boolean {
         if (obj.length === undefined || obj.width === undefined || obj.height === undefined) {
@@ -34,15 +19,16 @@ class Box {
 
 class Wrapper {
     constructor(
+        public _id: number,
         public length: number,
         public width: number,
         public pattern: string,
         public color: string,
         public complementaryColor: string,
-        public _id?: ObjectId
+        public supplierId?: number | null
     ) {}
 
-    static toComplexObject(obj: any, supplierId?: ObjectId): any {
+    static toComplexObject(obj: any, supplierId?: number): any {
         return {
             _id: obj._id,
             length: obj.length,
@@ -66,20 +52,6 @@ class Wrapper {
         };
     }
 
-    getId(): ObjectId {
-        if (this._id === undefined) {
-            throw new Error("Wrapper ID is undefined");
-        }
-        return this._id;
-    }
-
-    static retrieveId(obj: any): ObjectId {
-        if (obj._id === undefined) {
-            throw new Error("Wrapper ID is undefined");
-        }
-        return obj._id;
-    }
-
     static validateDimensions(obj: any): boolean {
         if (obj.length === undefined || obj.width === undefined) {
             return false;
@@ -90,12 +62,12 @@ class Wrapper {
 
 class Supplier {
     constructor(
+        public _id: number,
         public name: string,
         public address: string,
         public phone: string,
         public email: string,
-        public wrappers: string[],
-        public _id?: ObjectId
+        public wrappers?: number[] | Wrapper[]
     ) {}
 
     static toSimpleObject(s: any): any {
@@ -106,29 +78,6 @@ class Supplier {
             phone: s.phone,
             email: s.email
         };
-    }
-
-
-     static addWrapper(obj: any, wrapperId: string): Supplier {
-        if (obj.wrappers === undefined) {
-            throw new Error("Supplier wrappers is undefined");
-        }
-        obj.wrappers.push(wrapperId);
-        return obj;
-    }
-
-    getId(): ObjectId {
-        if (this._id === undefined) {
-            throw new Error("Supplier ID is undefined");
-        }
-        return this._id;
-    }
-
-    static retrieveId(obj: any): ObjectId {
-        if (obj._id === undefined) {
-            throw new Error("Wrapper ID is undefined");
-        }
-        return obj._id;
     }
 
     static validatePhoneNumber(obj: any): boolean {
@@ -143,36 +92,79 @@ class Supplier {
 
 class WrapperBoxCombo {
     constructor(
-        public wrapperId: string,
-        public boxId: string,
+        public _id: number,
         public name: string,
         public price: number,
-        public _id?: ObjectId,
+        public boxId?: number,
+        public wrapperId?: number,
+        public box?: Box,
+        public wrapper?: Wrapper
     ) { }
 
-    static toComplexObject(obj: any, wrapper: Wrapper, box: Box): any {
+    static toComplexObject(obj: any, wrapper: Wrapper, box: Box): WrapperBoxCombo {
         return {
             _id: obj._id,
             name: obj.name,
             wrapper: wrapper,
             box: box,
             price: obj.price
-        };
-    }
-
-    static retrieveId(obj: any): ObjectId {
-        if (obj._id === undefined) {
-            throw new Error("Wrapper ID is undefined");
-        }
-        return obj._id;
+        } as WrapperBoxCombo;
     }
 }
 
 class AverageWrapperLength {
     constructor(
         public supplier: Supplier,
-        public averageLength: number
+        public averageLength: number | null
     ) {}
 }
 
+interface SuppliedWrapper {
+    supplierId: number;
+    wrapperId: number;
+}
+
+interface IBoxRepository {
+    getAll(): Promise<Box[]>;
+    getPage(page: number, pageLength: number): Promise<Box[]>;
+    getById(id: number): Promise<Box | undefined>;
+    add(box: Box): void;
+    addBulk(boxes: Box[]): void;
+    update(box: Box): void;
+    delete(id: number): void;
+    getSize(): Promise<number>;
+}
+
+interface IWrapperRepository {
+    getAll(): Promise<Wrapper[]>;
+    getPage(page: number, pageLength: number): Promise<Wrapper[]>;
+    getById(id: number): Promise<Wrapper | undefined>;
+    add(wrapper: Wrapper): void;
+    update(wrapper: Wrapper): void;
+    delete(id: number): void;
+    getSize(): Promise<number>;
+}
+
+interface ISupplierRepository {
+    getAll(): Promise<Supplier[]>;
+    getPage(page: number, pageLength: number): Promise<Supplier[]>;
+    getById(id: number): Promise<Supplier | undefined>;
+    add(supplier: Supplier): void;
+    update(supplier: Supplier): void;
+    delete(id: number): void;
+    getSize(): Promise<number>;
+    addWrapper(supplierId: number, wrapperId: string): Promise<void>;
+}
+
+interface IWrapperBoxComboRepository {
+    getAll(): Promise<WrapperBoxCombo[]>;
+    getPage(page: number, pageLength: number): Promise<WrapperBoxCombo[]>;
+    getById(id: number): Promise<WrapperBoxCombo | undefined>;
+    add(wrapperBoxCombo: WrapperBoxCombo): void;
+    update(wrapperBoxCombo: WrapperBoxCombo): void;
+    delete(id: number): void;
+    getSize(): Promise<number>;
+}
+
 export { Box, Wrapper, Supplier, WrapperBoxCombo, AverageWrapperLength };
+export type { IBoxRepository, IWrapperRepository, ISupplierRepository, IWrapperBoxComboRepository, SuppliedWrapper };
