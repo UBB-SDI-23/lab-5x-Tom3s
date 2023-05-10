@@ -95,8 +95,8 @@ class WrapperBoxCombo {
         public _id: number,
         public name: string,
         public price: number,
-        public boxId?: number,
-        public wrapperId?: number,
+        public boxid?: number,
+        public wrapperid?: number,
         public box?: Box,
         public wrapper?: Wrapper
     ) { }

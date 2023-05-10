@@ -158,12 +158,12 @@ class PGService {
             throw new Error("Combo with ID" + id + "does not exist");
         }
 
-        if (combo.boxId == undefined || combo.wrapperId == undefined) {
+        if (combo.boxid == undefined || combo.wrapperid == undefined) {
             throw new Error("Combo with ID" + id + "is invalid");
         }
 
-        const box: Box = await this.boxRepository.getById(combo.boxId);
-        const wrapper: Wrapper = await this.wrapperRepository.getById(combo.wrapperId);
+        const box: Box = await this.boxRepository.getById(combo.boxid);
+        const wrapper: Wrapper = await this.wrapperRepository.getById(combo.wrapperid);
 
         return WrapperBoxCombo.toComplexObject(combo, wrapper, box);
     }
