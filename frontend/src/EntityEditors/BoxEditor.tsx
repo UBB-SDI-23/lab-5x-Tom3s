@@ -1,6 +1,5 @@
 import { Fragment, useEffect, useState } from "react";
 import { Badge, Button, Col, Form, Row, Toast, ToastContainer } from "react-bootstrap";
-import { ToastDetails } from "../models/entities";
 import { apiAccess } from "../models/endpoints";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
@@ -212,7 +211,7 @@ const BoxEditor = () => {
                         "Create box")
                     }
                 </Button>
-                <Button variant="primary" type="button" onClick={() => navigate("/home")}>
+                <Button variant="primary" type="button" onClick={() => navigate("/home?type=1")}>
                     Go Back
                 </Button>
             </Form>

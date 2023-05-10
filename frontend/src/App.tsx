@@ -4,6 +4,7 @@ import BoxEditor from "./EntityEditors/BoxEditor";
 import { Route, Routes, Navigate } from "react-router-dom";
 import WrapperEditor from "./EntityEditors/WrapperEditor";
 import SupplierEditor from "./EntityEditors/SupplierEditor";
+import ComboEditor from "./EntityEditors/ComboEditor";
 
 const App = () => {
     return (
@@ -13,6 +14,7 @@ const App = () => {
                 <Route path="/box" element={<BoxEditor />} />
                 <Route path="/wrapper" element={<WrapperEditor />} />
                 <Route path="/supplier" element={<SupplierEditor />} />
+                <Route path="/combo" element={<ComboEditor />} />
                 <Route path="/" element={<Navigate to="/home" />} />
             </Routes>
         </Fragment>

@@ -1,14 +1,16 @@
 import { useState, useEffect, Fragment } from "react";
 import { Table, Pagination, Row, InputGroup, Button, FormControl, Col, Form, Alert, ToastContainer, Toast } from "react-bootstrap";
 import { apiAccess } from "../models/endpoints";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const BoxList = () => {
 
     const navigate = useNavigate();
 
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const [boxes, setBoxes] = useState([]);
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(parseInt(searchParams.get("page") || "0"));
     const [pageCount, setPageCount] = useState(13334);
     const [validGoToPage, setValidGoToPage] = useState(true);
     const [showAlert, setShowAlert] = useState(false);
@@ -27,7 +29,14 @@ const BoxList = () => {
         // setBoxes();
         fetch(new apiAccess().boxes().page(page).url)
             .then(response => response.json())
-            .then(data => setBoxes(data));
+            .then(data => {
+                setBoxes(data)
+                setSearchParams((oldParams) => {
+                    oldParams.set("page", page.toString());
+                    oldParams.set("type", "1");
+                    return oldParams;
+                });
+            });
     }, [page, showAlert]);
 
     useEffect(() => {

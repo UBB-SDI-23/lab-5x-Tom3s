@@ -1,14 +1,16 @@
 import { useState, useEffect, Fragment } from "react";
 import { Table, Pagination, Button, Col, Form, InputGroup, Row, Toast, ToastContainer } from "react-bootstrap";
 import { apiAccess } from "../models/endpoints";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const WrapperList = () => {
 
     const navigate = useNavigate();
 
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const [wrapperes, setWrapperes] = useState([]);
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(parseInt(searchParams.get("page") || "0"));
     const [pageCount, setPageCount] = useState(13334);
     const [validGoToPage, setValidGoToPage] = useState(true);
     const [showAlert, setShowAlert] = useState(false);
@@ -26,7 +28,14 @@ const WrapperList = () => {
     useEffect(() => {
         fetch(new apiAccess().wrappers().page(page).url)
             .then(response => response.json())
-            .then(data => setWrapperes(data));
+            .then(data => {
+                setWrapperes(data)
+                setSearchParams((oldParams) => {
+                    oldParams.set("page", page.toString());
+                    oldParams.set("type", "2");
+                    return oldParams;
+                });
+            });
     }, [page, showAlert]);
 
     useEffect(() => {

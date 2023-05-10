@@ -21,6 +21,11 @@ export class apiAccess {
 
     }
 
+    combos(): apiAccess {
+        this.url += "/combos";
+        return this;
+    }
+
     wrapperBoxCombos(): apiAccess {
         this.url += "/combos";
         return this;

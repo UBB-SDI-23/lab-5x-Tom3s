@@ -211,7 +211,7 @@ const WrapperEditor = () => {
                         "Create wrapper")
                     }
                 </Button>
-                <Button variant="primary" type="button" onClick={() => navigate("/home")}>
+                <Button variant="primary" type="button" onClick={() => navigate("/home?type=2")}>
                     Go Back
                 </Button>
             </Form>

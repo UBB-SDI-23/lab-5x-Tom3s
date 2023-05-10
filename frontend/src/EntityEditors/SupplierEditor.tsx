@@ -194,7 +194,7 @@ const SupplierEditor = () => {
                             "Create supplier")
                     }
                 </Button>
-                <Button variant="primary" type="button" onClick={() => navigate("/home")}>
+                <Button variant="primary" type="button" onClick={() => navigate("/home?type=3")}>
                     Go Back
                 </Button>
             </Form>
