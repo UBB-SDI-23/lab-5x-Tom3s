@@ -5,36 +5,36 @@ import { apiAccess } from "../models/endpoints";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 
-const BoxEditor = () => {
+const WrapperEditor = () => {
 
     const navigate = useNavigate();
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const boxId = searchParams.get("id") || "";
+    const wrapperId = searchParams.get("id") || "";
 
     const [length, setLength] = useState(0);
     const [width, setWidth] = useState(0);
-    const [height, setHeight] = useState(0);
     const [color, setColor] = useState("");
-    const [material, setMaterial] = useState("");
-    const [toasts, setToasts] = useState([]); // [{type: "success", message: "Box created successfully"}
+    const [complementaryColor, setComplementaryColor] = useState("");
+    const [pattern, setPattern] = useState("");
+    const [toasts, setToasts] = useState([]); 
 
     const onChangeLength = (event: any) => { setLength(parseFloat(event.target.value)); };
     const onChangeWidth = (event: any) => { setWidth(parseFloat(event.target.value)); };
-    const onChangeHeight = (event: any) => { setHeight(parseFloat(event.target.value)); };
     const onChangeColor = (event: any) => { setColor(event.target.value); };
-    const onChangeMaterial = (event: any) => { setMaterial(event.target.value); };
+    const onChangeComplementaryColor = (event: any) => { setComplementaryColor(event.target.value); };
+    const onChangePattern = (event: any) => { setPattern(event.target.value); };
 
     useEffect(() => {
-        if (boxId !== "") {
-            fetch(new apiAccess().boxes().id(boxId).url)
+        if (wrapperId !== "") {
+            fetch(new apiAccess().wrappers().id(wrapperId).url)
                 .then(response => response.json())
                 .then(data => {
                     setLength(data.length);
                     setWidth(data.width);
-                    setHeight(data.height);
                     setColor(data.color);
-                    setMaterial(data.material);
+                    setComplementaryColor(data.complementarycolor);
+                    setPattern(data.pattern);
                 });
         }
     }, []);
@@ -49,11 +49,6 @@ const BoxEditor = () => {
                 invalidDimensions += ", ";
             invalidDimensions += "Width ";
         }
-        if (height <= 0 && !isNaN(height)) {
-            if (invalidDimensions !== "")
-                invalidDimensions += ", ";
-            invalidDimensions += "Height ";
-        }
         return invalidDimensions;
     }
 
@@ -67,21 +62,22 @@ const BoxEditor = () => {
                 emptyFields += ", ";
             emptyFields += "Width ";
         }
-        if (isNaN(height)) {
-            if (emptyFields !== "")
-                emptyFields += ", ";
-            emptyFields += "Height ";
-        }
         if (color === "") {
             if (emptyFields !== "")
                 emptyFields += ", ";
             emptyFields += "Color ";
         }
-        if (material === "") {
+        if (complementaryColor === "") {
             if (emptyFields !== "")
                 emptyFields += ", ";
-            emptyFields += "Material ";
+            emptyFields += "Complementary color ";
         }
+        if (pattern === "") {
+            if (emptyFields !== "")
+                emptyFields += ", ";
+            emptyFields += "Pattern ";
+        }
+
         return emptyFields;
     }
 
@@ -105,21 +101,21 @@ const BoxEditor = () => {
             toastMessage = emptyFields + "cannot be empty";
             toastDuration = 10000;
         } else {
-            if (boxId !== "") {
-                toastMessage = "Box edited successfully";
+            if (wrapperId !== "") {
+                toastMessage = "Wrapper edited successfully";
             } else {
-                toastMessage = "Box created successfully";
+                toastMessage = "Wrapper created successfully";
             }
         }
 
-        const box = {
+        const wrapper = {
             "length": length,
             "width": width,
-            "height": height,
             "color": color,
-            "material": material
+            "complementarycolor": complementaryColor,
+            "pattern": pattern
         };
-        console.log(box);
+        console.log(wrapper);
 
         const toast: any = {
             "type": toastType,
@@ -135,23 +131,23 @@ const BoxEditor = () => {
             return;
         }
 
-        if (boxId !== "") {
-            fetch(new apiAccess().boxes().id(boxId).url, {
+        if (wrapperId !== "") {
+            fetch(new apiAccess().wrappers().id(wrapperId).url, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(box)
+                body: JSON.stringify(wrapper)
             })
                 .then(response => response.json())
                 .then(data => console.log(data));
         } else {
-            fetch(new apiAccess().boxes().url, {
+            fetch(new apiAccess().wrappers().url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(box)
+                body: JSON.stringify(wrapper)
             })
                 .then(response => response.json())
                 .then(data => console.log(data));
@@ -164,12 +160,12 @@ const BoxEditor = () => {
     return (
         <Fragment>
             {
-                boxId !== "" && 
-                <h1>Editing box with<Badge bg="secondary">ID: {boxId}</Badge> </h1>
+                wrapperId !== "" && 
+                <h1>Editing wrapper with<Badge bg="secondary">ID: {wrapperId}</Badge> </h1>
             }
             {
-                boxId === "" &&
-                <h1>Create a new box</h1>
+                wrapperId === "" &&
+                <h1>Create a new wrapper</h1>
             }
             <Form onSubmit={handleSubmit}>
                 <Row className="mb-3">
@@ -182,11 +178,6 @@ const BoxEditor = () => {
                         <Form.Label>Width</Form.Label>
                         <Form.Control type="number" placeholder="Enter width" onChange={onChangeWidth} value={width} />
                     </Form.Group>
-
-                    <Form.Group as={Col} controlId="formGridHeight">
-                        <Form.Label>Height</Form.Label>
-                        <Form.Control type="number" placeholder="Enter height" onChange={onChangeHeight} value={height} />
-                    </Form.Group>
                 </Row>
 
                 <Row className="mb-3">
@@ -197,19 +188,27 @@ const BoxEditor = () => {
                 </Row>
 
                 <Row className="mb-3">
-                    <Form.Group as={Col} controlId="formGridMaterial">
-                        <Form.Label>Material</Form.Label>
-                        <Form.Control type="text" placeholder="Enter material" onChange={onChangeMaterial} defaultValue={material}/>
+                    <Form.Group as={Col} controlId="formGridComplementaryColor">
+                        <Form.Label>Complementary color</Form.Label>
+                        <Form.Control type="text" placeholder="Enter complementary color" onChange={onChangeComplementaryColor} defaultValue={complementaryColor} />
                     </Form.Group>
                 </Row>
 
+                <Row className="mb-3">
+                    <Form.Group as={Col} controlId="formGridPattern">
+                        <Form.Label>Pattern</Form.Label>
+                        <Form.Control type="text" placeholder="Enter pattern" onChange={onChangePattern} defaultValue={pattern} />
+                    </Form.Group>
+                </Row>
+
+
                 <Button variant="primary" type="submit">
                     {
-                        (boxId !== "" &&
-                        "Edit box")
+                        (wrapperId !== "" &&
+                        "Edit wrapper")
                         ||
-                        (boxId === "" &&
-                        "Create box")
+                        (wrapperId === "" &&
+                        "Create wrapper")
                     }
                 </Button>
                 <Button variant="primary" type="button" onClick={() => navigate("/home")}>
@@ -238,4 +237,4 @@ const BoxEditor = () => {
     );
 };
 
-export default BoxEditor;
+export default WrapperEditor;

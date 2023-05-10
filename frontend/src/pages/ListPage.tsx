@@ -7,6 +7,7 @@ import WrapperList from "../ListDisplays/Wrappers";
 
 const ListPage = () => {
     const [list, setList] = useState(<BoxList />);
+
     return (
         <Fragment>
             <ToggleButtonGroup type="radio" name="options" defaultValue={1}>

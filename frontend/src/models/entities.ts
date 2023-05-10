@@ -13,7 +13,7 @@ export interface Wrapper {
     width: number;
     pattern: string;
     color: string;
-    complementaryColor: string;
+    complementarycolor: string;
 }
 
 export interface Supplier {
