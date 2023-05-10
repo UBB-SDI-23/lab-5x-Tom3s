@@ -48,8 +48,8 @@ const ComboList = () => {
                     {combos.map((combo: any, index: number) => (
                         <tr key={combo._id}>
                             <td>{page * 15 + index}</td>
-                            <td>{combo.wrapperId}</td>
-                            <td>{combo.boxId}</td>
+                            <td>{combo.wrapperid}</td>
+                            <td>{combo.boxid}</td>
                             <td>{combo.name}</td>
                             <td>{combo.price}$</td>
                         </tr>

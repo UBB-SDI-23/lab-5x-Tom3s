@@ -1,19 +1,33 @@
 import { useState, useEffect, Fragment } from "react";
-import { Table, Pagination, Row, InputGroup, Button, FormControl, Col, Form } from "react-bootstrap";
+import { Table, Pagination, Row, InputGroup, Button, FormControl, Col, Form, Toast, ToastContainer } from "react-bootstrap";
 import { apiAccess } from "../models/endpoints";
+import { useNavigate } from "react-router-dom";
 
 const SupplierList = () => {
+
+    const navigate = useNavigate();
 
     const [suppliers, setSuppliers] = useState([]);
     const [page, setPage] = useState(0);
     const [pageCount, setPageCount] = useState(13334);
     const [validGoToPage, setValidGoToPage] = useState(true);
+    const [showAlert, setShowAlert] = useState(false);
+
+    const emptySupplier = {
+        _id: "",
+        name: "",
+        address: "",
+        phone: "",
+        email: "",
+        wrappers: []
+    };
+    const [tempSupplier, setTempSupplier] = useState(emptySupplier);
 
     useEffect(() => {
         fetch(new apiAccess().suppliers().page(page).url)
             .then(response => response.json())
             .then(data => setSuppliers(data));
-    }, [page]);
+    }, [page, showAlert]);
 
     useEffect(() => {
         fetch(new apiAccess().suppliers().pageCount().url)
@@ -32,6 +46,28 @@ const SupplierList = () => {
         }
     }
 
+    function handleDeleteButton(id: string) {
+        setShowAlert(true);
+        setTempSupplier(suppliers.find((supplier: any) => supplier._id === id) as any);
+    }
+
+    function deleteSupplier() {
+        const id = tempSupplier._id;
+
+        console.log(id);
+
+        setShowAlert(false)
+
+        fetch(new apiAccess().suppliers().id(id).url, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => response.json())
+            .then(data => { });
+    }
+
     return (
         <Fragment>
             <Table striped bordered hover variant="dark" className="element-list" id="supplier-list" >
@@ -43,6 +79,7 @@ const SupplierList = () => {
                         <th>Phone Number</th>
                         <th>E-mail</th>
                         <th>Nr. of Wrappers</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,6 +91,10 @@ const SupplierList = () => {
                             <td>{supplier.phone}</td>
                             <td>{supplier.email}</td>
                             <td>{supplier.wrappers.length}</td>
+                            <td>
+                                <Button variant="info" onClick={() => navigate("/supplier?id=" + supplier._id)}>Edit</Button>
+                                <Button variant="danger" onClick={() => handleDeleteButton(supplier._id)}>Delete</Button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
@@ -84,7 +125,27 @@ const SupplierList = () => {
 
                     </Form>
                 </Col>
+                <Col xs={1}>
+                    <Button variant="secondary" onClick={() => navigate("/supplier")}><strong>+</strong></Button>
+                </Col>
             </Row>
+            <ToastContainer position="middle-center" className="p-3">
+                <Toast bg="light" show={showAlert} onClose={() => setShowAlert(false)} >
+                    <Toast.Header>
+                        <strong className="me-auto">Are you sure you want to delete this supplier?</strong>
+                    </Toast.Header>
+                    <Toast.Body>
+                        <p><strong>Name:</strong> {tempSupplier.name}</p>
+                        <p><strong>Address:</strong> {tempSupplier.address}</p>
+                        <p><strong>Phone Number:</strong> {tempSupplier.phone}</p>
+                        <p><strong>E-mail:</strong> {tempSupplier.email}</p>
+                    </Toast.Body>
+                    <Toast.Body>
+                        <Button variant="danger" onClick={() => deleteSupplier()}>Yes</Button>
+                        <Button variant="secondary" onClick={() => setShowAlert(false)}>No</Button>
+                    </Toast.Body>
+                </Toast>
+            </ToastContainer>
 
         </Fragment>
     );

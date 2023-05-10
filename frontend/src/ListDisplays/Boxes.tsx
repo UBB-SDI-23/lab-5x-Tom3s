@@ -67,12 +67,6 @@ const BoxList = () => {
         })
             .then(response => response.json())
             .then(data => { });
-
-        setTimeout(() => {
-            fetch(new apiAccess().boxes().page(page).url)
-                .then(response => response.json())
-                .then(data => setBoxes(data));
-        }, 1);
     }
 
     return (
@@ -84,7 +78,7 @@ const BoxList = () => {
                         <th>Dimensions (L x W x H)</th>
                         <th>Material</th>
                         <th>Color</th>
-                        <th></th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
