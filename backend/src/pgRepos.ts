@@ -412,7 +412,7 @@ class PGComboRepository {
 
     async getCount(): Promise<number> {
         const result = await this.client.query("SELECT value FROM cache_table WHERE key = 'combos_count';");
-        return result.rows[0].count;
+        return result.rows[0].value;
     }
 }
 
