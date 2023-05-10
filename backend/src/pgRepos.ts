@@ -363,7 +363,11 @@ class PGComboRepository {
 
     async getPage(pageSize: number, pageLength: number): Promise<WrapperBoxCombo[]> {
         const offset = pageSize * pageLength;
-        const result = await this.client.query('SELECT * FROM combos ORDER BY _id LIMIT $1 OFFSET $2', [pageLength, offset]);
+        // SELECT * FROM combos 
+        // WHERE _id IN (
+        //     SELECT _id FROM combos ORDER BY _id LIMIT $1 OFFSET $2
+        // );
+        const result = await this.client.query('SELECT * FROM combos WHERE _id IN (SELECT _id FROM combos ORDER BY _id LIMIT $1 OFFSET $2);', [pageLength, offset]);
         return result.rows as WrapperBoxCombo[];
     }
 
