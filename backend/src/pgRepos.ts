@@ -373,7 +373,7 @@ class PGComboRepository {
 
     add(combo: WrapperBoxCombo): void {
         this.client.query('INSERT INTO combos (wrapperId, boxId, name, price) VALUES ($1, $2, $3, $4)',
-            [combo.wrapperId, combo.boxId, combo.name, combo.price], (err: Error, res: QueryResult) => {
+            [combo.wrapperid, combo.boxid, combo.name, combo.price], (err: Error, res: QueryResult) => {
                 if (err) {
                     console.log(err.message);
                     throw new Error(err.message);
@@ -393,7 +393,7 @@ class PGComboRepository {
 
     update(combo: WrapperBoxCombo): void {
         this.client.query('UPDATE combos SET wrapperId = $1, boxId = $2, name = $3, price = $4 WHERE _id = $5',
-            [combo.wrapperId, combo.boxId, combo.name, combo.price, combo._id], (err: Error, res: QueryResult) => {
+            [combo.wrapperid, combo.boxid, combo.name, combo.price, combo._id], (err: Error, res: QueryResult) => {
                 if (err) {
                     console.log(err.message);
                     throw new Error(err.message);
