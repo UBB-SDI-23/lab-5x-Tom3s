@@ -591,10 +591,9 @@ function setupRoutes(app: Express, service: PGService){
         #swagger.responses[404] = { description: 'Combo not found' }
         */
         const id = parseInt(req.params.id)
-        const combo = service.getComboById(id);
-        if (combo) {
-            res.send(await combo);
-        } else {
+        try {
+            res.send(await service.getComboById(id));
+        } catch (error) {
             res.sendStatus(404);
         }
     });
