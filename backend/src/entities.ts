@@ -82,7 +82,7 @@ class Supplier {
 
     static validatePhoneNumber(obj: any): boolean {
         const regex = /^07[0-9]{2}( |-)[0-9]{3}( |-)?[0-9]{3}$/;
-        const phoneNumber = obj.phoneNumber;
+        const phoneNumber = obj.phone;
         if (!phoneNumber) {
             return false;
         }
