@@ -1,0 +1,12 @@
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR (255) NOT NULL,
+    passwordhash VARCHAR (255) NOT NULL
+)
+
+
+CREATE TABLE jwt (
+    id SERIAL PRIMARY KEY,
+    token VARCHAR (255) NOT NULL,
+    date TIMESTAMP NOT NULL
+)
