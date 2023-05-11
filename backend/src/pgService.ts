@@ -315,7 +315,7 @@ class PGService {
     }
 
     async login(username: string, password: string): Promise<string> {
-        if (await this.authRepo.checkIfUserExists(username)) {
+        if (!(await this.authRepo.checkIfUserExists(username))) {
             throw new Error("Username does not exist");
         }
 
