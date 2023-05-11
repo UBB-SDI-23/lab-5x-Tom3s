@@ -708,6 +708,64 @@ function setupRoutes(app: Express, service: PGService){
         // if no query parameters, return error 403
         res.sendStatus(403);
     });
+
+    // POST /api/register - returns a registration token
+    app.post('/api/register', async (req, res) => {
+        /*
+        #swagger.tags = ['Authentication']
+        #swagger.description = 'Endpoint to get a registration token'
+        #swagger.responses[200] = { description: 'Returned a registration token' }
+        #swagger.responses[403] = { description: 'Username Taken' }
+        */
+        // const username = req.query.username as string;
+        // const password = req.query.password as string;
+
+        const data = req.body as { username: string, password: string };
+        const username = data.username;
+        const password = data.password;
+
+        if (!username || !password) {
+            res.status(400).send('Username and password required');
+            return;
+        }
+
+        try {
+            const token = await service.getRegistrationToken(username, password);
+            
+            res.send(
+                token
+            );
+        } catch (error: any) {
+            res.status(403).send(error.message);
+        }
+
+    });
+
+    // GET /api/register/:token - confirms a registration token
+    app.get('/api/register/:token', async (req, res) => {
+        /*
+        #swagger.tags = ['Authentication']
+        #swagger.description = 'Endpoint to confirm a registration token'
+        #swagger.parameters['token'] = {
+            in: 'path',
+            description: 'Registration token (string)'
+        }
+        #swagger.responses[200] = { description: 'Confirmed a registration token' }
+        #swagger.responses[400] = { description: 'Error occured during confirmation' }
+        #swagger.responses[500] = { description: 'Internal server error' }
+        */
+        const token = req.params.token as string;
+        
+        try {
+            if (await service.confirmRegistration(token)) {
+                res.sendStatus(200);
+            } else {
+                res.sendStatus(500);
+            }
+        } catch (error: any) {
+            res.status(400).send(error.message);
+        }
+    });
 }
 
 export default setupRoutes;

@@ -1,5 +1,7 @@
+// import { sign } from "jsonwebtoken";
 import { AverageWrapperLength, Box, Supplier, Wrapper, WrapperBoxCombo } from "./entities";
 import { PGBoxRepository, PGComboRepository, PGSuppliedWrapperRepository, PGSupplierRepository, PGWrapperRepository } from "./pgRepos";
+import AuthRepo from "./userRepos";
 
 class PGService {
     private boxRepository: PGBoxRepository;
@@ -7,6 +9,7 @@ class PGService {
     private suppliedWrapperRepository: PGSuppliedWrapperRepository;
     private supplierRepository: PGSupplierRepository;
     private comboRepository: PGComboRepository;
+    private authRepo: AuthRepo;
 
     private defaultPageLength: number = 15;
 
@@ -17,6 +20,7 @@ class PGService {
         this.suppliedWrapperRepository = new PGSuppliedWrapperRepository();
         this.supplierRepository = new PGSupplierRepository();
         this.comboRepository = new PGComboRepository();
+        this.authRepo = new AuthRepo();
     }
 
     // Box Actions
@@ -235,6 +239,79 @@ class PGService {
 
     async getAverageWrapperLengths(page: number, pageLength: number = this.defaultPageLength): Promise<AverageWrapperLength[]> {
         return this.wrapperRepository.getAverageLengths(page, pageLength);
+    }
+
+    private isStrongPassword(password: string): boolean {
+        const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+        return regex.test(password);
+    }
+
+    async getRegistrationToken(username: string, password: string): Promise<string> {
+
+        if (await this.authRepo.checkIfUserExists(username)) {
+            throw new Error("Username taken");
+        }
+
+        if (!this.isStrongPassword(password)) {
+            throw new Error("Password is not strong enough");
+        }
+
+        const jwt = require('jsonwebtoken')
+
+        const jwtSecretKey = process.env.JWT_SECRET_KEY;
+        const data = {
+            "username": username,
+            "password": password,
+            "date": Date.now()
+        }
+
+        const token = jwt.sign(data, jwtSecretKey);
+
+        return token;
+    }
+
+    async confirmRegistration(providedToken: string): Promise<boolean> {
+        const jwt = require('jsonwebtoken')
+
+        const jwtSecretKey = process.env.JWT_SECRET_KEY;
+
+        // try {
+        const decoded = jwt.verify(providedToken, jwtSecretKey);
+
+        if (!decoded) {
+            throw new Error("Invalid Token");
+        }
+
+        const tokenDate = new Date(decoded.date);
+        const currentDate = new Date();
+
+        const timeDifference = currentDate.getTime() - tokenDate.getTime();
+        const timeDifferenceInMinutes = timeDifference / (1000 * 60);
+
+        if (timeDifferenceInMinutes > 10) {
+            throw new Error("Token expired");
+        }
+
+        const username = decoded.username;
+        const password = decoded.password;
+
+        if (await this.authRepo.checkIfUserExists(username)) {
+            throw new Error("Token already used");
+        }
+
+        // hash password with sha256
+        const { createHash } = require('crypto');
+
+        const passwordHash = createHash('sha256').update(password).digest('hex');
+
+        this.authRepo.registerUser(username, passwordHash);
+
+        return true;
+
+        // } catch (error) {
+        //     console.log(error);
+        //     return false;
+        // }
     }
 }
 
