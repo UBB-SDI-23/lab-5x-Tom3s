@@ -795,7 +795,7 @@ function setupRoutes(app: Express, service: PGService){
         } catch (error: any) {
             res.status(500).send(error.message);
         }
-    }
+    });
 }
 
 export default setupRoutes;
