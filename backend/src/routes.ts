@@ -758,7 +758,7 @@ function setupRoutes(app: Express, service: PGService){
         
         try {
             if (await service.confirmRegistration(token)) {
-                res.sendStatus(200);
+                res.status(200).send('Registration successful');
             } else {
                 res.sendStatus(500);
             }
