@@ -766,6 +766,36 @@ function setupRoutes(app: Express, service: PGService){
             res.status(400).send(error.message);
         }
     });
+
+    // POST /api/login - returns a login token
+    app.post('/api/login', async (req, res) => {
+        /*
+        #swagger.tags = ['Authentication']
+        #swagger.description = 'Endpoint to get a login token'
+        #swagger.responses[200] = { description: 'Returned a login token' }
+        #swagger.responses[400] = { description: 'Invalid username or password' }
+        */
+        const data = req.body as { username: string, password: string };
+        const username = data.username;
+        const password = data.password;
+
+        if (!username || !password) {
+            res.status(400).send('Username and password required');
+            return;
+        }
+
+        try {
+            const token = await service.login(username, password);
+            
+            res.send(
+                {
+                    "sessionToken": token
+                }
+            );
+        } catch (error: any) {
+            res.status(500).send(error.message);
+        }
+    }
 }
 
 export default setupRoutes;

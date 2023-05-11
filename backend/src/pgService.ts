@@ -313,6 +313,32 @@ class PGService {
         //     return false;
         // }
     }
+
+    async login(username: string, password: string): Promise<string> {
+        if (await this.authRepo.checkIfUserExists(username)) {
+            throw new Error("Username does not exist");
+        }
+
+        const { createHash } = require('crypto');
+
+        const passwordHash = createHash('sha256').update(password).digest('hex');
+
+        if (await this.authRepo.verifyUser(username, passwordHash)) {
+            throw new Error("Password is incorrect");
+        }
+
+        const jwt = require('jsonwebtoken')
+
+        const jwtSecretKey = process.env.JWT_SECRET_KEY;
+        const data = {
+            "username": username,
+            "loginDate": Date.now()
+        };
+
+        const token = jwt.sign(data, jwtSecretKey);
+
+        return token;
+    }
 }
 
 export default PGService;
