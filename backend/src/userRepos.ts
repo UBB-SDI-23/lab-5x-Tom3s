@@ -29,7 +29,14 @@ class AuthRepo {
         const query = "SELECT * FROM users WHERE username = $1 AND passwordhash = $2";
         const values = [username, passwordHash];
         const result = await this.client.query(query, values);
-        return result.rowCount > 0;
+
+        if (result.rowCount > 0) {
+            console.log(result.rows[0].username);
+            console.log(result.rows[0].passwordhash);
+            return true;
+        }
+
+        return false;
     }
 
 }
