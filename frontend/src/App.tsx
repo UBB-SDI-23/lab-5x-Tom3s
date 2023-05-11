@@ -6,6 +6,7 @@ import WrapperEditor from "./EntityEditors/WrapperEditor";
 import SupplierEditor from "./EntityEditors/SupplierEditor";
 import ComboEditor from "./EntityEditors/ComboEditor";
 import RegisterPage from "./userSystem/registerPage";
+import ConfirmPage from "./userSystem/confirmPage";
 
 const App = () => {
     return (
@@ -17,6 +18,7 @@ const App = () => {
                 <Route path="/supplier" element={<SupplierEditor />} />
                 <Route path="/combo" element={<ComboEditor />} />
                 <Route path="/register" element={<RegisterPage />} />
+                <Route path="/confirm" element={<ConfirmPage />} />
                 <Route path="/" element={<Navigate to="/home" />} />
             </Routes>
         </Fragment>
