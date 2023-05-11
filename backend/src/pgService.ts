@@ -323,7 +323,7 @@ class PGService {
 
         const passwordHash = createHash('sha256').update(password).digest('hex');
 
-        if (await this.authRepo.verifyUser(username, passwordHash)) {
+        if (!(await this.authRepo.verifyUser(username, passwordHash))) {
             throw new Error("Password is incorrect");
         }
 
