@@ -35,7 +35,9 @@ const app = express();
 // setup CORS
 const cors = require('cors');
 app.use(cors({
-    origin: '*'
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 const port = 3000;
