@@ -725,20 +725,18 @@ function setupRoutes(app: Express, service: PGService){
         const password = data.password;
 
         if (!username || !password) {
-            res.status(403).send('Username and password required');
+            res.status(400).send('Username and password required');
             return;
         }
 
-        const token = await service.getRegistrationToken(username, password);
-
-        if (token) {
+        try {
+            const token = await service.getRegistrationToken(username, password);
+            
             res.send(
-                {
-                    "registration_token": token
-                }
+                token
             );
-        } else {
-            res.status(403).send('Username Taken');
+        } catch (error: any) {
+            res.status(403).send(error.message);
         }
 
     });
@@ -753,7 +751,8 @@ function setupRoutes(app: Express, service: PGService){
             description: 'Registration token (string)'
         }
         #swagger.responses[200] = { description: 'Confirmed a registration token' }
-        #swagger.responses[403] = { description: 'Registration token not found' }
+        #swagger.responses[400] = { description: 'Error occured during confirmation' }
+        #swagger.responses[500] = { description: 'Internal server error' }
         */
         const token = req.params.token as string;
         
@@ -764,7 +763,6 @@ function setupRoutes(app: Express, service: PGService){
                 res.sendStatus(500);
             }
         } catch (error: any) {
-            console.log(error);
             res.status(400).send(error.message);
         }
     });

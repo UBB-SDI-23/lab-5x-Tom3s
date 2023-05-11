@@ -241,10 +241,19 @@ class PGService {
         return this.wrapperRepository.getAverageLengths(page, pageLength);
     }
 
-    async getRegistrationToken(username: string, password: string): Promise<string | null> {
+    private isStrongPassword(password: string): boolean {
+        const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+        return regex.test(password);
+    }
+
+    async getRegistrationToken(username: string, password: string): Promise<string> {
 
         if (await this.authRepo.checkIfUserExists(username)) {
-            return null;
+            throw new Error("Username taken");
+        }
+
+        if (!this.isStrongPassword(password)) {
+            throw new Error("Password is not strong enough");
         }
 
         const jwt = require('jsonwebtoken')
