@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { Button } from "react-bootstrap";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom"
 import { apiAccess } from "../models/endpoints";
@@ -14,6 +14,7 @@ const ConfirmPage = () => {
     const token = params.get("token") || "";
 
     useEffect(() => {
+        if (token) {
         fetch(new apiAccess().confirm(token).url)
             .then(res => {
                 if (res.status == 200) {
@@ -27,7 +28,8 @@ const ConfirmPage = () => {
                 setLoading(false);
             }
             );
-    }, []);
+        }
+    }, [token]);
 
     return (
         <Fragment>
@@ -53,7 +55,7 @@ const ConfirmPage = () => {
                     )
 
             }
-            <Button onClick={() => navigate("/register")}>Go to home</Button>
+            <Button onClick={() => navigate("/register")}>Go to register</Button>
         </Fragment>
     )        
 }
