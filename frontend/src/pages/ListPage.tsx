@@ -68,7 +68,7 @@ const ListPage = () => {
                     </ToggleButtonGroup>
                 </Col>
 
-                <Col>
+                <Col className="d-flex justify-content-end">
                     <Button variant="primary" onClick={() => navigate("/register")}>Register</Button>
                     <Button variant="primary" onClick={() => navigate("/login")}>Login</Button>
                 </Col>

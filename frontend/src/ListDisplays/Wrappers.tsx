@@ -9,7 +9,7 @@ const WrapperList = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const [wrapperes, setWrapperes] = useState([]);
+    const [wrappers, setWrappers] = useState([]);
     const [page, setPage] = useState(parseInt(searchParams.get("page") || "0"));
     const [pageCount, setPageCount] = useState(13334);
     const [validGoToPage, setValidGoToPage] = useState(true);
@@ -27,16 +27,26 @@ const WrapperList = () => {
 
     useEffect(() => {
         fetch(new apiAccess().wrappers().page(page).url)
-            .then(response => response.json())
-            .then(data => {
-                setWrapperes(data)
-                setSearchParams((oldParams) => {
-                    oldParams.set("page", page.toString());
-                    oldParams.set("type", "2");
-                    return oldParams;
+          .then(response => response.json())
+          .then(data => {
+            const fetchOwnerNamePromises = data.map((wrapper: any) => {
+              return fetch(new apiAccess().userName(wrapper.ownerid).url)
+                .then(response => response.json())
+                .then(data => {
+                  wrapper.ownername = data.username;
+                  console.log(data);
                 });
             });
-    }, [page, showAlert]);
+            Promise.all(fetchOwnerNamePromises).then(() => {
+              setWrappers(data);
+              setSearchParams((oldParams) => {
+                oldParams.set("page", page.toString());
+                oldParams.set("type", "1");
+                return oldParams;
+              });
+            });
+          });
+      }, [page, showAlert]);
 
     useEffect(() => {
         fetch(new apiAccess().wrappers().pageCount().url)
@@ -57,7 +67,7 @@ const WrapperList = () => {
 
     function handleDeleteButton(id: string) {
         setShowAlert(true);
-        setTempWrapper(wrapperes.find((wrapper: any) => wrapper._id === id) as any);
+        setTempWrapper(wrappers.find((wrapper: any) => wrapper._id === id) as any);
     }
 
     function deleteWrapper() {
@@ -78,7 +88,7 @@ const WrapperList = () => {
         setTimeout(() => {
             fetch(new apiAccess().wrappers().page(page).url)
                 .then(response => response.json())
-                .then(data => setWrapperes(data));
+                .then(data => setWrappers(data));
         }, 1);
     }
 
@@ -95,10 +105,11 @@ const WrapperList = () => {
                         <th>Complementary Color</th>
                         <th>Pattern</th>
                         <th>Actions</th>
+                        <th>By</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {wrapperes.map((wrapper: any, index: number) => (
+                    {wrappers.map((wrapper: any, index: number) => (
                         <tr key={wrapper._id}>
                             <td>{page * 15 + index}</td>
                             <td>{wrapper.length} x {wrapper.width}</td>
@@ -109,6 +120,7 @@ const WrapperList = () => {
                                 <Button variant="info" onClick={() => navigate("/wrapper?id=" + wrapper._id)}>Edit</Button>
                                 <Button variant="danger" onClick={() => handleDeleteButton(wrapper._id)}>Delete</Button>
                             </td>
+                            <td> <a href={"/profile?id=" + wrapper.ownerid}>{wrapper.ownername}</a></td>
                         </tr>
                     ))}
                 </tbody>

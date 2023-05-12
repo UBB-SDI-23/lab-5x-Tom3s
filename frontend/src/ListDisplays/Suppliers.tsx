@@ -27,16 +27,26 @@ const SupplierList = () => {
 
     useEffect(() => {
         fetch(new apiAccess().suppliers().page(page).url)
-            .then(response => response.json())
-            .then(data => {
-                setSuppliers(data)
-                setSearchParams((oldParams) => {
-                    oldParams.set("page", page.toString());
-                    oldParams.set("type", "3");
-                    return oldParams;
+          .then(response => response.json())
+          .then(data => {
+            const fetchOwnerNamePromises = data.map((supplier: any) => {
+              return fetch(new apiAccess().userName(supplier.ownerid).url)
+                .then(response => response.json())
+                .then(data => {
+                  supplier.ownername = data.username;
+                  console.log(data);
                 });
             });
-    }, [page, showAlert]);
+            Promise.all(fetchOwnerNamePromises).then(() => {
+              setSuppliers(data);
+              setSearchParams((oldParams) => {
+                oldParams.set("page", page.toString());
+                oldParams.set("type", "1");
+                return oldParams;
+              });
+            });
+          });
+      }, [page, showAlert]);
 
     useEffect(() => {
         fetch(new apiAccess().suppliers().pageCount().url)
@@ -89,6 +99,7 @@ const SupplierList = () => {
                         <th>E-mail</th>
                         <th>Nr. of Wrappers</th>
                         <th>Actions</th>
+                        <th>By</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -104,6 +115,7 @@ const SupplierList = () => {
                                 <Button variant="info" onClick={() => navigate("/supplier?id=" + supplier._id)}>Edit</Button>
                                 <Button variant="danger" onClick={() => handleDeleteButton(supplier._id)}>Delete</Button>
                             </td>
+                            <td> <a href={"/profile?id=" + supplier.ownerid}>{supplier.ownername}</a></td>
                         </tr>
                     ))}
                 </tbody>
