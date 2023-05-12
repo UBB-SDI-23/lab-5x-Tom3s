@@ -23,10 +23,15 @@ class AuthRepo {
         return -1;
     }
 
-    registerUser(username: string, passwordHash: string): void {
-        const query = "INSERT INTO users (username, passwordhash) VALUES ($1, $2)";
+    async registerUser(username: string, passwordHash: string): Promise<void> {
+        const query = "INSERT INTO users (username, passwordhash) VALUES ($1, $2) RETURNING id";
         const values = [username, passwordHash];
-        this.client.query(query, values);
+        const result = await this.client.query(query, values);
+
+        const userid = result.rows[0].id;
+        const query2 = "INSERT INTO userdetails (userid) VALUES ($1)";
+        const values2 = [userid];
+        this.client.query(query2, values2);
     }
 
     async verifyUser(username: string, passwordHash: string): Promise<string> {
