@@ -7,6 +7,7 @@ import SupplierEditor from "./EntityEditors/SupplierEditor";
 import ComboEditor from "./EntityEditors/ComboEditor";
 import RegisterPage from "./userSystem/registerPage";
 import ConfirmPage from "./userSystem/confirmPage";
+import LoginPage from "./userSystem/loginPage";
 
 const App = () => {
     return (
@@ -18,6 +19,7 @@ const App = () => {
                 <Route path="/supplier" element={<SupplierEditor />} />
                 <Route path="/combo" element={<ComboEditor />} />
                 <Route path="/register" element={<RegisterPage />} />
+                <Route path="/login" element={<LoginPage />} />
                 <Route path="/confirm" element={<ConfirmPage />} />
                 <Route path="/" element={<Navigate to="/home" />} />
             </Routes>

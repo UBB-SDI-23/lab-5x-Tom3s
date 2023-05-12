@@ -51,6 +51,11 @@ export class apiAccess {
         this.url += "/register";
         return this;
     }
+    
+    login(): apiAccess {
+        this.url += "/login";
+        return this;
+    }
 
     confirm(token: string): apiAccess {
         this.url += "/register/" + token;
