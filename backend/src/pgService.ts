@@ -326,16 +326,20 @@ class PGService {
 
         const passwordHash = createHash('sha256').update(password).digest('hex');
 
-        if (!(await this.authRepository.verifyUser(username, passwordHash))) {
+        const role = await this.authRepository.verifyUser(username, passwordHash);
+
+        if (role == "") {
             throw new Error("Password is incorrect");
         }
+
 
         const jwt = require('jsonwebtoken')
 
         const jwtSecretKey = process.env.JWT_SECRET_KEY;
         const data = {
             "username": username,
-            "loginDate": Date.now()
+            "loginDate": Date.now(),
+            "role": role
         };
 
         const token = jwt.sign(data, jwtSecretKey);
