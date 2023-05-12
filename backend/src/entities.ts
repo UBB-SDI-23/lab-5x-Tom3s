@@ -14,13 +14,13 @@ class Box {
         // return obj.length > 0 && obj.width > 0 && obj.height > 0;
         var invalidDimensions = [];
         if (obj.length <= 0) {
-            invalidDimensions.push("Length");
+            invalidDimensions.push("length");
         }
         if (obj.width <= 0) {
-            invalidDimensions.push("Width");
+            invalidDimensions.push("width");
         }
         if (obj.height <= 0) {
-            invalidDimensions.push("Height");
+            invalidDimensions.push("height");
         }
         if (invalidDimensions.length > 0) {
             throw new Error("The following dimensions are invalid: " + invalidDimensions.join(", "));
@@ -30,19 +30,19 @@ class Box {
     static checkEmpty(obj: any): void {
         var emptyFields = [];
         if (obj.length === undefined || obj.length === null) {
-            emptyFields.push("Length");
+            emptyFields.push("length");
         }
         if (obj.width === undefined || obj.width === null) {
-            emptyFields.push("Width");
+            emptyFields.push("width");
         }
         if (obj.height === undefined || obj.height === null) {
-            emptyFields.push("Height");
+            emptyFields.push("height");
         }
         if (obj.material === undefined || obj.material === null || obj.material === "") {
-            emptyFields.push("Material");
+            emptyFields.push("material");
         }
         if (obj.color === undefined || obj.color === null || obj.color === "") {
-            emptyFields.push("Color");
+            emptyFields.push("color");
         }
         if (emptyFields.length > 0) {
             throw new Error("A Box must have the following fields: " + emptyFields.join(", "));
@@ -90,10 +90,10 @@ class Wrapper {
         // return obj.length > 0 && obj.width > 0;
         var invalidDimensions = [];
         if (obj.length <= 0) {
-            invalidDimensions.push("Length");
+            invalidDimensions.push("length");
         }
         if (obj.width <= 0) {
-            invalidDimensions.push("Width");
+            invalidDimensions.push("width");
         }
         if (invalidDimensions.length > 0) {
             throw new Error("The following dimensions are invalid: " + invalidDimensions.join(", "));
@@ -103,19 +103,19 @@ class Wrapper {
     static checkEmpty(obj: any): void {
         var emptyFields = [];
         if (obj.length === undefined || obj.length === null) {
-            emptyFields.push("Length");
+            emptyFields.push("length");
         }
         if (obj.width === undefined || obj.width === null) {
-            emptyFields.push("Width");
+            emptyFields.push("width");
         }
         if (obj.pattern === undefined || obj.pattern === null || obj.pattern === "") {
-            emptyFields.push("Pattern");
+            emptyFields.push("pattern");
         }
         if (obj.color === undefined || obj.color === null || obj.color === "") {
-            emptyFields.push("Color");
+            emptyFields.push("color");
         }
         if (obj.complementaryColor === undefined || obj.complementaryColor === null || obj.complementaryColor === "") {
-            emptyFields.push("Complementary Color");
+            emptyFields.push("complementarycolor");
         }
         if (emptyFields.length > 0) {
             throw new Error("A Wrapper must have the following fields: " + emptyFields.join(", "));
@@ -165,16 +165,16 @@ class Supplier {
     static checkEmpty(obj: any): void {
         var emptyFields = [];
         if (obj.name === undefined || obj.name === null || obj.name === "") {
-            emptyFields.push("Name");
+            emptyFields.push("name");
         }
         if (obj.address === undefined || obj.address === null || obj.address === "") {
-            emptyFields.push("Address");
+            emptyFields.push("address");
         }
         if (obj.phone === undefined || obj.phone === null || obj.phone === "") {
-            emptyFields.push("Phone");
+            emptyFields.push("phone");
         }
         if (obj.email === undefined || obj.email === null || obj.email === "") {
-            emptyFields.push("Email");
+            emptyFields.push("email");
         }
         if (emptyFields.length > 0) {
             throw new Error("A Supplier must have the following fields: " + emptyFields.join(", "));
@@ -219,10 +219,10 @@ class WrapperBoxCombo {
     static checkEmpty(obj: any): void {
         var emptyFields = [];
         if (obj.name === undefined || obj.name === null || obj.name === "") {
-            emptyFields.push("Name");
+            emptyFields.push("name");
         }
         if (obj.price === undefined || obj.price === null) {
-            emptyFields.push("Price");
+            emptyFields.push("price");
         }
         if (emptyFields.length > 0) {
             throw new Error("A WrapperBoxCombo must have the following fields: " + emptyFields.join(", "));

@@ -77,7 +77,7 @@ function setupRoutes(app: Express, service: PGService) {
     });
 
     // POST /api/boxes - creates a new box
-    app.post('/api/boxes', (req, res) => {
+    app.post('/api/boxes', async (req, res) => {
         /*
         #swagger.tags = ['Boxes']
         #swagger.description = 'Endpoint to create a new box'
@@ -93,7 +93,7 @@ function setupRoutes(app: Express, service: PGService) {
                 $color: 'white'
             }
         }
-        #swagger.parameters['sessionToken'] = {
+        #swagger.parameters['sessiontoken'] = {
             in: 'header',
             description: 'Session token',
             required: true,
@@ -102,11 +102,11 @@ function setupRoutes(app: Express, service: PGService) {
         #swagger.responses[201] = { description: 'Box created' }
         #swagger.responses[400] = { description: 'Bad request' }
         */
-       const token = req.headers.sessionToken as string;
+        const token = req.headers.sessiontoken as string;
         if (req.body instanceof Array) {
             var boxes = (req.body) as Box[];
             try {
-                service.addBoxes(boxes, token);
+                await service.addBoxes(boxes, token);
                 res.status(201).send("Boxes added");
             } catch (error: any) {
                 res.status(400).send(error.message);
@@ -115,7 +115,7 @@ function setupRoutes(app: Express, service: PGService) {
             var box = (req.body) as Box;
 
             try {
-                service.addBox(box, token);
+                await service.addBox(box, token);
                 res.status(201).send("Box added");
             } catch (error: any) {
                 res.status(400).send(error.message);
@@ -124,14 +124,14 @@ function setupRoutes(app: Express, service: PGService) {
     });
 
     // PUT /api/boxes/:id - updates a box
-    app.put('/api/boxes/:id', (req, res) => {
+    app.put('/api/boxes/:id', async (req, res) => {
         /*
         #swagger.tags = ['Boxes']
         #swagger.description = 'Endpoint to update a box'
         #swagger.parameters['id'] = { 
             description: 'Box id (int)',
-            type: 'string',
-            default: '6419faf56b23d736edce7bd6'
+            type: 'int',
+            default: '10'
         }
         #swagger.parameters['box'] = {
             in: 'body',
@@ -145,7 +145,7 @@ function setupRoutes(app: Express, service: PGService) {
                 $color: 'white'
             }
         }
-        #swagger.parameters['sessionToken'] = {
+        #swagger.parameters['sessiontoken'] = {
             in: 'header',
             description: 'Session token',
             required: true,
@@ -159,10 +159,10 @@ function setupRoutes(app: Express, service: PGService) {
         var box = (req.body) as Box;
         box._id = id;
 
-        const token = req.headers.sessionToken as string;
+        const token = req.headers.sessiontoken as string;
 
         try {
-            service.updateBox(box, token);
+            await service.updateBox(box, token);
             res.status(200).send("Box updated");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -170,12 +170,12 @@ function setupRoutes(app: Express, service: PGService) {
     });
 
     // DELETE /api/boxes/:id - deletes a box
-    app.delete('/api/boxes/:id', (req, res) => {
+    app.delete('/api/boxes/:id', async (req, res) => {
         /*
         #swagger.tags = ['Boxes']
         #swagger.description = 'Endpoint to delete a box'
         #swagger.parameters['id'] = { description: 'Box id (int)' }
-        #swagger.parameters['sessionToken'] = {
+        #swagger.parameters['sessiontoken'] = {
             in: 'header',
             description: 'Session token',
             required: true,
@@ -186,9 +186,9 @@ function setupRoutes(app: Express, service: PGService) {
         */
 
         const id = parseInt(req.params.id)
-        const token = req.headers.sessionToken as string;
+        const token = req.headers.sessiontoken as string;
         try {
-            service.deleteBox(id, token);
+            await service.deleteBox(id, token);
             res.status(200).send("Box deleted");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -245,8 +245,10 @@ function setupRoutes(app: Express, service: PGService) {
         /*
         #swagger.tags = ['Wrappers']
         #swagger.description = 'Endpoint to get a wrapper by id'
-        #swagger.parameters['id'] = {
+        #swagger.parameters['id'] = { 
+#swagger.parameters['id'] = {
             in: 'path',
+           type: 'int',
             description: 'Wrapper id (int)'
         }
         #swagger.responses[200] = { description: 'Wrapper found' }
@@ -262,7 +264,7 @@ function setupRoutes(app: Express, service: PGService) {
     });
 
     // POST /api/wrappers - creates a new wrapper
-    app.post('/api/wrappers', (req, res) => {
+    app.post('/api/wrappers', async (req, res) => {
         /*
         #swagger.tags = ['Wrappers']
         #swagger.description = 'Endpoint to create a new wrapper'
@@ -278,7 +280,7 @@ function setupRoutes(app: Express, service: PGService) {
                 $complementaryColor: 'black',
             }
         }
-        #swagger.parameters['sessionToken'] = {
+        #swagger.parameters['sessiontoken'] = {
             in: 'header',
             description: 'Session token',
             required: true,
@@ -289,10 +291,10 @@ function setupRoutes(app: Express, service: PGService) {
         */
         var wrapper = (req.body) as Wrapper;
 
-        const token = req.headers.sessionToken as string;
+        const token = req.headers.sessiontoken as string;
 
         try {
-            service.addWrapper(wrapper, token);
+            await service.addWrapper(wrapper, token);
             res.status(200).send("Wrapper created");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -300,12 +302,14 @@ function setupRoutes(app: Express, service: PGService) {
     });
 
     // PUT /api/wrappers/:id - updates a wrapper
-    app.put('/api/wrappers/:id', (req, res) => {
+    app.put('/api/wrappers/:id', async (req, res) => {
         /*
         #swagger.tags = ['Wrappers']
         #swagger.description = 'Endpoint to update a wrapper'
+        #swagger.parameters['id'] = { 
         #swagger.parameters['id'] = {
             in: 'path',
+            type: 'int',
             description: 'Wrapper id (int)'
         }
         #swagger.parameters['wrapper'] = {
@@ -320,7 +324,7 @@ function setupRoutes(app: Express, service: PGService) {
                 $complementaryColor: 'black',
             }
         }
-        #swagger.parameters['sessionToken'] = {
+        #swagger.parameters['sessiontoken'] = {
             in: 'header',
             description: 'Session token',
             required: true,
@@ -331,10 +335,10 @@ function setupRoutes(app: Express, service: PGService) {
         var wrapper = (req.body) as Wrapper;
         wrapper._id = id;
 
-        const token = req.headers.sessionToken as string;
+        const token = req.headers.sessiontoken as string;
 
         try {
-            service.updateWrapper(wrapper, token);
+            await service.updateWrapper(wrapper, token);
             res.status(200).send("Wrapper updated");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -342,15 +346,17 @@ function setupRoutes(app: Express, service: PGService) {
     });
 
     // DELETE /api/wrappers/:id - deletes a wrapper
-    app.delete('/api/wrappers/:id', (req, res) => {
+    app.delete('/api/wrappers/:id', async (req, res) => {
         /*
         #swagger.tags = ['Wrappers']
         #swagger.description = 'Endpoint to delete a wrapper'
+        #swagger.parameters['id'] = { 
         #swagger.parameters['id'] = {
             in: 'path',
+            type: 'int',
             description: 'Wrapper id (int)'
         }
-        #swagger.parameters['sessionToken'] = {
+        #swagger.parameters['sessiontoken'] = {
             in: 'header',
             description: 'Session token',
             required: true,
@@ -360,9 +366,9 @@ function setupRoutes(app: Express, service: PGService) {
         #swagger.responses[400] = { description: 'Bad request' }
         */
         const id = parseInt(req.params.id)
-        const token = req.headers.sessionToken as string;
+        const token = req.headers.sessiontoken as string;
         try {
-            service.deleteWrapper(id, token);
+            await service.deleteWrapper(id, token);
             res.status(200).send("Wrapper deleted");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -438,7 +444,7 @@ function setupRoutes(app: Express, service: PGService) {
     });
 
     // POST /api/suppliers - creates a new supplier
-    app.post('/api/suppliers', (req, res) => {
+    app.post('/api/suppliers', async (req, res) => {
         /*
         #swagger.tags = ['Suppliers']
         #swagger.description = 'Endpoint to create a new supplier'
@@ -454,7 +460,7 @@ function setupRoutes(app: Express, service: PGService) {
                 $wrappers: '',
             }
         }
-        #swagger.parameters['sessionToken'] = {
+        #swagger.parameters['sessiontoken'] = {
             in: 'header',
             description: 'Session token',
             required: true,
@@ -469,10 +475,10 @@ function setupRoutes(app: Express, service: PGService) {
             supplier.wrappers = new Array<number>();
         }
 
-        const token = req.headers.sessionToken as string;
+        const token = req.headers.sessiontoken as string;
 
         try {
-            service.addSupplier(supplier, token);
+            await service.addSupplier(supplier, token);
             res.status(201).send("Supplier created");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -480,7 +486,7 @@ function setupRoutes(app: Express, service: PGService) {
     });
 
     // PUT /api/suppliers/:id/:wrapperId - adds a wrapper to a supplier
-    app.put('/api/suppliers/:id/:wrapperId', (req, res) => {
+    app.put('/api/suppliers/:id/:wrapperId', async (req, res) => {
         /*
         #swagger.tags = ['Suppliers']
         #swagger.description = 'Endpoint to add a wrapper to a supplier'
@@ -492,7 +498,7 @@ function setupRoutes(app: Express, service: PGService) {
             in: 'path',
             description: 'Wrapper id (int)'
         }
-        #swagger.parameters['sessionToken'] = {
+        #swagger.parameters['sessiontoken'] = {
             in: 'header',
             description: 'Session token',
             required: true,
@@ -504,10 +510,10 @@ function setupRoutes(app: Express, service: PGService) {
         const id = parseInt(req.params.id)
         const wrapperId = parseInt(req.params.wrapperId);
 
-        const token = req.headers.sessionToken as string;
+        const token = req.headers.sessiontoken as string;
 
         try {
-            service.addWrapperToSupplier(id, wrapperId, token);
+            await service.addWrapperToSupplier(id, wrapperId, token);
             res.status(200).send("Wrapper added to supplier");
         } catch (error: any) {
             res.status(404).send(error.message);
@@ -516,7 +522,7 @@ function setupRoutes(app: Express, service: PGService) {
 
 
     // PUT /api/suppliers
-    app.put('/api/suppliers/:id', (req, res) => {
+    app.put('/api/suppliers/:id', async (req, res) => {
         /*
         #swagger.tags = ['Suppliers']
         #swagger.description = 'Endpoint to update a supplier'
@@ -536,7 +542,7 @@ function setupRoutes(app: Express, service: PGService) {
                 $wrappers: '',
             }
         }
-        #swagger.parameters['sessionToken'] = {
+        #swagger.parameters['sessiontoken'] = {
             in: 'header',
             description: 'Session token',
             required: true,
@@ -550,10 +556,10 @@ function setupRoutes(app: Express, service: PGService) {
 
         supplier._id = id;
 
-        const token = req.headers.sessionToken as string;
+        const token = req.headers.sessiontoken as string;
 
         try {
-            service.updateSupplier(supplier, token);
+            await service.updateSupplier(supplier, token);
             res.status(200).send("Supplier updated");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -561,7 +567,7 @@ function setupRoutes(app: Express, service: PGService) {
     });
 
     // DELETE /api/suppliers/:id - deletes a supplier
-    app.delete('/api/suppliers/:id', (req, res) => {
+    app.delete('/api/suppliers/:id', async (req, res) => {
         /*
         #swagger.tags = ['Suppliers']
         #swagger.description = 'Endpoint to delete a supplier'
@@ -569,7 +575,7 @@ function setupRoutes(app: Express, service: PGService) {
             in: 'path',
             description: 'Supplier id (int)'
         }
-        #swagger.parameters['sessionToken'] = {
+        #swagger.parameters['sessiontoken'] = {
             in: 'header',
             description: 'Session token',
             required: true,
@@ -580,10 +586,10 @@ function setupRoutes(app: Express, service: PGService) {
         */
         const id = parseInt(req.params.id)
 
-        const token = req.headers.sessionToken as string;
+        const token = req.headers.sessiontoken as string;
 
         try {
-            service.deleteSupplier(id, token);
+            await service.deleteSupplier(id, token);
             res.status(200).send("Supplier deleted");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -698,7 +704,7 @@ function setupRoutes(app: Express, service: PGService) {
     });
 
     // POST /api/combos - creates a new combo
-    app.post('/api/combos', (req, res) => {
+    app.post('/api/combos', async (req, res) => {
         /*
         #swagger.tags = ['Combos']
         #swagger.description = 'Endpoint to create a new combo'
@@ -713,7 +719,7 @@ function setupRoutes(app: Express, service: PGService) {
                 $price: 10.99,
             }
         }
-        #swagger.parameters['sessionToken'] = {
+        #swagger.parameters['sessiontoken'] = {
             in: 'header',
             description: 'Session token',
             required: true,
@@ -727,7 +733,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.headers.sessiontoken as string;
 
         try {
-            service.addCombo(combo, token);
+            await service.addCombo(combo, token);
             res.status(201).send("Combo created");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -735,7 +741,7 @@ function setupRoutes(app: Express, service: PGService) {
     });
 
     // PUT /api/combos/:id - updates a combo
-    app.put('/api/combos/:id', (req, res) => {
+    app.put('/api/combos/:id', async (req, res) => {
         /*
         #swagger.tags = ['Combos']
         #swagger.description = 'Endpoint to update a combo'
@@ -754,7 +760,7 @@ function setupRoutes(app: Express, service: PGService) {
                 $price: 10.99,
             }
         }
-        #swagger.parameters['sessionToken'] = {
+        #swagger.parameters['sessiontoken'] = {
             in: 'header',
             description: 'Session token',
             required: true,
@@ -770,7 +776,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.headers.sessiontoken as string;
 
         try {
-            service.updateCombo(combo, token);
+            await service.updateCombo(combo, token);
             res.status(200).send("Combo updated");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -778,7 +784,7 @@ function setupRoutes(app: Express, service: PGService) {
     });
 
     // DELETE /api/combos/:id - deletes a combo
-    app.delete('/api/combos/:id', (req, res) => {
+    app.delete('/api/combos/:id', async (req, res) => {
         /*
         #swagger.tags = ['Combos']
         #swagger.description = 'Endpoint to delete a combo'
@@ -786,7 +792,7 @@ function setupRoutes(app: Express, service: PGService) {
             in: 'path',
             description: 'Combo id (int)'
         }
-        #swagger.parameters['sessionToken'] = {
+        #swagger.parameters['sessiontoken'] = {
             in: 'header',
             description: 'Session token',
             required: true,
@@ -800,7 +806,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.headers.sessiontoken as string;
 
         try {
-            service.deleteCombo(id, token);
+            await service.deleteCombo(id, token);
             res.status(200).send("Combo deleted");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -922,7 +928,7 @@ function setupRoutes(app: Express, service: PGService) {
 
             res.send(
                 {
-                    "sessionToken": token
+                    "sessiontoken": token
                 }
             );
         } catch (error: any) {
