@@ -61,4 +61,19 @@ export class apiAccess {
         this.url += "/register/" + token;
         return this;
     }
+
+    userWithDetails(id: number) {
+        this.url += "/users/" + id + "?lists=true";
+        return this;
+    }
+
+    userWithoutDetails(id: number) {
+        this.url += "/users/" + id;
+        return this;
+    }
+
+    userName(id: number) {
+        this.url += "/users/name/" + id;
+        return this;
+    }
 }
