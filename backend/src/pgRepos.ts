@@ -39,30 +39,30 @@ class PGBoxRepository {
         return result.rows[0] as Box;
     }
 
-    add(box: Box): void {
+    async add(box: Box, userId: number): Promise<void> {
         // INSERT INTO boxes (width, height, length, color, material) VALUES ($1, $2, $3, $4, $5)
-        this.client.query('INSERT INTO boxes (width, height, length, color, material) VALUES ($1, $2, $3, $4, $5)', [box.width, box.height, box.length, box.color, box.material], (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-                throw new Error(err.message);
-            } else {
-                console.log(res);
-            }
-        });
+
+        const query = 'INSERT INTO boxes (width, height, length, color, material) VALUES ($1, $2, $3, $4, $5) RETURNING _id';
+        const values = [box.width, box.height, box.length, box.color, box.material];
+        const result = await this.client.query(query, values);
+
+        const boxId = result.rows[0]._id;
+        const query2 = 'INSERT INTO box_owners (boxid, userid) VALUES ($1, $2)';
+        const values2 = [boxId, userId];
+        this.client.query(query2, values2);
     }
 
-    addBulk(boxes: Box[]): void {
+    async addBulk(boxes: Box[], userId: number): Promise<void> {
         var values: string = boxes
             .map(box => `(${box.width}, ${box.height}, ${box.length}, '${box.color}', '${box.material}')`).join(', ');
 
-        this.client.query(`INSERT INTO boxes (width, height, length, color, material) VALUES ${values}`, (err: Error, res: QueryResult) => {
-            if (err) {
-                console.log(err.message);
-                throw new Error(err.message);
-            } else {
-                console.log(res);
-            }
-        });
+        const query = `INSERT INTO boxes (width, height, length, color, material) VALUES ${values} RETURNING _id`;
+        const result = await this.client.query(query);
+
+        const boxIds = result.rows.map(row => row._id);
+        var values2: string = boxIds.map(boxId => `(${boxId}, ${userId})`).join(', ');
+        const query2 = `INSERT INTO box_owners (boxid, userid) VALUES ${values2}`;
+        this.client.query(query2);
     }
 
     update(box: Box): void {
@@ -112,6 +112,13 @@ class PGBoxRepository {
         return result.rows.map(row => row.boxid as number);
     }
 
+    async getOwnerId(boxId: number): Promise<number> {
+        // SELECT userid FROM box_owners WHERE boxid = $1
+
+        const result = await this.client.query('SELECT userid FROM box_owners WHERE boxid = $1', [boxId]);
+        return result.rows[0].userid as number;
+    }
+
 }
 
 class PGWrapperRepository {
@@ -144,16 +151,15 @@ class PGWrapperRepository {
         return result.rows[0] as Wrapper;
     }
 
-    add(wrapper: Wrapper): void {
-        this.client.query('INSERT INTO wrappers (length, width, color, complementaryColor, pattern) VALUES ($1, $2, $3, $4, $5)',
-            [wrapper.length, wrapper.width, wrapper.color, wrapper.complementaryColor, wrapper.pattern], (err: Error, res: QueryResult) => {
-                if (err) {
-                    console.log(err.message);
-                    throw new Error(err.message);
-                } else {
-                    console.log(res);
-                }
-            });
+    async add(wrapper: Wrapper, userId: number): Promise<void> {
+        const query = 'INSERT INTO wrappers (length, width, color, complementaryColor, pattern) VALUES ($1, $2, $3, $4, $5) RETURNING _id';
+        const values = [wrapper.length, wrapper.width, wrapper.color, wrapper.complementaryColor, wrapper.pattern];
+        const result = await this.client.query(query, values);
+
+        const wrapperId = result.rows[0]._id;
+        const query2 = 'INSERT INTO wrapper_owners (wrapperid, userid) VALUES ($1, $2)';
+        const values2 = [wrapperId, userId];
+        this.client.query(query2, values2);
     }
 
     update(wrapper: Wrapper): void {
@@ -229,6 +235,11 @@ class PGWrapperRepository {
 
         const result = await this.client.query('SELECT wrapperid FROM wrapper_owners WHERE userid = $1', [userId]);
         return result.rows.map(row => row.wrapperid as number);
+    }
+
+    async getOwnerId(wrapperId: number): Promise<number> {
+        const result = await this.client.query('SELECT userid FROM wrapper_owners WHERE wrapperid = $1', [wrapperId]);
+        return result.rows[0].userid as number;
     }
 }
 
@@ -309,16 +320,29 @@ class PGSupplierRepository {
         return result.rows[0] as Supplier;
     }
 
-    add(supplier: Supplier): void {
-        this.client.query('INSERT INTO suppliers (name, address, phone, email) VALUES ($1, $2, $3, $4)',
-            [supplier.name, supplier.address, supplier.phone, supplier.email], (err: Error, res: QueryResult) => {
-                if (err) {
-                    console.log(err.message);
-                    throw new Error(err.message);
-                } else {
-                    console.log(res);
-                }
-            });
+    // add(supplier: Supplier): void {
+    //     this.client.query('INSERT INTO suppliers (name, address, phone, email) VALUES ($1, $2, $3, $4)',
+    //         [supplier.name, supplier.address, supplier.phone, supplier.email], (err: Error, res: QueryResult) => {
+    //             if (err) {
+    //                 console.log(err.message);
+    //                 throw new Error(err.message);
+    //             } else {
+    //                 console.log(res);
+    //             }
+    //         });
+    // }
+
+    async add(supplier: Supplier, userId: number): Promise<void> {
+        // INSERT INTO suppliers (name, address, phone, email) VALUES ($1, $2, $3, $4) RETURNING _id
+        // INSERT INTO supplier_owners (supplierid, userid) VALUES ($1, $2)
+        const query = 'INSERT INTO suppliers (name, address, phone, email) VALUES ($1, $2, $3, $4) RETURNING _id';
+        const values = [supplier.name, supplier.address, supplier.phone, supplier.email];
+        const result = await this.client.query(query, values);
+
+        const supplierId = result.rows[0]._id;
+        const query2 = 'INSERT INTO supplier_owners (supplierid, userid) VALUES ($1, $2)';
+        const values2 = [supplierId, userId];
+        this.client.query(query2, values2);
     }
 
     update(supplier: Supplier): void {
@@ -355,6 +379,11 @@ class PGSupplierRepository {
         const result = await this.client.query('SELECT supplierid FROM supplier_owners WHERE userid = $1', [userId]);
         return result.rows.map(row => row.supplierid as number);
     }
+
+    async getOwnerId(supplierId: number): Promise<number> {
+        const result = await this.client.query('SELECT userid FROM supplier_owners WHERE supplierId = $1', [supplierId]);
+        return result.rows[0].userid as number;
+    }
 }
 
 class PGComboRepository {
@@ -379,16 +408,29 @@ class PGComboRepository {
         return result.rows as WrapperBoxCombo[];
     }
 
-    add(combo: WrapperBoxCombo): void {
-        this.client.query('INSERT INTO combos (wrapperId, boxId, name, price) VALUES ($1, $2, $3, $4)',
-            [combo.wrapperid, combo.boxid, combo.name, combo.price], (err: Error, res: QueryResult) => {
-                if (err) {
-                    console.log(err.message);
-                    throw new Error(err.message);
-                } else {
-                    console.log(res);
-                }
-            });
+    // add(combo: WrapperBoxCombo): void {
+    //     this.client.query('INSERT INTO combos (wrapperId, boxId, name, price) VALUES ($1, $2, $3, $4)',
+    //         [combo.wrapperid, combo.boxid, combo.name, combo.price], (err: Error, res: QueryResult) => {
+    //             if (err) {
+    //                 console.log(err.message);
+    //                 throw new Error(err.message);
+    //             } else {
+    //                 console.log(res);
+    //             }
+    //         });
+    // }
+
+    async add(combo: WrapperBoxCombo, userId: number): Promise<void> {
+        // INSERT INTO combos (wrapperId, boxId, name, price) VALUES ($1, $2, $3, $4) RETURNING _id
+        // INSERT INTO combo_owners (comboid, userid) VALUES ($1, $2)
+        const query = 'INSERT INTO combos (wrapperId, boxId, name, price) VALUES ($1, $2, $3, $4) RETURNING _id';
+        const values = [combo.wrapperid, combo.boxid, combo.name, combo.price];
+        const result = await this.client.query(query, values);
+
+        const comboId = result.rows[0]._id;
+        const query2 = 'INSERT INTO combo_owners (comboid, userid) VALUES ($1, $2)';
+        const values2 = [comboId, userId];
+        this.client.query(query2, values2);
     }
 
     async getById(id: number): Promise<WrapperBoxCombo> {
@@ -430,6 +472,11 @@ class PGComboRepository {
     async getOwnedBy(userId: number): Promise<number[]> {
         const result = await this.client.query('SELECT comboid FROM combo_owners WHERE userid = $1', [userId]);
         return result.rows.map(row => row.comboid as number);
+    }
+
+    async getOwnerId(comboId: number): Promise<number> {
+        const result = await this.client.query('SELECT userid FROM combo_owners WHERE comboId = $1', [comboId]);
+        return result.rows[0].userid as number;
     }
 }
 

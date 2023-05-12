@@ -1,7 +1,7 @@
 // import { sign } from "jsonwebtoken";
 import { AverageWrapperLength, Box, Supplier, Wrapper, WrapperBoxCombo } from "./entities";
 import { PGBoxRepository, PGComboRepository, PGSuppliedWrapperRepository, PGSupplierRepository, PGWrapperRepository } from "./pgRepos";
-import { UserDetails } from "./userEntities";
+import { SessionDetails, UserDetails } from "./userEntities";
 import { AuthRepo,  UserRepository } from "./userRepos";
 
 class PGService {
@@ -35,30 +35,69 @@ class PGService {
         return this.boxRepository.getById(id);
     }
 
-    addBox(box: Box): void {
-        if (!Box.validateDimensions(box)) {
-            throw new Error("Error: Box dimensions are invalid");
+    addBox(box: Box, token: string): void {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to add a box.");
         }
-        this.boxRepository.add(box);
+
+        Box.checkEmpty(box);
+        Box.validateDimensions(box);
+
+        this.boxRepository.add(box, sessionDetails.userid);
     }
 
-    addBoxes(boxes: Box[]): void {
+    addBoxes(boxes: Box[], token: string): void {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to add boxes.");
+        }
         boxes.forEach(b => {
-            if (!Box.validateDimensions(b)) {
-                throw new Error("Error: Box dimensions are invalid");
-            }
+            Box.checkEmpty(b);
+            Box.validateDimensions(b);
         });
-        this.boxRepository.addBulk(boxes);
+
+        this.boxRepository.addBulk(boxes, sessionDetails.userid);
     }
 
-    updateBox(box: Box): void {
-        if (!Box.validateDimensions(box)) {
-            throw new Error("Error: Box dimensions are invalid");
+    async updateBox(box: Box, token: string): Promise<void> {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to update a box.");
         }
+
+        if (sessionDetails.role === "user") {
+            const ownerId = await this.boxRepository.getOwnerId(box._id);
+
+            if (ownerId !== sessionDetails.userid) {
+                throw new Error("Error: Only the owner of a box can update it.");
+            }
+        }
+
+        Box.checkEmpty(box);
+        Box.validateDimensions(box);
+
         this.boxRepository.update(box);
     }
 
-    deleteBox(id: number): void {
+    async deleteBox(id: number, token: string): Promise<void> {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to delete a box.");
+        }
+
+        if (sessionDetails.role === "user") {
+            const ownerId = await this.boxRepository.getOwnerId(id);
+
+            if (ownerId !== sessionDetails.userid) {
+                throw new Error("Error: Only the owner of a box can delete it.");
+            }
+        }
+
         this.boxRepository.delete(id);
     }
 
@@ -87,21 +126,54 @@ class PGService {
         return wrapper;
     }
 
-    addWrapper(wrapper: Wrapper): void {
-        if (!Wrapper.validateDimensions(wrapper)) {
-            throw new Error("Error: Wrapper dimensions are invalid");
+    addWrapper(wrapper: Wrapper, token: string): void {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to add a wrapper.");
         }
-        this.wrapperRepository.add(wrapper);
+
+        Wrapper.checkEmpty(wrapper);
+        Wrapper.validateDimensions(wrapper);
+
+        this.wrapperRepository.add(wrapper, sessionDetails.userid);
     }
 
-    updateWrapper(wrapper: Wrapper): void {
-        if (!Wrapper.validateDimensions(wrapper)) {
-            throw new Error("Error: Wrapper dimensions are invalid");
+    async updateWrapper(wrapper: Wrapper, token: string): Promise<void> {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to update a wrapper.");
         }
+
+        if (sessionDetails.role === "user") {
+            const ownerId = await this.wrapperRepository.getOwnerId(wrapper._id);
+
+            if (ownerId !== sessionDetails.userid) {
+                throw new Error("Error: Only the owner of a wrapper can update it.");
+            }
+        }
+        
+        Wrapper.checkEmpty(wrapper);
+        Wrapper.validateDimensions(wrapper);
+
         this.wrapperRepository.update(wrapper);
     }
 
-    deleteWrapper(id: number): void {
+    async deleteWrapper(id: number, token: string): Promise<void> {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to delete a wrapper.");
+        }
+
+        if (sessionDetails.role === "user") {
+            const ownerId = await this.wrapperRepository.getOwnerId(id);
+
+            if (ownerId !== sessionDetails.userid) {
+                throw new Error("Error: Only the owner of a wrapper can delete it.");
+            }
+        }
         this.wrapperRepository.delete(id);
     }
 
@@ -119,40 +191,111 @@ class PGService {
         return supplier;
     }
 
-    addSupplier(supplier: Supplier): void {
-        if (!Supplier.validatePhoneNumber(supplier)) {
-            throw new Error("Error: Supplier phone number is invalid");
+    addSupplier(supplier: Supplier, token: string): void {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to add a supplier.");
         }
-        this.supplierRepository.add(supplier);
+
+        Supplier.checkEmpty(supplier);
+        Supplier.validatePhoneNumber(supplier);
+        Supplier.validateEmail(supplier);
+
+        this.supplierRepository.add(supplier, sessionDetails.userid);
     }
 
-    updateSupplier(supplier: Supplier): void {
-        if (!Supplier.validatePhoneNumber(supplier)) {
-            throw new Error("Error: Supplier phone number is invalid");
+    async updateSupplier(supplier: Supplier, token: string): Promise<void> {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to update a supplier.");
         }
+
+        if (sessionDetails.role === "user") {
+            const ownerId = await this.supplierRepository.getOwnerId(supplier._id);
+
+            if (ownerId !== sessionDetails.userid) {
+                throw new Error("Error: Only the owner of a supplier can update it.");
+            }
+        }
+
+        Supplier.checkEmpty(supplier);
+        Supplier.validatePhoneNumber(supplier);
+        Supplier.validateEmail(supplier);
+
         this.supplierRepository.update(supplier);
     }
 
-    deleteSupplier(id: number): void {
+    // deleteSupplier(id: number): void {
+    //     this.supplierRepository.delete(id);
+    // }
+
+    async deleteSupplier(id: number, token: string): Promise<void> {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to delete a supplier.");
+        }
+
+        if (sessionDetails.role === "user") {
+            const ownerId = await this.supplierRepository.getOwnerId(id);
+
+            if (ownerId !== sessionDetails.userid) {
+                throw new Error("Error: Only the owner of a supplier can delete it.");
+            }
+        }
         this.supplierRepository.delete(id);
     }
 
-    addWrapperToSupplier(supplierId: number, wrapperId: number): void {
-        const supplier = this.supplierRepository.getById(supplierId);
-        if (supplier == undefined) {
-            throw new Error("Supplier with ID" + supplierId + "does not exist");
+    async addWrapperToSupplier(supplierId: number, wrapperId: number, token: string): Promise<void> {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to add a wrapper to a supplier.");
         }
 
-        const wrapper = this.wrapperRepository.getById(wrapperId);
-        if (wrapper == undefined) {
-            throw new Error("Wrapper with ID" + wrapperId + "does not exist");
+        if (sessionDetails.role === "user") {
+            const ownerId = await this.supplierRepository.getOwnerId(supplierId);
+
+            if (ownerId !== sessionDetails.userid) {
+                throw new Error("Error: Only the owner of a supplier can add a wrapper to it.");
+            }
         }
+        
+        // Check if supplier and wrapper exist
+        await this.supplierRepository.getById(supplierId);
+        await this.wrapperRepository.getById(wrapperId);
 
         this.suppliedWrapperRepository.add(supplierId, wrapperId);
     }
 
-    addCombo(combo: WrapperBoxCombo): void {
-        this.comboRepository.add(combo);
+    // addCombo(combo: WrapperBoxCombo): void {
+    //     this.comboRepository.add(combo);
+    // }
+
+    async addCombo(combo: WrapperBoxCombo, token: string): Promise<void> {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to add a combo.");
+        }
+
+        if (sessionDetails.role === "user") {
+            const ownerId = await this.comboRepository.getOwnerId(combo._id);
+
+            if (ownerId !== sessionDetails.userid) {
+                throw new Error("Error: Only the owner of a combo can add it.");
+            }
+        }
+
+        WrapperBoxCombo.checkEmpty(combo);
+        WrapperBoxCombo.validatePrice(combo);
+
+        await this.boxRepository.getById(combo.boxid as number);
+        await this.wrapperRepository.getById(combo.wrapperid as number);
+
+        this.comboRepository.add(combo, sessionDetails.userid);
     }
 
     async getAllCombos(): Promise<WrapperBoxCombo[]> {
@@ -175,11 +318,49 @@ class PGService {
         return WrapperBoxCombo.toComplexObject(combo, wrapper, box);
     }
 
-    updateCombo(combo: WrapperBoxCombo): void {
+    async updateCombo(combo: WrapperBoxCombo, token: string): Promise<void> {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to update a combo.");
+        }
+
+        if (sessionDetails.role === "user") {
+            const ownerId = await this.comboRepository.getOwnerId(combo._id);
+
+            if (ownerId !== sessionDetails.userid) {
+                throw new Error("Error: Only the owner of a combo can update it.");
+            }
+        }
+
+        WrapperBoxCombo.checkEmpty(combo);
+        WrapperBoxCombo.validatePrice(combo);
+
+        await this.boxRepository.getById(combo.boxid as number);
+        await this.wrapperRepository.getById(combo.wrapperid as number);
+
         this.comboRepository.update(combo);
     }
 
-    deleteCombo(id: number): void {
+    // deleteCombo(id: number): void {
+    //     this.comboRepository.delete(id);
+    // }
+
+    async deleteCombo(id: number, token: string): Promise<void> {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to delete a combo.");
+        }
+
+        if (sessionDetails.role === "user") {
+            const ownerId = await this.comboRepository.getOwnerId(id);
+
+            if (ownerId !== sessionDetails.userid) {
+                throw new Error("Error: Only the owner of a combo can delete it.");
+            }
+        }
+
         this.comboRepository.delete(id);
     }
 
@@ -318,7 +499,8 @@ class PGService {
     }
 
     async login(username: string, password: string): Promise<string> {
-        if (!(await this.authRepository.checkIfUserExists(username))) {
+        const userId = await this.authRepository.checkIfUserExists(username);
+        if (userId === -1) {
             throw new Error("Username does not exist");
         }
 
@@ -336,9 +518,10 @@ class PGService {
         const jwt = require('jsonwebtoken')
 
         const jwtSecretKey = process.env.JWT_SECRET_KEY;
-        const data = {
+        const data: SessionDetails = {
+            "userid": userId,
             "username": username,
-            "loginDate": Date.now(),
+            "logindate": Date.now(),
             "role": role
         };
 
@@ -378,6 +561,45 @@ class PGService {
             "id": id
         }
     }
+
+    private verifyToken(token: string): SessionDetails | null {
+        const jwt = require('jsonwebtoken')
+
+        const jwtSecretKey = process.env.JWT_SECRET_KEY;
+
+        // try {
+        //     var decoded = jwt.verify(token, jwtSecretKey) as SessionDetails;
+            
+        //     // check if logindate is older than 1 hour
+        //     const tokenDate = new Date(decoded.logindate);
+        //     const currentDate = new Date();
+        //     if (currentDate.getTime() - tokenDate.getTime() > 3600000) {
+        //         return null;
+        //     }
+
+        //     return decoded;
+        // } catch (error) {
+        //     return null;
+        // }
+
+        var decoded: SessionDetails | null = null;
+
+        try {
+            decoded = jwt.verify(token, jwtSecretKey) as SessionDetails;
+        } catch (error) {
+            return null;
+        }
+
+        // check if logindate is older than 1 hour
+        const tokenDate = new Date(decoded.logindate);
+        const currentDate = new Date();
+        if (currentDate.getTime() - tokenDate.getTime() > 3600000) {
+            throw new Error("Login session expired");
+        }
+
+        return decoded;
+    }
+
 }
 
 export default PGService;
