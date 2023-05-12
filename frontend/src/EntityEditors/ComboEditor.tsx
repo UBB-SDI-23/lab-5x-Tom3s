@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Badge, Button, Col, Form, InputGroup, Row, Toast, ToastContainer } from "react-bootstrap";
 import { apiAccess } from "../models/endpoints";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import UserDetailsOffCanvas from "../Elements/userDetails";
 
 const ComboEditor = () => {
 
@@ -158,6 +159,7 @@ const ComboEditor = () => {
 
     return (
         <Fragment>
+            <UserDetailsOffCanvas />
             {
                 comboId !== "" && 
                 <h1>Editing Wrapper-Box Combo with<Badge bg="secondary">ID: {comboId}</Badge> </h1>

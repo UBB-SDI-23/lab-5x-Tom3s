@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Badge, Button, Col, Form, Row, Toast, ToastContainer } from "react-bootstrap";
 import { apiAccess } from "../models/endpoints";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import UserDetailsOffCanvas from "../Elements/userDetails";
 
 
 const BoxEditor = () => {
@@ -162,6 +163,7 @@ const BoxEditor = () => {
 
     return (
         <Fragment>
+            <UserDetailsOffCanvas />
             {
                 boxId !== "" && 
                 <h1>Editing box with<Badge bg="secondary">ID: {boxId}</Badge> </h1>

@@ -35,7 +35,6 @@ const BoxList = () => {
                         .then(response => response.json())
                         .then(data => {
                             box.ownername = data.username;
-                            console.log(data);
                         });
                 });
                 Promise.all(fetchOwnerNamePromises).then(() => {
@@ -76,8 +75,6 @@ const BoxList = () => {
 
     function deleteBox() {
         const id = tempBox._id;
-
-        console.log(id);
 
         setShowAlert(false)
 

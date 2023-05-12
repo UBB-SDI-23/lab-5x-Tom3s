@@ -1,8 +1,10 @@
 import { Fragment, useEffect, useState } from "react"
 import { useNavigate, useSearchParams, Navigate } from "react-router-dom";
 import { apiAccess } from "../models/endpoints";
-import { Button, Col, ListGroup, Row } from "react-bootstrap";
+import { Button, Col, ListGroup, Offcanvas, Row } from "react-bootstrap";
 import { loadavg } from "os";
+import { destroyLocalSessionDetails } from "../models/entities";
+import UserDetailsOffCanvas from "../Elements/userDetails";
 
 const ProfilePage = () => {
 
@@ -25,7 +27,7 @@ const ProfilePage = () => {
 
     useEffect(() => {
         if (userId !== -1) {
-            fetch(new apiAccess().userWithDetails(userId).url)
+            fetch(new apiAccess().userWithLists(userId).url)
                 .then(response => response.json())
                 .then(data => {
                     setUser(data);
@@ -61,6 +63,7 @@ const ProfilePage = () => {
 
     return (
         <Fragment>
+            <UserDetailsOffCanvas />
             {
                 loading ?
                     (
@@ -89,6 +92,7 @@ const ProfilePage = () => {
                         {
                             userId !== -1 &&
                             <Fragment>
+
 
                                 <ListGroup>
                                     <ListGroup.Item>
@@ -141,8 +145,6 @@ const ProfilePage = () => {
                         </Row>
                     </Fragment>
             }
-
-
         </Fragment>
     );
 }

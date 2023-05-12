@@ -3,6 +3,7 @@ import { Badge, Button, Col, Form, Row, Toast, ToastContainer } from "react-boot
 import { ToastDetails } from "../models/entities";
 import { apiAccess } from "../models/endpoints";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import UserDetailsOffCanvas from "../Elements/userDetails";
 
 
 const WrapperEditor = () => {
@@ -159,6 +160,7 @@ const WrapperEditor = () => {
 
     return (
         <Fragment>
+            <UserDetailsOffCanvas />
             {
                 wrapperId !== "" && 
                 <h1>Editing wrapper with<Badge bg="secondary">ID: {wrapperId}</Badge> </h1>
