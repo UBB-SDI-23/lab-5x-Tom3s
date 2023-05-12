@@ -41,6 +41,15 @@ class AuthRepo {
         return "";
     }
 
+    setUserRole(userId: number, role: string): void {
+        const correctRoles = ["admin", "user", "moderator"];
+        if (!correctRoles.includes(role)) {
+            throw new Error("Invalid role");
+        }
+        const query = "UPDATE users SET role = $1 WHERE id = $2";
+        const values = [role, userId];
+        this.client.query(query, values);
+    }
 }
 
 class UserRepository {
@@ -56,7 +65,7 @@ class UserRepository {
 
 
     async getUserById(id: number): Promise<UserDetails> {
-        const query = "SELECT u.username, ud.userid, ud.email, ud.birthday, ud.gender, ud.nickname, ud.eyecolor FROM users u INNER JOIN userdetails ud ON u.id = ud.userid WHERE u.id = $1;";
+        const query = "SELECT u.username, u.role, ud.userid, ud.email, ud.birthday, ud.gender, ud.nickname, ud.eyecolor FROM users u INNER JOIN userdetails ud ON u.id = ud.userid WHERE u.id = $1;";
         const values = [id];
         const result = await this.client.query(query, values);
         return result.rows[0] as UserDetails;
