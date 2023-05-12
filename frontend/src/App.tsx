@@ -8,6 +8,7 @@ import ComboEditor from "./EntityEditors/ComboEditor";
 import RegisterPage from "./userSystem/registerPage";
 import ConfirmPage from "./userSystem/confirmPage";
 import LoginPage from "./userSystem/loginPage";
+import ProfilePage from "./userSystem/profilePage";
 
 const App = () => {
     return (
@@ -21,6 +22,7 @@ const App = () => {
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/confirm" element={<ConfirmPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/" element={<Navigate to="/home" />} />
             </Routes>
         </Fragment>

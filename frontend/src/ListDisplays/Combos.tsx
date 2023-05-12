@@ -26,14 +26,25 @@ const ComboList = () => {
     const [tempCombo, setTempCombo] = useState(emptyCombo);
 
     useEffect(() => {
-        fetch(new apiAccess().wrapperBoxCombos().page(page).url)
+        // setBoxes();
+        fetch(new apiAccess().combos().page(page).url)
             .then(response => response.json())
             .then(data => {
-                setCombos(data)
-                setSearchParams((oldParams) => {
-                    oldParams.set("page", page.toString());
-                    oldParams.set("type", "4");
-                    return oldParams;
+                const fetchOwnerNamePromises = data.map((combo: any) => {
+                    return fetch(new apiAccess().userName(combo.ownerid).url)
+                        .then(response => response.json())
+                        .then(data => {
+                            combo.ownername = data.username;
+                            console.log(data);
+                        });
+                });
+                Promise.all(fetchOwnerNamePromises).then(() => {
+                    setCombos(data);
+                    setSearchParams((oldParams) => {
+                        oldParams.set("page", page.toString());
+                        oldParams.set("type", "4");
+                        return oldParams;
+                    });
                 });
             });
     }, [page, showAlert]);
@@ -88,6 +99,7 @@ const ComboList = () => {
                         <th>Combo Name</th>
                         <th>Price</th>
                         <th>Actions</th>
+                        <th>By</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -102,6 +114,7 @@ const ComboList = () => {
                                 <Button variant="info" onClick={() => navigate("/combo?id=" + combo._id)}>Edit</Button>
                                 <Button variant="danger" onClick={() => handleDeleteButton(combo._id)}>Delete</Button>
                             </td>
+                            <td> <a href={"/profile?id=" + combo.ownerid}>{combo.ownername}</a></td>
                         </tr>
                     ))}
                 </tbody>

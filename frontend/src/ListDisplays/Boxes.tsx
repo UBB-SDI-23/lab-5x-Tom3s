@@ -30,11 +30,21 @@ const BoxList = () => {
         fetch(new apiAccess().boxes().page(page).url)
             .then(response => response.json())
             .then(data => {
-                setBoxes(data)
-                setSearchParams((oldParams) => {
-                    oldParams.set("page", page.toString());
-                    oldParams.set("type", "1");
-                    return oldParams;
+                const fetchOwnerNamePromises = data.map((box: any) => {
+                    return fetch(new apiAccess().userName(box.ownerid).url)
+                        .then(response => response.json())
+                        .then(data => {
+                            box.ownername = data.username;
+                            console.log(data);
+                        });
+                });
+                Promise.all(fetchOwnerNamePromises).then(() => {
+                    setBoxes(data);
+                    setSearchParams((oldParams) => {
+                        oldParams.set("page", page.toString());
+                        oldParams.set("type", "1");
+                        return oldParams;
+                    });
                 });
             });
     }, [page, showAlert]);
@@ -44,6 +54,9 @@ const BoxList = () => {
             .then(response => response.json())
             .then(data => setPageCount(parseInt(data) - 1));
     }, []);
+
+    
+      
 
     function handleGoToPage(event: any) {
         event.preventDefault();
@@ -88,6 +101,7 @@ const BoxList = () => {
                         <th>Material</th>
                         <th>Color</th>
                         <th>Actions</th>
+                        <th>By</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -101,6 +115,7 @@ const BoxList = () => {
                                 <Button variant="info" onClick={() => navigate("/box?id=" + box._id)}>Edit</Button>
                                 <Button variant="danger" onClick={() => handleDeleteButton(box._id)}>Delete</Button>
                             </td>
+                            <td> <a href={"/profile?id=" + box.ownerid}>{box.ownername}</a></td>
                         </tr>
                     ))}
                 </tbody>
