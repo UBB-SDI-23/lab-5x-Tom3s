@@ -498,7 +498,7 @@ class PGService {
         // }
     }
 
-    async login(username: string, password: string): Promise<string> {
+    async login(username: string, password: string): Promise<any> {
         const userId = await this.authRepository.checkIfUserExists(username);
         if (userId === -1) {
             throw new Error("Username does not exist");
@@ -527,7 +527,12 @@ class PGService {
 
         const token = jwt.sign(data, jwtSecretKey);
 
-        return token;
+        return {
+            "sessiontoken": token,
+            "role": role,
+            "userid": userId,
+            "username": username
+        };
     }
 
     async getUserById(id: number, lists: boolean): Promise<UserDetails> {

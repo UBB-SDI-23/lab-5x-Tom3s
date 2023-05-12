@@ -924,13 +924,9 @@ function setupRoutes(app: Express, service: PGService) {
         }
 
         try {
-            const token = await service.login(username, password);
+            const sessionDetails = await service.login(username, password);
 
-            res.send(
-                {
-                    "sessiontoken": token
-                }
-            );
+            res.status(200).send(sessionDetails);
         } catch (error: any) {
             res.status(500).send(error.message);
         }
