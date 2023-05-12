@@ -798,6 +798,54 @@ function setupRoutes(app: Express, service: PGService){
             res.status(500).send(error.message);
         }
     });
+
+    // GET /api/users/name/:id - returns a user's name
+    app.get('/api/users/name/:id', async (req, res) => {
+        /*
+        #swagger.tags = ['Users']
+        #swagger.description = 'Endpoint to get a user\'s name'
+        #swagger.parameters['id'] = {
+            in: 'path',
+            description: 'User id (int)'
+        }
+        #swagger.responses[200] = { description: 'Returned a user\'s name' }
+        #swagger.responses[404] = { description: 'User not found' }
+        */
+        const id = parseInt(req.params.id)
+        try {
+            res.send(await service.getUserName(id));
+        } catch (error: any) {
+            res.status(404).send(error.message);
+        }
+    });
+
+    // GET /api/users/:id - returns a user's all details
+    app.get('/api/users/:id', async (req, res) => {
+        /*
+        #swagger.tags = ['Users']
+        #swagger.description = 'Endpoint to get a user\'s all details'
+        #swagger.parameters['id'] = {
+            in: 'path',
+            description: 'User id (int)'
+        }
+        #swagger.parameters['lists'] = {
+            in: 'query',
+            description: 'If true, returns user\'s lists',
+            type: 'boolean'
+        }
+        #swagger.responses[200] = { description: 'Returned a user\'s all details' }
+        #swagger.responses[404] = { description: 'User not found' }
+        */
+        const id = parseInt(req.params.id)
+
+        const lists: boolean = req.query.lists == 'true'; 
+
+        try {
+            res.send(await service.getUserById(id, lists));
+        } catch (error: any) {
+            res.status(404).send(error.message);
+        }
+    });
 }
 
 export default setupRoutes;

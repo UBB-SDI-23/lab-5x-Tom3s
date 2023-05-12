@@ -104,6 +104,14 @@ class PGBoxRepository {
         const result = await this.client.query('SELECT boxes.*, box_owners.userid as ownerid FROM boxes LEFT JOIN box_owners ON boxes._id = box_owners.boxid WHERE width > $1 OR height > $1 OR length > $1 ORDER BY _id LIMIT $2 OFFSET $3', [size, pageLength, offset]);
         return result.rows as Box[];
     }
+
+    async getOwnedBy(userId: number): Promise<number[]> {
+        // SELECT boxid FROM box_owners WHERE userid = $1
+
+        const result = await this.client.query('SELECT boxid FROM box_owners WHERE userid = $1', [userId]);
+        return result.rows.map(row => row.boxid as number);
+    }
+
 }
 
 class PGWrapperRepository {
@@ -216,6 +224,12 @@ class PGWrapperRepository {
         return await Promise.all(averageLengths);
     }
 
+    async getOwnedBy(userId: number): Promise<number[]> {
+        // SELECT wrapperid FROM wrapper_owners WHERE userid = $1
+
+        const result = await this.client.query('SELECT wrapperid FROM wrapper_owners WHERE userid = $1', [userId]);
+        return result.rows.map(row => row.wrapperid as number);
+    }
 }
 
 class PGSuppliedWrapperRepository {
@@ -335,6 +349,12 @@ class PGSupplierRepository {
         const result = await this.client.query('SELECT COUNT(*) FROM suppliers');
         return result.rows[0].count;
     }
+
+    async getOwnedBy(userId: number): Promise<number[]> {
+        // SELECT supplierid FROM supplier_owners WHERE userid = $1
+        const result = await this.client.query('SELECT supplierid FROM supplier_owners WHERE userid = $1', [userId]);
+        return result.rows.map(row => row.supplierid as number);
+    }
 }
 
 class PGComboRepository {
@@ -405,6 +425,11 @@ class PGComboRepository {
     async getCount(): Promise<number> {
         const result = await this.client.query("SELECT value FROM cache_table WHERE key = 'combos_count';");
         return result.rows[0].value;
+    }
+
+    async getOwnedBy(userId: number): Promise<number[]> {
+        const result = await this.client.query('SELECT comboid FROM combo_owners WHERE userid = $1', [userId]);
+        return result.rows.map(row => row.comboid as number);
     }
 }
 

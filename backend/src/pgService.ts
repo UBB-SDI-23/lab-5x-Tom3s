@@ -1,7 +1,8 @@
 // import { sign } from "jsonwebtoken";
 import { AverageWrapperLength, Box, Supplier, Wrapper, WrapperBoxCombo } from "./entities";
 import { PGBoxRepository, PGComboRepository, PGSuppliedWrapperRepository, PGSupplierRepository, PGWrapperRepository } from "./pgRepos";
-import AuthRepo from "./userRepos";
+import { UserDetails } from "./userEntities";
+import { AuthRepo,  UserRepository } from "./userRepos";
 
 class PGService {
     private boxRepository: PGBoxRepository;
@@ -9,7 +10,8 @@ class PGService {
     private suppliedWrapperRepository: PGSuppliedWrapperRepository;
     private supplierRepository: PGSupplierRepository;
     private comboRepository: PGComboRepository;
-    private authRepo: AuthRepo;
+    private authRepository: AuthRepo;
+    private userRepository: UserRepository;
 
     private defaultPageLength: number = 15;
 
@@ -20,7 +22,8 @@ class PGService {
         this.suppliedWrapperRepository = new PGSuppliedWrapperRepository();
         this.supplierRepository = new PGSupplierRepository();
         this.comboRepository = new PGComboRepository();
-        this.authRepo = new AuthRepo();
+        this.authRepository = new AuthRepo();
+        this.userRepository = new UserRepository();
     }
 
     // Box Actions
@@ -248,7 +251,7 @@ class PGService {
 
     async getRegistrationToken(username: string, password: string): Promise<string> {
 
-        if (await this.authRepo.checkIfUserExists(username)) {
+        if (await this.authRepository.checkIfUserExists(username)) {
             throw new Error("Username taken");
         }
 
@@ -295,7 +298,7 @@ class PGService {
         const username = decoded.username;
         const password = decoded.password;
 
-        if (await this.authRepo.checkIfUserExists(username)) {
+        if (await this.authRepository.checkIfUserExists(username)) {
             throw new Error("Token already used");
         }
 
@@ -304,7 +307,7 @@ class PGService {
 
         const passwordHash = createHash('sha256').update(password).digest('hex');
 
-        this.authRepo.registerUser(username, passwordHash);
+        this.authRepository.registerUser(username, passwordHash);
 
         return true;
 
@@ -315,7 +318,7 @@ class PGService {
     }
 
     async login(username: string, password: string): Promise<string> {
-        if (!(await this.authRepo.checkIfUserExists(username))) {
+        if (!(await this.authRepository.checkIfUserExists(username))) {
             throw new Error("Username does not exist");
         }
 
@@ -323,7 +326,7 @@ class PGService {
 
         const passwordHash = createHash('sha256').update(password).digest('hex');
 
-        if (!(await this.authRepo.verifyUser(username, passwordHash))) {
+        if (!(await this.authRepository.verifyUser(username, passwordHash))) {
             throw new Error("Password is incorrect");
         }
 
@@ -338,6 +341,38 @@ class PGService {
         const token = jwt.sign(data, jwtSecretKey);
 
         return token;
+    }
+
+    async getUserById(id: number, lists: boolean): Promise<UserDetails> {
+        if (!(await this.userRepository.checkIfUserExists(id))) {
+            throw new Error("User does not exist");
+        }
+
+        const user: UserDetails = await this.userRepository.getUserById(id);
+
+        if (!lists) {
+            return user;
+        }
+
+        user.boxes = await this.boxRepository.getOwnedBy(id);
+        user.wrappers = await this.wrapperRepository.getOwnedBy(id);
+        user.suppliers = await this.supplierRepository.getOwnedBy(id);
+        user.combos = await this.comboRepository.getOwnedBy(id);
+
+        return user;
+    }
+
+    async getUserName(id: number): Promise<any> {
+        if (!(await this.userRepository.checkIfUserExists(id))) {
+            throw new Error("User does not exist");
+        }
+
+        const username: string = await this.userRepository.getUsernameById(id);
+
+        return {
+            "username": username,
+            "id": id
+        }
     }
 }
 

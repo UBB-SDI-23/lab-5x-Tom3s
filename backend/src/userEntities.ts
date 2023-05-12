@@ -4,12 +4,17 @@ interface UserCredentials {
 }
 
 interface UserDetails {
+    userid: string;
     username: string;
     email: string;
     birthday: Date;
     gender: string;
     nickname: string;
     eyecolor: string;
+    boxes?: number[];
+    wrappers?: number[];
+    suppliers?: number[];
+    combos?: number[];
 }
 
 interface Token {
