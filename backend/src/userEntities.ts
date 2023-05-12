@@ -23,4 +23,11 @@ interface Token {
     date: Date;
 }
 
-export type { UserCredentials, UserDetails, Token };
+interface SessionDetails {
+    userid: number;
+    username: string;
+    role: string;
+    logindate: number;
+}
+
+export type { UserCredentials, UserDetails, Token, SessionDetails};

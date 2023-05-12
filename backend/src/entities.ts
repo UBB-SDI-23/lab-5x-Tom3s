@@ -10,11 +10,43 @@ class Box {
         public ownerid?: number
     ) {}
 
-    static validateDimensions(obj: any): boolean {
-        if (obj.length === undefined || obj.width === undefined || obj.height === undefined) {
-            return false;
+    static validateDimensions(obj: Box): void {
+        // return obj.length > 0 && obj.width > 0 && obj.height > 0;
+        var invalidDimensions = [];
+        if (obj.length <= 0) {
+            invalidDimensions.push("length");
         }
-        return obj.length > 0 && obj.width > 0 && obj.height > 0;
+        if (obj.width <= 0) {
+            invalidDimensions.push("width");
+        }
+        if (obj.height <= 0) {
+            invalidDimensions.push("height");
+        }
+        if (invalidDimensions.length > 0) {
+            throw new Error("The following dimensions are invalid: " + invalidDimensions.join(", "));
+        }            
+    }
+
+    static checkEmpty(obj: any): void {
+        var emptyFields = [];
+        if (obj.length === undefined || obj.length === null) {
+            emptyFields.push("length");
+        }
+        if (obj.width === undefined || obj.width === null) {
+            emptyFields.push("width");
+        }
+        if (obj.height === undefined || obj.height === null) {
+            emptyFields.push("height");
+        }
+        if (obj.material === undefined || obj.material === null || obj.material === "") {
+            emptyFields.push("material");
+        }
+        if (obj.color === undefined || obj.color === null || obj.color === "") {
+            emptyFields.push("color");
+        }
+        if (emptyFields.length > 0) {
+            throw new Error("A Box must have the following fields: " + emptyFields.join(", "));
+        }
     }
 }
 
@@ -54,11 +86,40 @@ class Wrapper {
         };
     }
 
-    static validateDimensions(obj: any): boolean {
-        if (obj.length === undefined || obj.width === undefined) {
-            return false;
+    static validateDimensions(obj: Wrapper): void {
+        // return obj.length > 0 && obj.width > 0;
+        var invalidDimensions = [];
+        if (obj.length <= 0) {
+            invalidDimensions.push("length");
         }
-        return obj.length > 0 && obj.width > 0;
+        if (obj.width <= 0) {
+            invalidDimensions.push("width");
+        }
+        if (invalidDimensions.length > 0) {
+            throw new Error("The following dimensions are invalid: " + invalidDimensions.join(", "));
+        }
+    }
+
+    static checkEmpty(obj: any): void {
+        var emptyFields = [];
+        if (obj.length === undefined || obj.length === null) {
+            emptyFields.push("length");
+        }
+        if (obj.width === undefined || obj.width === null) {
+            emptyFields.push("width");
+        }
+        if (obj.pattern === undefined || obj.pattern === null || obj.pattern === "") {
+            emptyFields.push("pattern");
+        }
+        if (obj.color === undefined || obj.color === null || obj.color === "") {
+            emptyFields.push("color");
+        }
+        if (obj.complementaryColor === undefined || obj.complementaryColor === null || obj.complementaryColor === "") {
+            emptyFields.push("complementarycolor");
+        }
+        if (emptyFields.length > 0) {
+            throw new Error("A Wrapper must have the following fields: " + emptyFields.join(", "));
+        }
     }
 }
 
@@ -83,13 +144,41 @@ class Supplier {
         };
     }
 
-    static validatePhoneNumber(obj: any): boolean {
+    static validatePhoneNumber(obj: Supplier): void {
         const regex = /^07[0-9]{2}( |-)[0-9]{3}( |-)?[0-9]{3}$/;
         const phoneNumber = obj.phone;
-        if (!phoneNumber) {
-            return false;
+        
+        if (!regex.test(phoneNumber)) {
+            throw new Error("Invalid phone number (must be in the format 07XX XXX XXX or 07XX-XXX-XXX)");
         }
-        return regex.test(phoneNumber);
+    }
+
+    static validateEmail(obj: Supplier): void {
+        const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+        const email = obj.email;
+
+        if (!regex.test(email)) {
+            throw new Error("Invalid email address");
+        }
+    }
+
+    static checkEmpty(obj: any): void {
+        var emptyFields = [];
+        if (obj.name === undefined || obj.name === null || obj.name === "") {
+            emptyFields.push("name");
+        }
+        if (obj.address === undefined || obj.address === null || obj.address === "") {
+            emptyFields.push("address");
+        }
+        if (obj.phone === undefined || obj.phone === null || obj.phone === "") {
+            emptyFields.push("phone");
+        }
+        if (obj.email === undefined || obj.email === null || obj.email === "") {
+            emptyFields.push("email");
+        }
+        if (emptyFields.length > 0) {
+            throw new Error("A Supplier must have the following fields: " + emptyFields.join(", "));
+        }
     }
 }
 
@@ -113,6 +202,31 @@ class WrapperBoxCombo {
             box: box,
             price: obj.price
         } as WrapperBoxCombo;
+    }
+
+    static validatePrice(obj: WrapperBoxCombo): void {
+        if (!isNaN(obj.price)){
+            throw new Error("Price must be a number");
+        }
+        if (obj.price <= 0) {
+            throw new Error("Price must be greater than 0");
+        }
+        if (obj.price.toFixed(2).split(".")[1].length > 2) {
+            throw new Error("Price must have at most 2 decimal places");
+        }
+    }
+
+    static checkEmpty(obj: any): void {
+        var emptyFields = [];
+        if (obj.name === undefined || obj.name === null || obj.name === "") {
+            emptyFields.push("name");
+        }
+        if (obj.price === undefined || obj.price === null) {
+            emptyFields.push("price");
+        }
+        if (emptyFields.length > 0) {
+            throw new Error("A WrapperBoxCombo must have the following fields: " + emptyFields.join(", "));
+        }
     }
 }
 

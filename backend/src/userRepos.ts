@@ -12,11 +12,15 @@ class AuthRepo {
         this.client.connect();
     }
 
-    async checkIfUserExists(username: string): Promise<boolean> {
-        const query = "SELECT * FROM users WHERE username = $1";
+    async checkIfUserExists(username: string): Promise<number> {
+        const query = "SELECT id FROM users WHERE username = $1";
         const values = [username];
         const result = await this.client.query(query, values);
-        return result.rowCount > 0;
+        
+        if (result.rowCount > 0) {
+            return result.rows[0].id;
+        }
+        return -1;
     }
 
     registerUser(username: string, passwordHash: string): void {
@@ -25,18 +29,16 @@ class AuthRepo {
         this.client.query(query, values);
     }
 
-    async verifyUser(username: string, passwordHash: string): Promise<boolean> {
-        const query = "SELECT * FROM users WHERE username = $1 AND passwordhash = $2";
+    async verifyUser(username: string, passwordHash: string): Promise<string> {
+        const query = "SELECT role FROM users WHERE username = $1 AND passwordhash = $2";
         const values = [username, passwordHash];
         const result = await this.client.query(query, values);
 
         if (result.rowCount > 0) {
-            console.log(result.rows[0].username);
-            console.log(result.rows[0].passwordhash);
-            return true;
+            return result.rows[0].role;
         }
 
-        return false;
+        return "";
     }
 
 }
