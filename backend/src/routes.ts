@@ -75,6 +75,8 @@ function setupRoutes(app: Express, service: PGService){
         }
     });
 
+    // GET /api/boxes/:id/owner - returns the owner of the box
+
     // POST /api/boxes - creates a new box
     app.post('/api/boxes', (req, res) => {
         if (req.body instanceof Array) {

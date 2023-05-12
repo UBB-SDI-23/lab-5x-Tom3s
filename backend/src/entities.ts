@@ -6,7 +6,8 @@ class Box {
         public width: number, 
         public height: number, 
         public material: string, 
-        public color: string
+        public color: string,
+        public ownerid?: number
     ) {}
 
     static validateDimensions(obj: any): boolean {
@@ -25,7 +26,8 @@ class Wrapper {
         public pattern: string,
         public color: string,
         public complementaryColor: string,
-        public supplierId?: number | null
+        public supplierId?: number | null,
+        public ownerid?: number
     ) {}
 
     static toComplexObject(obj: any, supplierId?: number): any {
@@ -67,7 +69,8 @@ class Supplier {
         public address: string,
         public phone: string,
         public email: string,
-        public wrappers?: number[] | Wrapper[]
+        public wrappers?: number[] | Wrapper[],
+        public ownerid?: number
     ) {}
 
     static toSimpleObject(s: any): any {
@@ -98,7 +101,8 @@ class WrapperBoxCombo {
         public boxid?: number,
         public wrapperid?: number,
         public box?: Box,
-        public wrapper?: Wrapper
+        public wrapper?: Wrapper,
+        public ownerid?: number
     ) { }
 
     static toComplexObject(obj: any, wrapper: Wrapper, box: Box): WrapperBoxCombo {

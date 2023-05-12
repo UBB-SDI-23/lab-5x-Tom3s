@@ -18,13 +18,21 @@ class PGBoxRepository {
     }
 
     async getPage(page: number, pageLength: number): Promise<Box[]> {
+        // SELECT boxes.*, box_owners.userid
+        // FROM boxes
+        // LEFT JOIN box_owners
+        // ON boxes.id = box_owners.boxid
+        // ORDER BY _id
+        // LIMIT $1
+        // OFFSET $2;
+
         const offset = page * pageLength;
-        const result = await this.client.query('SELECT * FROM boxes ORDER BY _id LIMIT $1 OFFSET $2', [pageLength, offset]);
+        const result = await this.client.query('SELECT boxes.*, box_owners.userid as ownerid FROM boxes LEFT JOIN box_owners ON boxes._id = box_owners.boxid ORDER BY _id LIMIT $1 OFFSET $2;', [pageLength, offset]);
         return result.rows as Box[];
     }
 
     async getById(id: number): Promise<Box> {
-        const result = await this.client.query('SELECT * FROM boxes WHERE _id = $1', [id]);
+        const result = await this.client.query('SELECT boxes.*, box_owners.userid as ownerid FROM boxes LEFT JOIN box_owners ON boxes._id = box_owners.boxid WHERE _id = $1', [id]);
         if (result.rows.length === 0) {
             throw new Error(`Box with id ${id} not found`);
         }
@@ -93,7 +101,7 @@ class PGBoxRepository {
         // OFFSET $page * $pageLength
 
         const offset = page * pageLength;
-        const result = await this.client.query('SELECT * FROM boxes WHERE width > $1 OR height > $1 OR length > $1 ORDER BY _id LIMIT $2 OFFSET $3', [size, pageLength, offset]);
+        const result = await this.client.query('SELECT boxes.*, box_owners.userid as ownerid FROM boxes LEFT JOIN box_owners ON boxes._id = box_owners.boxid WHERE width > $1 OR height > $1 OR length > $1 ORDER BY _id LIMIT $2 OFFSET $3', [size, pageLength, offset]);
         return result.rows as Box[];
     }
 }
@@ -116,12 +124,12 @@ class PGWrapperRepository {
 
     async getPage(page: number, pageLength: number): Promise<Wrapper[]> {
         const offset = page * pageLength;
-        const result = await this.client.query('SELECT * FROM wrappers ORDER BY _id LIMIT $1 OFFSET $2', [pageLength, offset]);
+        const result = await this.client.query('SELECT wrappers.*, wrapper_owners.userid as ownerid FROM wrappers LEFT JOIN wrapper_owners ON wrappers._id = wrapper_owners.wrapperid ORDER BY _id LIMIT $1 OFFSET $2;', [pageLength, offset]);
         return result.rows as Wrapper[];
     }
 
     async getById(id: number): Promise<Wrapper> {
-        const result = await this.client.query('SELECT * FROM wrappers WHERE _id = $1', [id]);
+        const result = await this.client.query('SELECT wrappers.*, wrapper_owners.userid as ownerid FROM wrappers LEFT JOIN wrapper_owners ON wrappers._id = wrapper_owners.wrapperid WHERE _id = $1', [id]);
         if (result.rows.length === 0) {
             throw new Error(`Wrapper with id ${id} not found`);
         }
@@ -188,20 +196,6 @@ class PGWrapperRepository {
         const offset = page * pageLength;
         const result = await this.client.query('SELECT * FROM suppliers ORDER BY _id LIMIT $1 OFFSET $2', [pageLength, offset]);
         suppliers = result.rows as Supplier[];
-        
-        // suppliers.forEach(async (supplier: Supplier) => {
-        //     // SELECT suppliedWrappers.supplierId, AVG(wrappers.length) AS averageLength
-        //     // FROM suppliedWrappers
-        //     // JOIN wrappers ON suppliedWrappers.wrapperId = wrappers._id
-        //     // WHERE suppliedWrappers.supplierId = <your_supplier_id>
-        //     // GROUP BY suppliedWrappers.supplierId;
-        //     var averageLength: number | null = null;
-        //     const tempResult = await this.client.query('SELECT suppliedWrappers.supplierId, AVG(wrappers.length) AS averageLength FROM suppliedWrappers JOIN wrappers ON suppliedWrappers.wrapperId = wrappers._id WHERE suppliedWrappers.supplierId = $1 GROUP BY suppliedWrappers.supplierId', [supplier._id]);
-        //     if (tempResult.rows.length > 0) {
-        //         averageLength = tempResult.rows[0].averageLength;
-        //     }
-        //     averageLengths.push(new AverageWrapperLength(supplier, averageLength));
-        // });
 
         var averageLengths: Promise<AverageWrapperLength>[] = suppliers.map(async (supplier: Supplier) => {
             // SELECT suppliedWrappers.supplierId, AVG(wrappers.length) AS averageLength
@@ -288,15 +282,13 @@ class PGSupplierRepository {
     }
 
     async getPage(pageSize: number, pageLength: number): Promise<Supplier[]> {
-        // SELECT * FROM suppliers ORDER BY _id LIMIT 10 OFFSET 0
         const offset = pageSize * pageLength;
-        const result = await this.client.query('SELECT * FROM suppliers ORDER BY _id LIMIT $1 OFFSET $2', [pageLength, offset]);
+        const result = await this.client.query('SELECT suppliers.*, supplier_owners.userid as ownerid FROM suppliers LEFT JOIN supplier_owners ON suppliers._id = supplier_owners.supplierid ORDER BY _id LIMIT $1 OFFSET $2;', [pageLength, offset]);
         return result.rows as Supplier[];
     }
 
     async getById(id: number): Promise<Supplier> {
-        // SELECT * FROM suppliers WHERE _id = $1
-        const result = await this.client.query('SELECT * FROM suppliers WHERE _id = $1', [id]);
+        const result = await this.client.query('SELECT suppliers.*, supplier_owners.userid as ownerid FROM suppliers LEFT JOIN supplier_owners ON suppliers._id = supplier_owners.supplierid WHERE _id = $1', [id]);      
         if (result.rows.length === 0) {
             throw new Error(`Supplier with id ${id} not found`);
         }
@@ -363,11 +355,7 @@ class PGComboRepository {
 
     async getPage(pageSize: number, pageLength: number): Promise<WrapperBoxCombo[]> {
         const offset = pageSize * pageLength;
-        // SELECT * FROM combos 
-        // WHERE _id IN (
-        //     SELECT _id FROM combos ORDER BY _id LIMIT $1 OFFSET $2
-        // );
-        const result = await this.client.query('SELECT * FROM combos WHERE _id IN (SELECT _id FROM combos ORDER BY _id LIMIT $1 OFFSET $2);', [pageLength, offset]);
+        const result = await this.client.query('SELECT combos.*, combo_owners.userid as ownerid FROM combos LEFT JOIN combo_owners ON combos._id = combo_owners.comboid ORDER BY _id LIMIT $1 OFFSET $2;', [pageLength, offset]);
         return result.rows as WrapperBoxCombo[];
     }
 
@@ -384,7 +372,7 @@ class PGComboRepository {
     }
 
     async getById(id: number): Promise<WrapperBoxCombo> {
-        const result = await this.client.query('SELECT * FROM combos WHERE _id = $1', [id]);
+        const result = await this.client.query('SELECT combos.*, combo_owners.userid as ownerid FROM combos LEFT JOIN combo_owners ON combos._id = combo_owners.comboid WHERE _id = $1', [id]);
         if (result.rows.length === 0) {
             throw new Error(`Combo with id ${id} not found`);
         }
