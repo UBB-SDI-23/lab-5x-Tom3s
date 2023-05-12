@@ -1,12 +1,15 @@
 import { useState, Fragment, useEffect } from "react";
-import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
+import { ToggleButtonGroup, ToggleButton, Button, Row, Col } from "react-bootstrap";
 import BoxList from "../ListDisplays/Boxes";
 import ComboList from "../ListDisplays/Combos";
 import SupplierList from "../ListDisplays/Suppliers";
 import WrapperList from "../ListDisplays/Wrappers";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const ListPage = () => {
+
+    const navigate = useNavigate();
+
     const [searchParams, setSearchParams] = useSearchParams();
     const typeParam = searchParams.get("type") || "1";
 
@@ -55,13 +58,22 @@ const ListPage = () => {
 
     return (
         <Fragment>
-            <ToggleButtonGroup type="radio" name="options" defaultValue={listType}>
-                <ToggleButton variant="outline-secondary" id="tbg-radio-1" value={1} onClick={() => setListType(1)}>Boxes</ToggleButton>
-                <ToggleButton variant="outline-secondary" id="tbg-radio-2" value={2} onClick={() => setListType(2)}>Wrappers</ToggleButton>
-                <ToggleButton variant="outline-secondary" id="tbg-radio-3" value={3} onClick={() => setListType(3)}>Supplier</ToggleButton>
-                <ToggleButton variant="outline-secondary" id="tbg-radio-4" value={4} onClick={() => setListType(4)}>Combos</ToggleButton>
+            <Row>
+                <Col>
+                    <ToggleButtonGroup type="radio" name="options" defaultValue={listType}>
+                        <ToggleButton variant="outline-secondary" id="tbg-radio-1" value={1} onClick={() => setListType(1)}>Boxes</ToggleButton>
+                        <ToggleButton variant="outline-secondary" id="tbg-radio-2" value={2} onClick={() => setListType(2)}>Wrappers</ToggleButton>
+                        <ToggleButton variant="outline-secondary" id="tbg-radio-3" value={3} onClick={() => setListType(3)}>Supplier</ToggleButton>
+                        <ToggleButton variant="outline-secondary" id="tbg-radio-4" value={4} onClick={() => setListType(4)}>Combos</ToggleButton>
+                    </ToggleButtonGroup>
+                </Col>
 
-            </ToggleButtonGroup>
+                <Col>
+                    <Button variant="primary" onClick={() => navigate("/register")}>Register</Button>
+                    <Button variant="primary" onClick={() => navigate("/login")}>Login</Button>
+                </Col>
+
+            </Row>
             {list}
         </Fragment>
     );
