@@ -54,8 +54,8 @@ const BoxList = () => {
             .then(data => setPageCount(parseInt(data) - 1));
     }, []);
 
-    
-      
+
+
 
     function handleGoToPage(event: any) {
         event.preventDefault();
@@ -88,6 +88,20 @@ const BoxList = () => {
             .then(data => { });
     }
 
+    function checkEditEligibility(boxOwnerId: number): boolean {
+        const role = localStorage.getItem("role");
+        const userId = localStorage.getItem("userid");
+
+        if (role === "admin" || role === "moderator") {
+            return true;
+        }
+
+        if (userId === boxOwnerId.toString()) {
+            return true;
+        }
+        return false;
+    }
+
     return (
         <Fragment>
             <Table striped bordered hover variant="dark" className="element-list" id="box-list" >
@@ -108,10 +122,17 @@ const BoxList = () => {
                             <td>{box.length} x {box.width} x {box.height}</td>
                             <td>{box.material}</td>
                             <td>{box.color}</td>
-                            <td>
-                                <Button variant="info" onClick={() => navigate("/box?id=" + box._id)}>Edit</Button>
-                                <Button variant="danger" onClick={() => handleDeleteButton(box._id)}>Delete</Button>
-                            </td>
+                            {
+                                checkEditEligibility(box.ownerid) ?
+                                    <td>
+                                        <Button variant="info" onClick={() => navigate("/box?id=" + box._id)}>Edit</Button>
+                                        <Button variant="danger" onClick={() => handleDeleteButton(box._id)}>Delete</Button>
+                                    </td>
+                                    :
+                                    <td>
+                                        <Button variant="white" disabled={true}>None</Button>
+                                    </td>
+                            }
                             <td> <a href={"/profile?id=" + box.ownerid}>{box.ownername}</a></td>
                         </tr>
                     ))}

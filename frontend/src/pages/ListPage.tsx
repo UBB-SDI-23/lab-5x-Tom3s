@@ -1,6 +1,6 @@
 import { useState, Fragment, useEffect } from "react";
 import { ToggleButtonGroup, ToggleButton, Button, Row, Col, Offcanvas, ListGroup } from "react-bootstrap";
-import BoxList from "../ListDisplays/Boxes";
+import BoxList from "../ListDisplays/BoxListClass";
 import ComboList from "../ListDisplays/Combos";
 import SupplierList from "../ListDisplays/Suppliers";
 import WrapperList from "../ListDisplays/Wrappers";
