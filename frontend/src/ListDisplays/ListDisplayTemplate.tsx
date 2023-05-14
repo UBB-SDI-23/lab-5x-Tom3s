@@ -238,6 +238,9 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
     }
 
     getAddItemButton(): JSX.Element {
+        if (localStorage.getItem("sessiontoken") === null) {
+            return <Fragment></Fragment>;
+        }
         return (
             <Button variant="secondary" onClick={() => this.navigate(`/${this.typeName}`)}><strong>+</strong></Button>
         );
