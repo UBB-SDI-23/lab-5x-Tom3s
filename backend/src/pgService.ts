@@ -1,7 +1,7 @@
 // import { sign } from "jsonwebtoken";
 import { AverageWrapperLength, Box, Supplier, Wrapper, WrapperBoxCombo } from "./entities";
 import { PGBoxRepository, PGComboRepository, PGSuppliedWrapperRepository, PGSupplierRepository, PGWrapperRepository } from "./pgRepos";
-import { SessionDetails, UserDetails } from "./userEntities";
+import { SessionDetails, UserDetails, verifyUserDetails } from "./userEntities";
 import { AuthRepo,  UserRepository } from "./userRepos";
 
 class PGService {
@@ -621,6 +621,27 @@ class PGService {
         }
 
         this.authRepository.updateUserRole(id, role);
+    }
+
+    async updateUserDetails(sessiontoken: string, id: number, details: any){
+        const sessionDetails = this.verifyToken(sessiontoken);
+
+        if (sessionDetails === null) {
+            throw new Error("Invalid token");
+        }
+
+        if (sessionDetails.userid !== id) {
+            throw new Error("Insufficient permissions");
+        }
+
+        // this will never happen, because a correct sessiontoken will always have a valid userid
+        // if (!(await this.userRepository.checkIfUserExists(id))) {
+        //     throw new Error("User does not exist");
+        // }
+
+        verifyUserDetails(details);
+
+        this.userRepository.updateUserDetails(id, details);
     }
 }
 

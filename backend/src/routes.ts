@@ -1015,6 +1015,49 @@ function setupRoutes(app: Express, service: PGService) {
             res.status(403).send(error.message);
         }
     });
+
+    // PUT /api/users/:id - updates a user's details
+    app.put('/api/users/:id', async (req, res) => {
+        /*
+        #swagger.tags = ['Users']
+        #swagger.description = 'Endpoint to update a user\'s details'
+        #swagger.parameters['id'] = {
+            in: 'path',
+            description: 'User id (int)'
+        }
+        #swagger.parameters['details'] = {
+            in: 'body',
+            description: 'User details (object)',
+            schema: {
+                nickname: 'string',
+                email: 'string',
+                gender: 'string',
+                birthday: 'string'
+                eyecolor: 'string'
+            }
+            
+        }
+        #swagger.parameters['sessiontoken'] = {
+            in: 'header',
+            description: 'Session token (string)'
+        }
+        #swagger.responses[200] = { description: 'Updated a user\'s details' }
+        #swagger.responses[403] = { description: 'Not authorized' }
+        #swagger.responses[404] = { description: 'User not found' }
+        */
+
+        const id = parseInt(req.params.id)
+        const details = req.body;
+        const sessiontoken = req.headers.sessiontoken as string;
+
+        try {
+            await service.updateUserDetails(sessiontoken, id, details);
+            res.status(200).send('Updated user details');
+        }
+        catch (error: any) {
+            res.status(403).send(error.message);
+        }
+    });
 }
 
 export default setupRoutes;

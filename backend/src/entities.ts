@@ -153,8 +153,8 @@ class Supplier {
         }
     }
 
-    static validateEmail(obj: Supplier): void {
-        const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    static validateEmail(obj: any): void {
+        const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
         const email = obj.email;
 
         if (!regex.test(email)) {

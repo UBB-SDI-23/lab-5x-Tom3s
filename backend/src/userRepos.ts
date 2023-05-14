@@ -86,6 +86,12 @@ class UserRepository {
         const result = await this.client.query(query, values);
         return result.rowCount > 0;
     }
+
+    updateUserDetails(id: number, details: any): void {
+        const query = "UPDATE userdetails SET nickname = $1, email = $2, birthday = $3, gender = $4, eyecolor = $5 WHERE userid = $6";
+        const values = [details.nickname, details.email, details.birthday, details.gender, details.eyecolor, id];
+        this.client.query(query, values);
+    }
 }
 
 export { AuthRepo, UserRepository };
