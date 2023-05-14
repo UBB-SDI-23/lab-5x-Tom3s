@@ -115,7 +115,11 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
         if (role === "admin" || role === "moderator") {
             return true;
         }
-
+        
+        if (boxOwnerId === null) {
+            return false;
+        }
+        
         if (userId === boxOwnerId.toString()) {
             return true;
         }
