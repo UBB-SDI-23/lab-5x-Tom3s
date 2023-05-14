@@ -6,6 +6,7 @@ import ConfirmPage from "./userSystem/confirmPage";
 import LoginPage from "./userSystem/loginPage";
 import ProfilePage from "./userSystem/profilePage";
 import { BoxEditor, ComboEditor, SupplierEditor, WrapperEditor } from "./EntityEditors/EditorClasses";
+import ProfileEditor from "./userSystem/profileEditor";
 
 const App = () => {
     return (
@@ -20,6 +21,7 @@ const App = () => {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/confirm" element={<ConfirmPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/editProfile" element={<ProfileEditor />} />
                 <Route path="/" element={<Navigate to="/home" />} />
             </Routes>
         </Fragment>

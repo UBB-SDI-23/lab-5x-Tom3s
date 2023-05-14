@@ -72,6 +72,11 @@ export class apiAccess {
         return this;
     }
 
+    users() {
+        this.url += "/users";
+        return this;
+    }
+
     userName(id: number) {
         this.url += "/users/name/" + id;
         return this;
