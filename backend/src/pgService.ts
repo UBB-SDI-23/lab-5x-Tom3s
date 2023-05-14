@@ -605,22 +605,22 @@ class PGService {
         return decoded;
     }
 
-    async changeUserRole(userid: number, newRole: string, token: string): Promise<void> {
+    async updateUserRole(token: string, id: number, role: string): Promise<void> {
         const sessionDetails = this.verifyToken(token);
 
-        if (sessionDetails == null) {
+        if (sessionDetails === null) {
             throw new Error("Invalid token");
         }
 
-        if (sessionDetails.role != "admin") {
-            throw new Error("Not authorized");
+        if (sessionDetails.role !== "admin") {
+            throw new Error("Insufficient permissions");
         }
 
-        if (!(await this.userRepository.checkIfUserExists(userid))) {
+        if (!(await this.userRepository.checkIfUserExists(id))) {
             throw new Error("User does not exist");
         }
 
-        this.authRepository.setUserRole(userid, newRole);
+        this.authRepository.updateUserRole(id, role);
     }
 }
 

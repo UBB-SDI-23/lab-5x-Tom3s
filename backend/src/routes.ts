@@ -980,35 +980,38 @@ function setupRoutes(app: Express, service: PGService) {
         }
     });
 
-    // PUT /api/users/role/:id - changes a user's role
-    app.put('/api/users/role/:id', async (req, res) => {
+    // PUT /api/users/:id/role - updates a user's details
+    app.put('/api/users/:id/role', async (req, res) => {
         /*
         #swagger.tags = ['Users']
-        #swagger.description = 'Endpoint to change a user\'s role'
+        #swagger.description = 'Endpoint to update a user\'s role'
         #swagger.parameters['id'] = {
             in: 'path',
             description: 'User id (int)'
         }
         #swagger.parameters['role'] = {
             in: 'body',
-            description: 'New role (string)'
+            description: 'User role (string)',
+            schema: {
+                role: 'user'
+            }
         }
         #swagger.parameters['sessiontoken'] = {
             in: 'header',
             description: 'Session token (string)'
         }
-        #swagger.responses[200] = { description: 'Changed a user\'s role' }
-        #swagger.responses[403] = { description: 'Action forbidden' }
+        #swagger.responses[200] = { description: 'Updated a user\'s role' }
+        #swagger.responses[403] = { description: 'Not authorized' }
+        #swagger.responses[404] = { description: 'User not found' }
         */
         const id = parseInt(req.params.id)
-        const role = req.query.role as string;
-        const token = req.headers.sessiontoken as string;
+        const role = req.body.role as string;
+        const sessiontoken = req.headers.sessiontoken as string;
 
         try {
-            await service.changeUserRole(id, role, token);
-            res.sendStatus(200);
+            res.send(await service.updateUserRole(sessiontoken, id, role));
         } catch (error: any) {
-            res.status(404).send(error.message);
+            res.status(403).send(error.message);
         }
     });
 }

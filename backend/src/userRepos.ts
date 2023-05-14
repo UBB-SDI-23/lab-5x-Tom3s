@@ -46,15 +46,12 @@ class AuthRepo {
         return "";
     }
 
-    setUserRole(userId: number, role: string): void {
-        const correctRoles = ["admin", "user", "moderator"];
-        if (!correctRoles.includes(role)) {
-            throw new Error("Invalid role");
-        }
+    updateUserRole(id: number, role: string): void {
         const query = "UPDATE users SET role = $1 WHERE id = $2";
-        const values = [role, userId];
+        const values = [role, id];
         this.client.query(query, values);
     }
+
 }
 
 class UserRepository {
