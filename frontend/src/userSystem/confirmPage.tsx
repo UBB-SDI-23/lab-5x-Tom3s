@@ -15,19 +15,19 @@ const ConfirmPage = () => {
 
     useEffect(() => {
         if (token) {
-        fetch(new apiAccess().confirm(token).url)
-            .then(res => {
-                if (res.status == 200) {
-                    setAccepted(true);
+            fetch(new apiAccess().confirm(token).url)
+                .then(res => {
+                    if (res.status == 200) {
+                        setAccepted(true);
+                    }
+                    return res.text();
+                })
+                .then(data => {
+                    setResponse(data);
+                    console.log(data);
+                    setLoading(false);
                 }
-                return res.text();
-            })
-            .then(data => {
-                setResponse(data);
-                console.log(data);
-                setLoading(false);
-            }
-            );
+                );
         }
     }, [token]);
 
@@ -45,19 +45,20 @@ const ConfirmPage = () => {
                         accepted ?
                             <div>
                                 <h1>Account confirmed!</h1>
+                                <Button onClick={() => navigate("/login")}>Go to login</Button>
                             </div>
                             :
                             <div>
                                 <h1>Account not confirmed!</h1>
                                 <br />
                                 <p>{response}</p>
+                                <Button onClick={() => navigate("/register")}>Go to register</Button>
                             </div>
                     )
 
             }
-            <Button onClick={() => navigate("/register")}>Go to register</Button>
         </Fragment>
-    )        
+    )
 }
 
 export default ConfirmPage;

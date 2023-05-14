@@ -1,14 +1,11 @@
 import { Fragment } from "react";
 import ListPage from "./pages/ListPage";
-import BoxEditor from "./EntityEditors/BoxEditor";
 import { Route, Routes, Navigate } from "react-router-dom";
-import WrapperEditor from "./EntityEditors/WrapperEditor";
-import SupplierEditor from "./EntityEditors/SupplierEditor";
-import ComboEditor from "./EntityEditors/ComboEditor";
 import RegisterPage from "./userSystem/registerPage";
 import ConfirmPage from "./userSystem/confirmPage";
 import LoginPage from "./userSystem/loginPage";
 import ProfilePage from "./userSystem/profilePage";
+import { BoxEditor, ComboEditor, SupplierEditor, WrapperEditor } from "./EntityEditors/EditorClasses";
 
 const App = () => {
     return (

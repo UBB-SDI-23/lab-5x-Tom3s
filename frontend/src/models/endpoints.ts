@@ -62,18 +62,23 @@ export class apiAccess {
         return this;
     }
 
-    userWithDetails(id: number) {
+    userWithLists(id: number) {
         this.url += "/users/" + id + "?lists=true";
         return this;
     }
 
-    userWithoutDetails(id: number) {
+    userWithoutLists(id: number) {
         this.url += "/users/" + id;
         return this;
     }
 
     userName(id: number) {
         this.url += "/users/name/" + id;
+        return this;
+    }
+
+    updateRole(id: number) {
+        this.url += "/users/" + id + "/role";
         return this;
     }
 }

@@ -1,7 +1,8 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Form, Col, Row, InputGroup, Button } from "react-bootstrap";
 import { apiAccess } from "../models/endpoints";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { setLocalSessionDetails } from "../models/entities";
 
 
 const LoginPage = () => {
@@ -10,17 +11,19 @@ const LoginPage = () => {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [validUsername, setValidUsername] = useState(false); 
-    const [token, setToken] = useState("");
+    const [validUsername, setValidUsername] = useState(false);
+    const [sessionDetails, setSessionDetails] = useState({} as any);
     const [successfulLogin, setSuccessfulLogin] = useState(false);
     const [responseError, setResponseError] = useState("");
+    const [userDetails, setUserDetails] = useState({} as any);
+    const [redirect, setRedirect] = useState(<Fragment />);
 
     const onChangeUsername = (event: any) => { setUsername(event.target.value); };
     const onChangePassword = (event: any) => { setPassword(event.target.value); };
 
     function handleSubmit(event: any) {
         event.preventDefault();
-        
+
         const data = {
             "username": username,
             "password": password
@@ -33,19 +36,31 @@ const LoginPage = () => {
             },
             body: JSON.stringify(data)
         })
-            .then(res => {
+            .then(async (res) => {
                 if (res.status === 200) {
                     setSuccessfulLogin(true);
+                    setSessionDetails(await res.json());
+                    return;
                 }
-                return res.text();
-            })
-            .then(data => {
-                    setResponseError(data);
-                    setToken(data);
+                setResponseError(await res.text());
             });
-
         setPassword("");
     }
+
+    useEffect(() => {
+        console.log(sessionDetails);
+        if (sessionDetails.sessiontoken) {
+            setLocalSessionDetails(sessionDetails);
+        }
+    }, [sessionDetails]);
+
+    useEffect(() => {
+        if (successfulLogin) {
+            setTimeout(() => {
+                setRedirect(<Navigate to="/home" />);
+            }, 1000);
+        }
+    }, [successfulLogin]);
 
     return (
         <Fragment>
@@ -56,7 +71,7 @@ const LoginPage = () => {
                         <Form.Label column sm={2}>Username</Form.Label>
                         <Form.Control type="text" placeholder="Enter username" required onChange={onChangeUsername} value={username} />
                     </Form.Group>
-                    
+
                     <Form.Group as={Row} controlId="formPassword">
                         <Form.Label column sm={2}>Password</Form.Label>
                         <InputGroup hasValidation>
@@ -74,16 +89,16 @@ const LoginPage = () => {
 
             {
                 successfulLogin ?
-                (<div>
-                    <p>Successful login!</p>
-                    <p>Token: {token}</p>
-                    {/* <Button variant="primary" onClick={() => navigate("/user")}>Go to user page</Button> */}
-                </div>) :
-                ( responseError != "" &&
-                <div>
-                    <p>Failed login!</p>
-                    <p>Error: {responseError}</p>
-                </div>)
+                    (<div>
+                        <p>Successful login!</p>
+                        <p>Redirecting...</p>
+                        {redirect}
+                    </div>) :
+                    (responseError !== "" &&
+                        <div>
+                            <p>Failed login!</p>
+                            <p>Error: {responseError}</p>
+                        </div>)
             }
         </Fragment>
     );
@@ -91,4 +106,3 @@ const LoginPage = () => {
 
 export default LoginPage;
 
-    

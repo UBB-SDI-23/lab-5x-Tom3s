@@ -1,8 +1,10 @@
 import { Fragment, useEffect, useState } from "react"
 import { useNavigate, useSearchParams, Navigate } from "react-router-dom";
 import { apiAccess } from "../models/endpoints";
-import { Button, Col, ListGroup, Row } from "react-bootstrap";
+import { Button, ButtonGroup, Col, Fade, ListGroup, Offcanvas, Row } from "react-bootstrap";
 import { loadavg } from "os";
+import { destroyLocalSessionDetails } from "../models/entities";
+import UserDetailsOffCanvas from "../Elements/userDetails";
 
 const ProfilePage = () => {
 
@@ -12,8 +14,10 @@ const ProfilePage = () => {
     const [redirect, setRedirect] = useState(<Fragment />);
     const [user, setUser] = useState({} as any);
     const [loading, setLoading] = useState(true);
+    const [roleUpdateResponse, setRoleUpdateResponse] = useState("");
 
-    const userId: number = parseInt(searchParams.get("id") || "-1");
+    // const userId: number = parseInt(searchParams.get("id") || "-1");
+    const [userId, setUserId] = useState(parseInt(searchParams.get("id") || "-1"));
 
     useEffect(() => {
         if (userId === -1) {
@@ -25,7 +29,7 @@ const ProfilePage = () => {
 
     useEffect(() => {
         if (userId !== -1) {
-            fetch(new apiAccess().userWithDetails(userId).url)
+            fetch(new apiAccess().userWithLists(userId).url)
                 .then(response => response.json())
                 .then(data => {
                     setUser(data);
@@ -59,8 +63,34 @@ const ProfilePage = () => {
         }
     }
 
+    function handleRoleChange(newRole: string) {
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'sessiontoken': localStorage.getItem("sessiontoken") || ""
+            },
+            body: JSON.stringify({ "role": newRole })
+        };
+        fetch(new apiAccess().updateRole(userId).url, requestOptions)
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                // setUser(data);
+                setRoleUpdateResponse(data);
+                setTimeout(() => {
+                    setRoleUpdateResponse("");
+                }, 3000);
+                setUserId(-1);
+                setTimeout(() => {
+                    setUserId(user.userid);
+                }, 0);
+            });
+    }
+
     return (
         <Fragment>
+            <UserDetailsOffCanvas />
             {
                 loading ?
                     (
@@ -89,6 +119,7 @@ const ProfilePage = () => {
                         {
                             userId !== -1 &&
                             <Fragment>
+
 
                                 <ListGroup>
                                     <ListGroup.Item>
@@ -139,10 +170,23 @@ const ProfilePage = () => {
                                 <Button onClick={() => navigate("/home")}>Go to home</Button>
                             </Col>
                         </Row>
+
+                        {
+                            localStorage.getItem("role") === "admin" &&
+                            <><ButtonGroup aria-label="Basic example">
+                                <Button variant="secondary" disabled={true}>Set Role: </Button>
+                                <Button variant="secondary" onClick={() => handleRoleChange("user")} active={user.role === "user"}>User</Button>
+                                <Button variant="secondary" onClick={() => handleRoleChange("moderator")} active={user.role === "moderator"}>Moderator</Button>
+                                <Button variant="secondary" onClick={() => handleRoleChange("admin")} active={user.role === "admin"}>Admin</Button>
+                            </ButtonGroup>
+                            <Fade in={roleUpdateResponse !== ""}>
+                                <label>{roleUpdateResponse}</label>
+                            </Fade>
+                            </>
+                        }
+
                     </Fragment>
             }
-
-
         </Fragment>
     );
 }

@@ -1,10 +1,9 @@
 import { useState, Fragment, useEffect } from "react";
-import { ToggleButtonGroup, ToggleButton, Button, Row, Col } from "react-bootstrap";
-import BoxList from "../ListDisplays/Boxes";
-import ComboList from "../ListDisplays/Combos";
-import SupplierList from "../ListDisplays/Suppliers";
-import WrapperList from "../ListDisplays/Wrappers";
+import { ToggleButtonGroup, ToggleButton, Button, Row, Col, Offcanvas, ListGroup } from "react-bootstrap";
+import { BoxList, WrapperList, SupplierList, ComboList } from "../ListDisplays/ListClasses";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { destroyLocalSessionDetails } from "../models/entities";
+import UserDetailsOffCanvas from "../Elements/userDetails";
 
 const ListPage = () => {
 
@@ -16,11 +15,7 @@ const ListPage = () => {
     const [listType, setListType] = useState(parseInt(typeParam));
     const [list, setList] = useState(<BoxList />);
 
-
-    // console.log(typeParam);
-
     useEffect(() => {
-        console.log(listType);
         switch (listType) {
             case 1:
                 setList(<BoxList />);
@@ -56,10 +51,17 @@ const ListPage = () => {
         }
     }, [listType]);
 
+    console.log("Token: " + localStorage.getItem('token'));
+
     return (
         <Fragment>
             <Row>
-                <Col>
+                <Col className="d-flex justify-content-start">
+                    <UserDetailsOffCanvas />
+                </Col>
+
+
+                <Col className="d-flex justify-content-center">
                     <ToggleButtonGroup type="radio" name="options" defaultValue={listType}>
                         <ToggleButton variant="outline-secondary" id="tbg-radio-1" value={1} onClick={() => setListType(1)}>Boxes</ToggleButton>
                         <ToggleButton variant="outline-secondary" id="tbg-radio-2" value={2} onClick={() => setListType(2)}>Wrappers</ToggleButton>
@@ -69,8 +71,16 @@ const ListPage = () => {
                 </Col>
 
                 <Col className="d-flex justify-content-end">
-                    <Button variant="primary" onClick={() => navigate("/register")}>Register</Button>
-                    <Button variant="primary" onClick={() => navigate("/login")}>Login</Button>
+                    {
+                        localStorage.getItem('sessiontoken') === null ?
+                            <Fragment>
+                                <Button variant="primary" onClick={() => navigate("/register")}>Register</Button>
+                                <Button variant="primary" onClick={() => navigate("/login")}>Login</Button>
+                            </Fragment>
+                            :
+                            <Button variant="primary" onClick={() => { destroyLocalSessionDetails(); navigate("/home"); }}>Logout</Button>
+
+                    }
                 </Col>
 
             </Row>

@@ -3,6 +3,7 @@ import { Badge, Button, Col, Form, Row, Toast, ToastContainer } from "react-boot
 import { ToastDetails } from "../models/entities";
 import { apiAccess } from "../models/endpoints";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import UserDetailsOffCanvas from "../Elements/userDetails";
 
 
 const SupplierEditor = () => {
@@ -148,6 +149,7 @@ const SupplierEditor = () => {
 
     return (
         <Fragment>
+            <UserDetailsOffCanvas />
             {
                 supplierId !== "" &&
                 <h1>Editing supplier with<Badge bg="secondary">ID: {supplierId}</Badge> </h1>
