@@ -1009,7 +1009,8 @@ function setupRoutes(app: Express, service: PGService) {
         const sessiontoken = req.headers.sessiontoken as string;
 
         try {
-            res.send(await service.updateUserRole(sessiontoken, id, role));
+            await service.updateUserRole(sessiontoken, id, role);
+            res.status(200).send('Updated user role');
         } catch (error: any) {
             res.status(403).send(error.message);
         }
