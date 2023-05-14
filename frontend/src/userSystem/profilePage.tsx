@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react"
 import { useNavigate, useSearchParams, Navigate } from "react-router-dom";
 import { apiAccess } from "../models/endpoints";
-import { Button, Col, ListGroup, Offcanvas, Row } from "react-bootstrap";
+import { Button, ButtonGroup, Col, ListGroup, Offcanvas, Row } from "react-bootstrap";
 import { loadavg } from "os";
 import { destroyLocalSessionDetails } from "../models/entities";
 import UserDetailsOffCanvas from "../Elements/userDetails";
@@ -59,6 +59,23 @@ const ProfilePage = () => {
             case 3: return 'rd';
             default: return 'th';
         }
+    }
+
+    function handleRoleChange(newRole: string) {
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'sessiontoken': localStorage.getItem("sessiontoken") || ""
+            },
+            body: JSON.stringify({ role: newRole })
+        };
+        fetch(new apiAccess().updateRole(userId).url, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setUser(data);
+            });
     }
 
     return (
@@ -143,6 +160,14 @@ const ProfilePage = () => {
                                 <Button onClick={() => navigate("/home")}>Go to home</Button>
                             </Col>
                         </Row>
+
+                        {
+                            localStorage.getItem("role") === "admin" &&
+                            <ButtonGroup aria-label="Basic example">
+                                <Button variant="secondary" disabled={true} >Set Role: </Button>
+                            </ButtonGroup>
+                        }
+
                     </Fragment>
             }
         </Fragment>

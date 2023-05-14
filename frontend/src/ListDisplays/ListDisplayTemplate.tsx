@@ -26,17 +26,18 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
         super(props);
         this.state = {
             list: [],
-            page: 0,
+            page: parseInt(this.searchParams.get("page") || "0"),
             pageCount: 0,
             validGoToPage: true,
             showAlert: false,
             tempItem: {},
             navigate: <Fragment />
         };
+        this.handleGoToPage = this.handleGoToPage.bind(this);
     }
 
     navigate(url: string) {
-        this.setState({ navigate: <Navigate to={url}/> });
+        this.setState({ navigate: <Navigate to={url} /> });
     }
 
     componentDidMount() {
@@ -44,12 +45,20 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
         this.fetchList();
     }
 
+    setSearchParams(page: number, type: number) {
+        this.searchParams.has("page") ? this.searchParams.set("page", page.toString()) : this.searchParams.append("page", page.toString());
+        this.searchParams.has("type") ? this.searchParams.set("type", type.toString()) : this.searchParams.append("type", type.toString());
+        window.history.pushState({}, "", "?" + this.searchParams.toString());
+    }
+
+
     fetchList() {
         fetch(this.getFetchUrl())
             .then(async response => {
                 const data: any[] = await response.json() as any[];
                 const fetchOwnerNamePromises = data.map((item: any) => {
-                    return fetch(this.getOwnerNameUrl(item.ownerid))
+                    return item.ownerid === null ? "" :
+                    fetch(this.getOwnerNameUrl(item.ownerid))
                         .then(response => response.json())
                         .then(data => {
                             item.ownername = data.username;
@@ -57,21 +66,22 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
                 });
                 Promise.all(fetchOwnerNamePromises).then(() => {
                     this.setState({ list: data });
-                    // setSearchParams((oldParams) => {
-                    //     oldParams.set("page", page.toString());
-                    //     oldParams.set("type", "1");
-                    //     return oldParams;
-                    // });
-                    this.searchParams.set("page", this.state.page.toString());
-                    this.searchParams.set("type", this.typeNumber.toString());
+                    const page = this.state.page;
+                    const type = this.typeNumber;
+                    this.setSearchParams(page, type);
                 });
             })
-        }
-    
+    }
+
     fetchPageCount() {
         fetch(this.getFetchPageCountUrl())
-            .then(response => {
-                const data: number = parseInt(response.text() as any);
+            .then(async (response) => {
+                const data: number = await response.json();
+                // console.log(data);
+                // const data: number = parseInt(response.json() as any);
+                // console.log(response.json());
+                // console.log(response.text());
+
                 this.setState({ pageCount: data - 1 });
             });
     }
@@ -117,7 +127,6 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
     }
 
     deleteItem() {
-        const id = this.state.tempItem._id;
         const sessionToken = localStorage.getItem("sessiontoken") as string;
 
         this.setState({ showAlert: false })
@@ -131,13 +140,15 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
         })
             .then(response => {
                 console.log(response.text());
+                this.fetchList();
             });
     }
 
     handleGoToPage(event: any) {
         event.preventDefault();
         const page = event.target.elements[0].value;
-        if (this.state.page > 0 && this.state.page <= this.state.pageCount) {
+        console.log(this.state.pageCount);
+        if (page > 0 && page <= this.state.pageCount) {
             // setPage(page - 1);
             this.setState({ page: page - 1 });
             // setValidGoToPage(true);
@@ -151,6 +162,7 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
     componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<ListDisplayTemplateState>, snapshot?: any): void {
         if (prevState.page !== this.state.page || prevState.showAlert !== this.state.showAlert) {
             this.fetchList();
+            console.log("Page changed or alert changed");
         }
     }
 
@@ -233,7 +245,7 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
                 {
                     this.fieldNames.map((fieldName: string) => {
                         const tempItem = this.state.tempItem;
-                        return ( 
+                        return (
                             <Fragment>
                                 <strong>{fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}: </strong> {tempItem[fieldName]} <br />
                             </Fragment>
@@ -260,6 +272,16 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
     }
 
     render(): React.ReactNode {
+        const {
+            list,
+            page,
+            pageCount,
+            validGoToPage,
+            showAlert,
+            tempItem,
+            navigate
+        } = this.state;
+
         return (
             <Fragment>
                 {this.getTable()}

@@ -76,4 +76,9 @@ export class apiAccess {
         this.url += "/users/name/" + id;
         return this;
     }
+
+    updateRole(id: number) {
+        this.url += "/users/" + id + "/role";
+        return this;
+    }
 }

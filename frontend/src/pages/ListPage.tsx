@@ -1,9 +1,6 @@
 import { useState, Fragment, useEffect } from "react";
 import { ToggleButtonGroup, ToggleButton, Button, Row, Col, Offcanvas, ListGroup } from "react-bootstrap";
-import BoxList from "../ListDisplays/BoxListClass";
-import ComboList from "../ListDisplays/Combos";
-import SupplierList from "../ListDisplays/Suppliers";
-import WrapperList from "../ListDisplays/Wrappers";
+import { BoxList, WrapperList, SupplierList, ComboList } from "../ListDisplays/ListClasses";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { destroyLocalSessionDetails } from "../models/entities";
 import UserDetailsOffCanvas from "../Elements/userDetails";
