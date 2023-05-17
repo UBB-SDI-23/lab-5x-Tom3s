@@ -9,6 +9,7 @@ import { BoxEditor, ComboEditor, SupplierEditor, WrapperEditor } from "./EntityE
 import ProfileEditor from "./userSystem/profileEditor";
 import { Container, ThemeProvider } from "react-bootstrap";
 import NavigationBar from "./Elements/navBar";
+import { BoxBulkDeletor, WrapperBulkDeletor, SupplierBulkDeletor, ComboBulkDeletor } from "./BulkDeletors/BulkDeletorClasses";
 
 const App = () => {
     return (
@@ -30,6 +31,10 @@ const App = () => {
                 <Route path="/confirm" element={<ConfirmPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/editProfile" element={<ProfileEditor />} />
+                <Route path="/boxDeletor" element={<BoxBulkDeletor />} />
+                <Route path="/wrapperDeletor" element={<WrapperBulkDeletor />} />
+                <Route path="/supplierDeletor" element={<SupplierBulkDeletor />} />
+                <Route path="/comboDeletor" element={<ComboBulkDeletor />} />
                 <Route path="/" element={<Navigate to="/home" />} />
                     </Routes>
                 </Container>

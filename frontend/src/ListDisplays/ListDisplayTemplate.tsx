@@ -20,6 +20,7 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
     abstract fieldNames: string[];
     abstract typeNumber: number;
     abstract typeName: string;
+    abstract bulkDeletorPath: string;
     searchParams = new URLSearchParams(window.location.search);
 
     constructor(props: any) {
@@ -32,6 +33,7 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
             showAlert: false,
             tempItem: {},
             navigate: <Fragment />
+
         };
         this.handleGoToPage = this.handleGoToPage.bind(this);
     }
@@ -166,7 +168,6 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
     componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<ListDisplayTemplateState>, snapshot?: any): void {
         if (prevState.page !== this.state.page || prevState.showAlert !== this.state.showAlert) {
             this.fetchList();
-            console.log("Page changed or alert changed");
         }
     }
 
@@ -246,6 +247,15 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
         );
     }
 
+    getBulkDeleteButton(): JSX.Element {
+        if (localStorage.getItem("role") !== "admin") {
+            return <Fragment></Fragment>;
+        }
+        return (
+            <Button variant="danger" onClick={() => this.navigate(this.bulkDeletorPath)}><strong>Bulk Delete</strong></Button>
+        );
+    }
+
     getModalBody(): JSX.Element {
         return (
             <Modal.Body>
@@ -298,6 +308,9 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
                     </Col>
                     <Col>
                         {this.getAddItemButton()}
+                    </Col>
+                    <Col>
+                        {this.getBulkDeleteButton()}
                     </Col>
                     <Col xs={2}>
                         {this.getGoToPage()}
