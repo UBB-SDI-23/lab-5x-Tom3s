@@ -38,9 +38,9 @@ const ProfilePage = () => {
         }
     }, [userId]);
 
-    useEffect(() => {
-        console.log(user);
-    }, [user]);
+    // useEffect(() => {
+    //     console.log(user);
+    // }, [user]);
 
     function formatDate(dateString: string) {
         const date = new Date(dateString);
@@ -75,7 +75,7 @@ const ProfilePage = () => {
         fetch(new apiAccess().updateRole(userId).url, requestOptions)
             .then(response => response.text())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 // setUser(data);
                 setRoleUpdateResponse(data);
                 setTimeout(() => {
