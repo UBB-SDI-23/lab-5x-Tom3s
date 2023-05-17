@@ -220,7 +220,7 @@ function setupRoutes(app: Express, service: PGService) {
         const ids = (req.body.ids) as number[];
         try {
             await service.deleteBoxes(ids, token);
-            res.status(200).send("Boxes deleted");
+            res.status(200).send("Boxes deleted: " + ids.toString());
         } catch (error: any) {
             res.status(400).send(error.message);
         }
@@ -430,7 +430,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.headers.sessiontoken as string;
         try {
             await service.deleteWrappers(ids, token);
-            res.status(200).send("Wrappers deleted");
+            res.status(200).send("Wrappers deleted: " + ids.toString());
         } catch (error: any) {
             res.status(400).send(error.message);
         }
@@ -681,7 +681,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.headers.sessiontoken as string;
         try {
             await service.deleteSuppliers(ids, token);
-            res.status(200).send("Suppliers deleted");
+            res.status(200).send("Suppliers deleted: " + ids.toString());
         } catch (error: any) {
             res.status(400).send(error.message);
         }
@@ -931,7 +931,7 @@ function setupRoutes(app: Express, service: PGService) {
 
         try {
             await service.deleteCombos(ids, token);
-            res.status(200).send("Combos deleted");
+            res.status(200).send("Combos deleted: " + ids.toString());
         } catch (error: any) {
             res.status(400).send(error.message);
         }
