@@ -2,6 +2,7 @@ import { apiAccess } from "../models/endpoints";
 import ListDisplayTemplate from "./ListDisplayTemplate";
 
 class BoxList extends ListDisplayTemplate {
+    bulkDeletorPath: string = "/boxDeletor";
     fieldNames: string[] = ["width", "height", "length", "material", "color"];
     typeNumber: number = 1;
     typeName: string = "Box";
@@ -20,6 +21,7 @@ class BoxList extends ListDisplayTemplate {
 }
 
 class WrapperList extends ListDisplayTemplate {
+    bulkDeletorPath: string = "/wrapperDeletor";
     fieldNames: string[] = ["length", "width", "color", "complementarycolor", "pattern"];
     typeNumber: number = 2;
     typeName: string = "Wrapper";
@@ -38,6 +40,7 @@ class WrapperList extends ListDisplayTemplate {
 }
 
 class SupplierList extends ListDisplayTemplate {
+    bulkDeletorPath: string = "/supplierDeletor";
     fieldNames: string[] = ["name", "address", "phone", "email"];
     typeNumber: number = 3;
     typeName: string = "Supplier";
@@ -56,6 +59,7 @@ class SupplierList extends ListDisplayTemplate {
 }
 
 class ComboList extends ListDisplayTemplate {
+    bulkDeletorPath: string = "/comboDeletor";
     fieldNames: string[] = ["boxid", "wrapperid", "name", "price"];
     typeNumber: number = 4;
     typeName: string = "Combo";
