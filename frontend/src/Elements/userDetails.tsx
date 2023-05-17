@@ -52,17 +52,17 @@ const UserDetailsOffCanvas = () => {
                                     {
                                         window.location.pathname !== "/profile" &&
                                         <Col md="auto">
-                                            <Button variant="primary" onClick={() => { navigate("/profile?id=" + localStorage.getItem('userid')); }}>Profile</Button>
+                                            <Button variant="primary" onClick={() => { navigate("/profile?id=" + localStorage.getItem('userid')); setShowOffCanvas(false); }}>Profile</Button>
                                         </Col>
                                     }
                                     {
                                         window.location.pathname !== "/editProfile" &&
                                         <Col md="auto">
-                                            <Button variant="primary" onClick={() => { navigate("/editProfile?id=" + localStorage.getItem('userid')); }}>Edit Profile</Button>
+                                            <Button variant="primary" onClick={() => { navigate("/editProfile?id=" + localStorage.getItem('userid')); setShowOffCanvas(false); }}>Edit Profile</Button>
                                         </Col>
                                     }
                                     <Col md="auto">
-                                        <Button variant="primary" onClick={() => { destroyLocalSessionDetails(); navigate("/home"); }}>Logout</Button>
+                                        <Button variant="primary" onClick={() => { destroyLocalSessionDetails(); setShowOffCanvas(false); navigate("/home"); }}>Logout</Button>
                                     </Col>
                                 </Row>
                             </Offcanvas.Body>
