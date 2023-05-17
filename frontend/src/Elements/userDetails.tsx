@@ -55,6 +55,12 @@ const UserDetailsOffCanvas = () => {
                                             <Button variant="primary" onClick={() => { navigate("/profile?id=" + localStorage.getItem('userid')); }}>Profile Page</Button>
                                         </Col>
                                     }
+                                    {
+                                        window.location.pathname !== "/editProfile" &&
+                                        <Col md="auto">
+                                            <Button variant="primary" onClick={() => { navigate("/editProfile?id=" + localStorage.getItem('userid')); }}>Edit Profile</Button>
+                                        </Col>
+                                    }
                                     <Col md="auto">
                                         <Button variant="primary" onClick={() => { destroyLocalSessionDetails(); navigate("/home"); }}>Logout</Button>
                                     </Col>

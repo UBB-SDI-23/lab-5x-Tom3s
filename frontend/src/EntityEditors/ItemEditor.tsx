@@ -77,7 +77,7 @@ abstract class ItemEditor extends React.Component<{}, ItemEditorState> {
                     visible: true,
                     id: this.state.toasts.length !== 0 ? (this.state.toasts.at(-1).id + 1) : 0
                 };
-                if (response.status === 400) {
+                if (![200, 201].includes(response.status)) {
                     toast.type = "Warning";
                     toast.duration = 10000;
                 }
