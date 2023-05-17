@@ -56,11 +56,6 @@ const ListPage = () => {
     return (
         <Fragment>
             <Row>
-                <Col className="d-flex justify-content-start">
-                    <UserDetailsOffCanvas />
-                </Col>
-
-
                 <Col className="d-flex justify-content-center">
                     <ToggleButtonGroup type="radio" name="options" defaultValue={listType}>
                         <ToggleButton variant="outline-secondary" id="tbg-radio-1" value={1} onClick={() => setListType(1)}>Boxes</ToggleButton>
@@ -71,16 +66,7 @@ const ListPage = () => {
                 </Col>
 
                 <Col className="d-flex justify-content-end">
-                    {
-                        localStorage.getItem('sessiontoken') === null ?
-                            <Fragment>
-                                <Button variant="primary" onClick={() => navigate("/register")}>Register</Button>
-                                <Button variant="primary" onClick={() => navigate("/login")}>Login</Button>
-                            </Fragment>
-                            :
-                            <Button variant="primary" onClick={() => { destroyLocalSessionDetails(); navigate("/home"); }}>Logout</Button>
-
-                    }
+                    
                 </Col>
 
             </Row>

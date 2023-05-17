@@ -212,7 +212,6 @@ abstract class ItemEditor extends React.Component<{}, ItemEditorState> {
     render() {
         return (
             <Fragment>
-                <UserDetailsOffCanvas />
                 {this.state.navigate}
                 {this.getTitleElement()}
                 {this.getFormElement()}

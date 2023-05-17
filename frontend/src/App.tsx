@@ -7,12 +7,20 @@ import LoginPage from "./userSystem/loginPage";
 import ProfilePage from "./userSystem/profilePage";
 import { BoxEditor, ComboEditor, SupplierEditor, WrapperEditor } from "./EntityEditors/EditorClasses";
 import ProfileEditor from "./userSystem/profileEditor";
+import { Container, ThemeProvider } from "react-bootstrap";
+import NavigationBar from "./Elements/navBar";
 
 const App = () => {
     return (
         <Fragment>
-            <Routes>
-                <Route path="/home" element={<ListPage />} />
+            <ThemeProvider
+                breakpoints={['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']}
+                minBreakpoint="xxs"
+            >
+                <Container fluid >
+                    <NavigationBar />
+                    <Routes>
+                        <Route path="/home" element={<ListPage />} />
                 <Route path="/box" element={<BoxEditor />} />
                 <Route path="/wrapper" element={<WrapperEditor />} />
                 <Route path="/supplier" element={<SupplierEditor />} />
@@ -23,7 +31,9 @@ const App = () => {
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/editProfile" element={<ProfileEditor />} />
                 <Route path="/" element={<Navigate to="/home" />} />
-            </Routes>
+                    </Routes>
+                </Container>
+            </ThemeProvider>
         </Fragment>
     );
 };

@@ -90,7 +90,6 @@ const ProfilePage = () => {
 
     return (
         <Fragment>
-            <UserDetailsOffCanvas />
             {
                 loading ?
                     (
@@ -164,7 +163,7 @@ const ProfilePage = () => {
                                 }
                             </Fragment>
                         }
-
+                        
                         <Row className="justify-content-md-center">
                             <Col md="auto">
                                 <Button onClick={() => navigate("/home")}>Go to home</Button>
