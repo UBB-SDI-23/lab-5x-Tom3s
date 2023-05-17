@@ -36,12 +36,6 @@ const RegisterPage = () => {
         setValidUsername(username == "" || validateUsername());
     }, [username]);
 
-    // useEffect(() => {
-    //     if (validPassword) {
-    //         console.log(password);
-    //     }
-    // }, [validPassword]);
-
     function handleSubmit(event: any) {
         event.preventDefault();
         

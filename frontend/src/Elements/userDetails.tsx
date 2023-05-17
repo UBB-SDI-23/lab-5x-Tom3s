@@ -52,7 +52,7 @@ const UserDetailsOffCanvas = () => {
                                     {
                                         window.location.pathname !== "/profile" &&
                                         <Col md="auto">
-                                            <Button variant="primary" onClick={() => { navigate("/profile?id=" + localStorage.getItem('userid')); }}>Profile Page</Button>
+                                            <Button variant="primary" onClick={() => { navigate("/profile?id=" + localStorage.getItem('userid')); }}>Profile</Button>
                                         </Col>
                                     }
                                     {
