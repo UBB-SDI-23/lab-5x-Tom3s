@@ -5,7 +5,7 @@ import { Express } from 'express';
 import PGService from "./pgService";
 import { tokenToString } from "typescript";
 
-function setupRoutes(app: Express, service: PGService) {
+function setupRoutes(app: Express) {
 
     // GET /api/boxes/pages - returns the number of pages of boxes
     app.get('/api/boxes/pages', async (req, res) => {
@@ -14,7 +14,7 @@ function setupRoutes(app: Express, service: PGService) {
         #swagger.description = 'Endpoint to get the number of pages of boxes'
         #swagger.responses[200] = { description: 'Returned the number of pages of boxes' }
         */
-        const pages = service.getBoxPageCount();
+        const pages = new PGService().getBoxPageCount();
         res.send((await pages).toString());
     });
 
@@ -39,12 +39,12 @@ function setupRoutes(app: Express, service: PGService) {
         var query = req.query;
         if (query.page) {
             var pageNumber = parseInt(query.page as string);
-            res.send(await service.getPageOfBoxes(pageNumber));
+            res.send(await new PGService().getPageOfBoxes(pageNumber));
             return;
         }
 
         if (query.all && query.all == 'true') {
-            res.send(await service.getAllBoxes());
+            res.send(await new PGService().getAllBoxes());
             return;
         }
 
@@ -68,7 +68,7 @@ function setupRoutes(app: Express, service: PGService) {
         #swagger.responses[404] = { description: 'Box not found' }
         */
         const id = parseInt(req.params.id);
-        const box = service.getBoxById(id);
+        const box = new PGService().getBoxById(id);
         if (box) {
             res.send(await box);
         } else {
@@ -106,7 +106,7 @@ function setupRoutes(app: Express, service: PGService) {
         if (req.body instanceof Array) {
             var boxes = (req.body) as Box[];
             try {
-                await service.addBoxes(boxes, token);
+                await new PGService().addBoxes(boxes, token);
                 res.status(201).send("Boxes added");
             } catch (error: any) {
                 res.status(400).send(error.message);
@@ -115,7 +115,7 @@ function setupRoutes(app: Express, service: PGService) {
             var box = (req.body) as Box;
 
             try {
-                await service.addBox(box, token);
+                await new PGService().addBox(box, token);
                 res.status(201).send("Box added");
             } catch (error: any) {
                 res.status(400).send(error.message);
@@ -162,7 +162,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.headers.sessiontoken as string;
 
         try {
-            await service.updateBox(box, token);
+            await new PGService().updateBox(box, token);
             res.status(200).send("Box updated");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -188,7 +188,7 @@ function setupRoutes(app: Express, service: PGService) {
         const id = parseInt(req.params.id)
         const token = req.headers.sessiontoken as string;
         try {
-            await service.deleteBox(id, token);
+            await new PGService().deleteBox(id, token);
             res.status(200).send("Box deleted");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -219,7 +219,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.headers.sessiontoken as string;
         const ids = (req.body.ids) as number[];
         try {
-            await service.deleteBoxes(ids, token);
+            await new PGService().deleteBoxes(ids, token);
             res.status(200).send("Boxes deleted: " + ids.toString());
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -233,7 +233,7 @@ function setupRoutes(app: Express, service: PGService) {
         #swagger.description = 'Endpoint to get the number of pages of wrappers'
         #swagger.responses[200] = { description: 'Returned the number of pages of wrappers' }
         */
-        const pages = service.getWrapperPageCount();
+        const pages = new PGService().getWrapperPageCount();
         res.send((await pages).toString());
     });
 
@@ -258,12 +258,12 @@ function setupRoutes(app: Express, service: PGService) {
         var query = req.query;
         if (query.page) {
             var pageNumber = parseInt(query.page as string);
-            res.send(await service.getPageOfWrappers(pageNumber));
+            res.send(await new PGService().getPageOfWrappers(pageNumber));
             return;
         }
 
         if (query.all && query.all == 'true') {
-            res.send(await service.getAllWrappers());
+            res.send(await new PGService().getAllWrappers());
             return;
         }
 
@@ -286,7 +286,7 @@ function setupRoutes(app: Express, service: PGService) {
         #swagger.responses[404] = { description: 'Wrapper not found' }
         */
         const id = parseInt(req.params.id)
-        const wrapper = service.getWrapperById(id);
+        const wrapper = new PGService().getWrapperById(id);
         if (wrapper) {
             res.send(await wrapper);
         } else {
@@ -325,7 +325,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.headers.sessiontoken as string;
 
         try {
-            await service.addWrapper(wrapper, token);
+            await new PGService().addWrapper(wrapper, token);
             res.status(200).send("Wrapper created");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -369,7 +369,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.headers.sessiontoken as string;
 
         try {
-            await service.updateWrapper(wrapper, token);
+            await new PGService().updateWrapper(wrapper, token);
             res.status(200).send("Wrapper updated");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -399,7 +399,7 @@ function setupRoutes(app: Express, service: PGService) {
         const id = parseInt(req.params.id)
         const token = req.headers.sessiontoken as string;
         try {
-            await service.deleteWrapper(id, token);
+            await new PGService().deleteWrapper(id, token);
             res.status(200).send("Wrapper deleted");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -429,7 +429,7 @@ function setupRoutes(app: Express, service: PGService) {
         const ids = (req.body.ids) as number[];
         const token = req.headers.sessiontoken as string;
         try {
-            await service.deleteWrappers(ids, token);
+            await new PGService().deleteWrappers(ids, token);
             res.status(200).send("Wrappers deleted: " + ids.toString());
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -443,7 +443,7 @@ function setupRoutes(app: Express, service: PGService) {
         #swagger.description = 'Endpoint to get the number of pages of suppliers'
         #swagger.responses[200] = { description: 'Returned the number of pages of suppliers' }
         */
-        const pages = service.getSupplierPageCount();
+        const pages = new PGService().getSupplierPageCount();
         res.send((await pages).toString());
     });
 
@@ -469,12 +469,12 @@ function setupRoutes(app: Express, service: PGService) {
         var query = req.query;
         if (query.page) {
             var pageNumber = parseInt(query.page as string);
-            res.send(await service.getPageOfSuppliers(pageNumber));
+            res.send(await new PGService().getPageOfSuppliers(pageNumber));
             return;
         }
 
         if (query.all && query.all == 'true') {
-            res.send(await service.getAllSuppliers());
+            res.send(await new PGService().getAllSuppliers());
             return;
         }
 
@@ -496,7 +496,7 @@ function setupRoutes(app: Express, service: PGService) {
         #swagger.responses[404] = { description: 'Supplier not found' }
         */
         const id = parseInt(req.params.id)
-        const supplier = service.getSupplierById(id);
+        const supplier = new PGService().getSupplierById(id);
         if (supplier) {
             res.send(await supplier);
         } else {
@@ -539,7 +539,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.headers.sessiontoken as string;
 
         try {
-            await service.addSupplier(supplier, token);
+            await new PGService().addSupplier(supplier, token);
             res.status(201).send("Supplier created");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -574,7 +574,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.headers.sessiontoken as string;
 
         try {
-            await service.addWrapperToSupplier(id, wrapperId, token);
+            await new PGService().addWrapperToSupplier(id, wrapperId, token);
             res.status(200).send("Wrapper added to supplier");
         } catch (error: any) {
             res.status(404).send(error.message);
@@ -620,7 +620,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.headers.sessiontoken as string;
 
         try {
-            await service.updateSupplier(supplier, token);
+            await new PGService().updateSupplier(supplier, token);
             res.status(200).send("Supplier updated");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -650,7 +650,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.headers.sessiontoken as string;
 
         try {
-            await service.deleteSupplier(id, token);
+            await new PGService().deleteSupplier(id, token);
             res.status(200).send("Supplier deleted");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -680,7 +680,7 @@ function setupRoutes(app: Express, service: PGService) {
         const ids = (req.body.ids) as number[];
         const token = req.headers.sessiontoken as string;
         try {
-            await service.deleteSuppliers(ids, token);
+            await new PGService().deleteSuppliers(ids, token);
             res.status(200).send("Suppliers deleted: " + ids.toString());
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -717,12 +717,12 @@ function setupRoutes(app: Express, service: PGService) {
         var query = req.query;
         if (query.page) {
             var pageNumber = parseInt(query.page as string);
-            res.send(await service.getBoxesLargerThan(size, pageNumber));
+            res.send(await new PGService().getBoxesLargerThan(size, pageNumber));
             return;
         }
 
         if (query.all && query.all == 'true') {
-            res.send(await service.getBoxesLargerThan(size, 0, await service.getBoxPageCount(1)));
+            res.send(await new PGService().getBoxesLargerThan(size, 0, await new PGService().getBoxPageCount(1)));
             return;
         }
 
@@ -736,7 +736,7 @@ function setupRoutes(app: Express, service: PGService) {
         #swagger.description = 'Endpoint to get the number of pages of combos'
         #swagger.responses[200] = { description: 'Returned the number of pages of combos' }
         */
-        const pages = service.getComboPageCount();
+        const pages = new PGService().getComboPageCount();
         res.send((await pages).toString());
     });
 
@@ -761,12 +761,12 @@ function setupRoutes(app: Express, service: PGService) {
         var query = req.query;
         if (query.page) {
             var pageNumber = parseInt(query.page as string);
-            res.send(await service.getPageOfCombos(pageNumber));
+            res.send(await new PGService().getPageOfCombos(pageNumber));
             return;
         }
 
         if (query.all && query.all == 'true') {
-            res.send(await service.getAllCombos());
+            res.send(await new PGService().getAllCombos());
             return;
         }
 
@@ -789,7 +789,7 @@ function setupRoutes(app: Express, service: PGService) {
         */
         const id = parseInt(req.params.id)
         try {
-            res.send(await service.getComboById(id));
+            res.send(await new PGService().getComboById(id));
         } catch (error) {
             res.sendStatus(404);
         }
@@ -825,7 +825,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.headers.sessiontoken as string;
 
         try {
-            await service.addCombo(combo, token);
+            await new PGService().addCombo(combo, token);
             res.status(201).send("Combo created");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -868,7 +868,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.headers.sessiontoken as string;
 
         try {
-            await service.updateCombo(combo, token);
+            await new PGService().updateCombo(combo, token);
             res.status(200).send("Combo updated");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -898,7 +898,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.headers.sessiontoken as string;
 
         try {
-            await service.deleteCombo(id, token);
+            await new PGService().deleteCombo(id, token);
             res.status(200).send("Combo deleted");
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -930,7 +930,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.headers.sessiontoken as string;
 
         try {
-            await service.deleteCombos(ids, token);
+            await new PGService().deleteCombos(ids, token);
             res.status(200).send("Combos deleted: " + ids.toString());
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -959,12 +959,12 @@ function setupRoutes(app: Express, service: PGService) {
         var query = req.query;
         if (query.page) {
             var pageNumber = parseInt(query.page as string);
-            res.send(await service.getAverageWrapperLengths(pageNumber));
+            res.send(await new PGService().getAverageWrapperLengths(pageNumber));
             return;
         }
 
         if (query.all && query.all == 'true') {
-            res.send(await service.getAverageWrapperLengths(0, await service.getSupplierPageCount(1)));
+            res.send(await new PGService().getAverageWrapperLengths(0, await new PGService().getSupplierPageCount(1)));
             return;
         }
 
@@ -993,7 +993,7 @@ function setupRoutes(app: Express, service: PGService) {
         }
 
         try {
-            const token = await service.getRegistrationToken(username, password);
+            const token = await new PGService().getRegistrationToken(username, password);
 
             res.send(
                 token
@@ -1020,7 +1020,7 @@ function setupRoutes(app: Express, service: PGService) {
         const token = req.params.token as string;
 
         try {
-            if (await service.confirmRegistration(token)) {
+            if (await new PGService().confirmRegistration(token)) {
                 res.status(200).send('Registration successful');
             } else {
                 res.sendStatus(500);
@@ -1048,7 +1048,7 @@ function setupRoutes(app: Express, service: PGService) {
         }
 
         try {
-            const sessionDetails = await service.login(username, password);
+            const sessionDetails = await new PGService().login(username, password);
 
             res.status(200).send(sessionDetails);
         } catch (error: any) {
@@ -1070,7 +1070,7 @@ function setupRoutes(app: Express, service: PGService) {
         */
         const id = parseInt(req.params.id)
         try {
-            res.send(await service.getUserName(id));
+            res.send(await new PGService().getUserName(id));
         } catch (error: any) {
             res.status(404).send(error.message);
         }
@@ -1098,7 +1098,7 @@ function setupRoutes(app: Express, service: PGService) {
         const lists: boolean = req.query.lists == 'true';
 
         try {
-            res.send(await service.getUserById(id, lists));
+            res.send(await new PGService().getUserById(id, lists));
         } catch (error: any) {
             res.status(404).send(error.message);
         }
@@ -1133,7 +1133,7 @@ function setupRoutes(app: Express, service: PGService) {
         const sessiontoken = req.headers.sessiontoken as string;
 
         try {
-            await service.updateUserRole(sessiontoken, id, role);
+            await new PGService().updateUserRole(sessiontoken, id, role);
             res.status(200).send('Updated user role');
         } catch (error: any) {
             res.status(403).send(error.message);
@@ -1175,7 +1175,7 @@ function setupRoutes(app: Express, service: PGService) {
         const sessiontoken = req.headers.sessiontoken as string;
 
         try {
-            await service.updateUserDetails(sessiontoken, id, details);
+            await new PGService().updateUserDetails(sessiontoken, id, details);
             res.status(200).send('Updated user details');
         }
         catch (error: any) {
