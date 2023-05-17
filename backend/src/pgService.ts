@@ -432,7 +432,7 @@ class PGService {
 
     async getRegistrationToken(username: string, password: string): Promise<string> {
 
-        if (await this.authRepository.checkIfUserExists(username)) {
+        if ((await this.authRepository.checkIfUserExists(username)) !== -1) {
             throw new Error("Username taken");
         }
 
@@ -479,7 +479,7 @@ class PGService {
         const username = decoded.username;
         const password = decoded.password;
 
-        if (await this.authRepository.checkIfUserExists(username)) {
+        if ((await this.authRepository.checkIfUserExists(username)) !== -1) {
             throw new Error("Token already used");
         }
 
