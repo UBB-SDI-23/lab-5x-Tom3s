@@ -217,7 +217,7 @@ function setupRoutes(app: Express, service: PGService) {
         */
        
         const token = req.headers.sessiontoken as string;
-        const ids = req.body as number[];
+        const ids = (req.body.ids) as number[];
         try {
             await service.deleteBoxes(ids, token);
             res.status(200).send("Boxes deleted");
