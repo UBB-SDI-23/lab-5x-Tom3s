@@ -87,6 +87,14 @@ class PGBoxRepository {
         });
     }
 
+    async deleteBulk(ids: number[]): Promise<void> {
+        // DELETE FROM boxes WHERE _id IN ($1, $2, $3, ...)
+        const queryPlaceholders = ids.map((id, index) => `$${index + 1}`).join(', ');
+        const query = `DELETE FROM boxes WHERE _id IN (${queryPlaceholders})`;
+        this.client.query(query, ids);
+    }
+
+
     async getCount(): Promise<number> {
         // SELECT COUNT(*) FROM boxes
         const result = await this.client.query('SELECT COUNT(*) FROM boxes');
@@ -183,6 +191,13 @@ class PGWrapperRepository {
                 console.log(res);
             }
         });
+    }
+
+    async deleteBulk(ids: number[]): Promise<void> {
+        // DELETE FROM wrappers WHERE _id IN ($1, $2, $3, ...)
+        const queryPlaceholders = ids.map((id, index) => `$${index + 1}`).join(', ');
+        const query = `DELETE FROM wrappers WHERE _id IN (${queryPlaceholders})`;
+        this.client.query(query, ids);
     }
 
     async getCount(): Promise<number> {
@@ -320,18 +335,6 @@ class PGSupplierRepository {
         return result.rows[0] as Supplier;
     }
 
-    // add(supplier: Supplier): void {
-    //     this.client.query('INSERT INTO suppliers (name, address, phone, email) VALUES ($1, $2, $3, $4)',
-    //         [supplier.name, supplier.address, supplier.phone, supplier.email], (err: Error, res: QueryResult) => {
-    //             if (err) {
-    //                 console.log(err.message);
-    //                 throw new Error(err.message);
-    //             } else {
-    //                 console.log(res);
-    //             }
-    //         });
-    // }
-
     async add(supplier: Supplier, userId: number): Promise<void> {
         // INSERT INTO suppliers (name, address, phone, email) VALUES ($1, $2, $3, $4) RETURNING _id
         // INSERT INTO supplier_owners (supplierid, userid) VALUES ($1, $2)
@@ -366,6 +369,13 @@ class PGSupplierRepository {
                 console.log(res);
             }
         });
+    }
+
+    async deleteBulk(ids: number[]): Promise<void> {
+        // DELETE FROM suppliers WHERE _id IN ($1, $2, $3, ...)
+        const queryPlaceholders = ids.map((id, index) => `$${index + 1}`).join(', ');
+        const query = `DELETE FROM suppliers WHERE _id IN (${queryPlaceholders})`;
+        this.client.query(query, ids);
     }
 
     async getCount(): Promise<number> {
@@ -462,6 +472,13 @@ class PGComboRepository {
                 console.log(res);
             }
         });
+    }
+
+    async deleteBulk(ids: number[]): Promise<void> {
+        // DELETE FROM combos WHERE _id IN ($1, $2, $3, ...)
+        const queryPlaceholders = ids.map((id, index) => `$${index + 1}`).join(', ');
+        const query = `DELETE FROM combos WHERE _id IN (${queryPlaceholders})`;
+        this.client.query(query, ids);
     }
 
     async getCount(): Promise<number> {

@@ -195,6 +195,37 @@ function setupRoutes(app: Express, service: PGService) {
         }
     });
 
+    // DELETE /api/boxes/ - deletes more boxes
+    app.delete('/api/boxes/', async (req, res) => {
+        /*
+        #swagger.tags = ['Boxes']
+        #swagger.description = 'Endpoint to delete more boxes'
+        #swagger.parameters['ids'] = {
+            in: 'body',
+            description: 'Array of box ids (int)',
+            required: true,
+            schema: [1, 2, 3]
+        }
+        #swagger.parameters['sessiontoken'] = {
+            in: 'header',
+            description: 'Session token',
+            required: true,
+            type: 'string'
+        }
+        #swagger.responses[200] = { description: 'Boxes deleted' }
+        #swagger.responses[400] = { description: 'Bad request' }
+        */
+       
+        const token = req.headers.sessiontoken as string;
+        const ids = req.body as number[];
+        try {
+            await service.deleteBoxes(ids, token);
+            res.status(200).send("Boxes deleted");
+        } catch (error: any) {
+            res.status(400).send(error.message);
+        }
+    });
+
     // GET /api/wrappers/pages - returns the number of pages of wrappers
     app.get('/api/wrappers/pages', async (req, res) => {
         /*
@@ -370,6 +401,36 @@ function setupRoutes(app: Express, service: PGService) {
         try {
             await service.deleteWrapper(id, token);
             res.status(200).send("Wrapper deleted");
+        } catch (error: any) {
+            res.status(400).send(error.message);
+        }
+    });
+
+    // DELETE /api/wrappers - bulk deletes wrappers
+    app.delete('/api/wrappers', async (req, res) => {
+        /*
+        #swagger.tags = ['Wrappers']
+        #swagger.description = 'Endpoint to bulk delete wrappers'
+        #swagger.parameters['ids'] = {
+            in: 'body',
+            description: 'Wrapper ids to delete',
+            required: true,
+            schema: [1, 2, 3]
+        }
+        #swagger.parameters['sessiontoken'] = {
+            in: 'header',
+            description: 'Session token',
+            required: true,
+            type: 'string'
+        }
+        #swagger.responses[200] = { description: 'Wrappers deleted' }
+        #swagger.responses[400] = { description: 'Bad request' }
+        */
+        const ids = (req.body.ids) as number[];
+        const token = req.headers.sessiontoken as string;
+        try {
+            await service.deleteWrappers(ids, token);
+            res.status(200).send("Wrappers deleted");
         } catch (error: any) {
             res.status(400).send(error.message);
         }
@@ -596,6 +657,37 @@ function setupRoutes(app: Express, service: PGService) {
         }
     });
 
+    // DELETE /api/suppliers/ - bulk deletes suppliers
+    app.delete('/api/suppliers/', async (req, res) => {
+        /*
+        #swagger.tags = ['Suppliers']
+        #swagger.description = 'Endpoint to bulk delete suppliers'
+        #swagger.parameters['ids'] = {
+            in: 'body',
+            description: 'Supplier ids (int)',
+            required: true,
+            schema: [1, 2, 3]
+        }
+        #swagger.parameters['sessiontoken'] = {
+            in: 'header',
+            description: 'Session token',
+            required: true,
+            type: 'string'
+        }
+        #swagger.responses[200] = { description: 'Suppliers deleted' }
+        #swagger.responses[400] = { description: 'Bad request' }
+        */
+        const ids = (req.body.ids) as number[];
+        const token = req.headers.sessiontoken as string;
+        try {
+            await service.deleteSuppliers(ids, token);
+            res.status(200).send("Suppliers deleted");
+        } catch (error: any) {
+            res.status(400).send(error.message);
+        }
+    });
+
+
     // GET /api/boxes/filter/:size - returns boxes larger than the given size
     app.get('/api/boxes/filter/:size', async (req, res) => {
         /*
@@ -808,6 +900,38 @@ function setupRoutes(app: Express, service: PGService) {
         try {
             await service.deleteCombo(id, token);
             res.status(200).send("Combo deleted");
+        } catch (error: any) {
+            res.status(400).send(error.message);
+        }
+    });
+
+    // DELETE /api/combos - bulk deletes combos
+    app.delete('/api/combos', async (req, res) => {
+        /*
+        #swagger.tags = ['Combos']
+        #swagger.description = 'Endpoint to bulk delete combos'
+        #swagger.parameters['ids'] = {
+            in: 'body',
+            description: 'Combo ids to delete',
+            required: true,
+            schema: [1, 2, 3]
+        }
+        #swagger.parameters['sessiontoken'] = {
+            in: 'header',
+            description: 'Session token',
+            required: true,
+            type: 'string'
+        }
+        #swagger.responses[200] = { description: 'Combos deleted' }
+        #swagger.responses[400] = { description: 'Invalid combo ids' }
+        */
+        const ids = (req.body.ids) as number[];
+
+        const token = req.headers.sessiontoken as string;
+
+        try {
+            await service.deleteCombos(ids, token);
+            res.status(200).send("Combos deleted");
         } catch (error: any) {
             res.status(400).send(error.message);
         }

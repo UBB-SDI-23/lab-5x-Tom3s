@@ -101,6 +101,20 @@ class PGService {
         this.boxRepository.delete(id);
     }
 
+    async deleteBoxes(ids: number[], token: string): Promise<void> {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to delete boxes.");
+        }
+
+        if (sessionDetails.role !== "admin") {
+            throw new Error("Error: Only admins can bulk delete boxes.");
+        }
+
+        this.boxRepository.deleteBulk(ids);
+    }
+
     // Wrapper Actions
     async getAllWrappers(): Promise<Wrapper[]> {
         const wrappers: Wrapper[] = await this.wrapperRepository.getAll();
@@ -177,6 +191,20 @@ class PGService {
         this.wrapperRepository.delete(id);
     }
 
+    async deleteWrappers(ids: number[], token: string): Promise<void> {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to delete wrappers.");
+        }
+
+        if (sessionDetails.role !== "admin") {
+            throw new Error("Error: Only admins can bulk delete wrappers.");
+        }
+
+        this.wrapperRepository.deleteBulk(ids);
+    }
+
     // Supplier Actions
     async getAllSuppliers(): Promise<Supplier[]> {
         return this.supplierRepository.getAll();
@@ -246,6 +274,20 @@ class PGService {
             }
         }
         this.supplierRepository.delete(id);
+    }
+
+    async deleteSuppliers(ids: number[], token: string): Promise<void> {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to delete suppliers.");
+        }
+
+        if (sessionDetails.role !== "admin") {
+            throw new Error("Error: Only admins can bulk delete suppliers.");
+        }
+
+        this.supplierRepository.deleteBulk(ids);
     }
 
     async addWrapperToSupplier(supplierId: number, wrapperId: number, token: string): Promise<void> {
@@ -362,6 +404,20 @@ class PGService {
         }
 
         this.comboRepository.delete(id);
+    }
+
+    async deleteCombos(ids: number[], token: string): Promise<void> {
+        const sessionDetails = this.verifyToken(token);
+
+        if (!sessionDetails) {
+            throw new Error("Error: Invalid token! Please log in or register to delete combos.");
+        }
+
+        if (sessionDetails.role !== "admin") {
+            throw new Error("Error: Only admins can bulk delete combos.");
+        }
+
+        this.comboRepository.deleteBulk(ids);
     }
 
     async getPageOfBoxes(page: number, pageLength: number = this.defaultPageLength): Promise<Promise<Box[]>> {
