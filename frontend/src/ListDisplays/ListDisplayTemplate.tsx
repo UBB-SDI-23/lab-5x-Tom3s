@@ -172,7 +172,7 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
 
     getTable(): JSX.Element {
         return (
-            <Table striped bordered hover variant="dark" className="element-list" id={this.typeName + "-list"} >
+            <Table striped bordered hover variant="dark" className="element-list" id={this.typeName + "-list"} align="center" responsive>
                 <thead>
                     <tr>
                         {this.getTableHeaderList().map((header: string) => {
@@ -225,7 +225,7 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
     getGoToPage(): JSX.Element {
         return (
             <Form noValidate onSubmit={this.handleGoToPage} >
-                <InputGroup className="mb-3">
+                <InputGroup className="mb-3" >
                     <Form.Control type="number" placeholder="Go to page" min={1} max={this.state.pageCount - 1} />
                     <Button variant="primary" type="submit">Go</Button>
                 </InputGroup>
@@ -293,14 +293,14 @@ abstract class ListDisplayTemplate extends React.Component<{}, ListDisplayTempla
             <Fragment>
                 {this.getTable()}
                 <Row>
-                    <Col xs={3}>
+                    <Col>
                         {this.getPagination()}
+                    </Col>
+                    <Col>
+                        {this.getAddItemButton()}
                     </Col>
                     <Col xs={2}>
                         {this.getGoToPage()}
-                    </Col>
-                    <Col xs={1}>
-                        {this.getAddItemButton()}
                     </Col>
                 </Row>
                 {this.getDeleteModal()}
