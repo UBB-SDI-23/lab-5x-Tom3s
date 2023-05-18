@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react"
 import { useNavigate, useSearchParams, Navigate } from "react-router-dom";
 import { apiAccess } from "../models/endpoints";
-import { Button, ButtonGroup, Col, Container, Fade, ListGroup, Offcanvas, Row } from "react-bootstrap";
+import { Button, ButtonGroup, Col, Container, Fade, Form, InputGroup, ListGroup, Offcanvas, Row } from "react-bootstrap";
 import { loadavg } from "os";
 import { destroyLocalSessionDetails } from "../models/entities";
 import UserDetailsOffCanvas from "../Elements/userDetails";
@@ -15,6 +15,8 @@ const ProfilePage = () => {
     const [user, setUser] = useState({} as any);
     const [loading, setLoading] = useState(true);
     const [roleUpdateResponse, setRoleUpdateResponse] = useState("");
+    // const [validPageLength, setValidPageLength] = useState(true);
+    const [pageLengthResponse, setPageLengthResponse] = useState("");
 
     // const userId: number = parseInt(searchParams.get("id") || "-1");
     const [userId, setUserId] = useState(parseInt(searchParams.get("id") || "-1"));
@@ -86,6 +88,58 @@ const ProfilePage = () => {
                     setUserId(user.userid);
                 }, 0);
             });
+    }
+
+    function fetchNewPageLength() {
+        if (localStorage.getItem("role") === "admin") {
+            fetch(new apiAccess().userWithoutLists(parseInt(localStorage.getItem("userid") || "")).url,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                }
+            )
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    localStorage.setItem("pagelength", data.pagelength);
+                });
+        }
+    }
+
+    function putDefaultPageLength(pageLength: number) {
+        console.log(pageLength);
+        fetch(new apiAccess().updatePageLength(pageLength).url,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'sessiontoken': localStorage.getItem("sessiontoken") || ""
+                }
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                setPageLengthResponse(data);
+                setTimeout(() => {
+                    setPageLengthResponse("");
+                }, 3000);
+
+                fetchNewPageLength();
+            });
+    }
+
+    function handleSetDefaultPageLength(event: any) {
+        event.preventDefault();
+        const pageLength = event.target.elements[0].value;
+        // if (pageLength > 0 && pageLength <= 50) {
+        //     setValidPageLength(true);
+        putDefaultPageLength(pageLength);
+
+        // } else {
+        //     setValidPageLength(false);
+        // }
     }
 
     return (
@@ -171,19 +225,38 @@ const ProfilePage = () => {
                                 </Col>
                             </Row>
 
-                            {
-                                localStorage.getItem("role") === "admin" &&
-                                <><ButtonGroup aria-label="Basic example">
-                                    <Button variant="secondary" disabled={true}>Set Role: </Button>
-                                    <Button variant="secondary" onClick={() => handleRoleChange("user")} active={user.role === "user"}>User</Button>
-                                    <Button variant="secondary" onClick={() => handleRoleChange("moderator")} active={user.role === "moderator"}>Moderator</Button>
-                                    <Button variant="secondary" onClick={() => handleRoleChange("admin")} active={user.role === "admin"}>Admin</Button>
-                                </ButtonGroup>
-                                    <Fade in={roleUpdateResponse !== ""}>
-                                        <label>{roleUpdateResponse}</label>
-                                    </Fade>
-                                </>
-                            }
+                            <Row>
+
+                                {
+                                    localStorage.getItem("role") === "admin" &&
+                                    <Col>
+                                        <ButtonGroup aria-label="Basic example">
+                                            <Button variant="secondary" disabled={true}>Set Role: </Button>
+                                            <Button variant="secondary" onClick={() => handleRoleChange("user")} active={user.role === "user"}>User</Button>
+                                            <Button variant="secondary" onClick={() => handleRoleChange("moderator")} active={user.role === "moderator"}>Moderator</Button>
+                                            <Button variant="secondary" onClick={() => handleRoleChange("admin")} active={user.role === "admin"}>Admin</Button>
+                                        </ButtonGroup>
+                                        <Fade in={roleUpdateResponse !== ""}>
+                                            <label>{roleUpdateResponse}</label>
+                                        </Fade>
+                                    </Col>
+                                }
+                                {
+                                    localStorage.getItem("role") === "admin" &&
+                                    user.role === "admin" &&
+                                    <Col>
+                                        <Form noValidate onSubmit={handleSetDefaultPageLength} >
+                                            <InputGroup className="mb-3" >
+                                                <Form.Control type="number" placeholder="Default Page Length" />
+                                                <Button variant="primary" type="submit">Set</Button>
+                                            </InputGroup>
+                                            <Form.Text className="text-muted">
+                                                {pageLengthResponse}
+                                            </Form.Text>
+                                        </Form>
+                                    </Col>
+                                }
+                            </Row>
 
                         </Fragment>
                 }

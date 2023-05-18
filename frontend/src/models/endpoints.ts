@@ -1,7 +1,7 @@
 export class apiAccess {
     public url: string;
     constructor() {
-        this.url = "http://localhost/api";
+        this.url = "http://34.32.135.255/api";
     }
 
     boxes(): apiAccess {
@@ -38,7 +38,7 @@ export class apiAccess {
     }
 
     page(page: number): apiAccess {
-        this.url += "?page=" + page;
+        this.url += "?page=" + page + "&pageLength=" + localStorage.getItem('pagelength');
         return this;
     }
 
@@ -84,6 +84,11 @@ export class apiAccess {
 
     updateRole(id: number) {
         this.url += "/users/" + id + "/role";
+        return this;
+    }
+
+    updatePageLength(length: number) {
+        this.url += "/users/pagelength/" + length;
         return this;
     }
 }
