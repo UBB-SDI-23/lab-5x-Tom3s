@@ -67,7 +67,7 @@ class UserRepository {
 
 
     async getUserById(id: number): Promise<UserDetails> {
-        const query = "SELECT u.username, u.role, ud.userid, ud.email, ud.birthday, ud.gender, ud.nickname, ud.eyecolor FROM users u LEFT JOIN userdetails ud ON u.id = ud.userid WHERE u.id = $1;";
+        const query = "SELECT u.username, u.role, ud.userid, ud.email, ud.birthday, ud.gender, ud.nickname, ud.eyecolor, ud.pagelength FROM users u LEFT JOIN userdetails ud ON u.id = ud.userid WHERE u.id = $1;";
         const values = [id];
         const result = await this.client.query(query, values);
         return result.rows[0] as UserDetails;
@@ -81,7 +81,7 @@ class UserRepository {
     }
 
     async checkIfUserExists(id: number): Promise<boolean> {
-        const query = "SELECT * FROM users WHERE id = $1";
+        const query = "SELECT id FROM users WHERE id = $1";
         const values = [id];
         const result = await this.client.query(query, values);
         return result.rowCount > 0;
