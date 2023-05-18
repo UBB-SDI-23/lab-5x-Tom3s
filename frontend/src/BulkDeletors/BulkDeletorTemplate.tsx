@@ -1,6 +1,6 @@
 import React from "react";
 import { Fragment } from "react";
-import { Pagination, Row, Col, Button, Modal, Form, Table } from "react-bootstrap";
+import { Pagination, Row, Col, Button, Modal, Form, Table, Container } from "react-bootstrap";
 import { Navigate } from "react-router-dom";
 
 interface BulkDeletorTemplateState {
@@ -254,21 +254,23 @@ abstract class BulkDeletorTemplate extends React.Component<{}, BulkDeletorTempla
 
         return (
             <Fragment>
-                {navigate}
-                {this.getDeleteModal()}
-                {this.getConfirmModal()}
-                {this.getTable()}
-                <Row>
-                    <Col>
-                        {this.getPagination()}
-                    </Col>
-                    <Col>
-                        {this.getDeletButton()}
-                    </Col>
-                    <Col>
-                        <Button variant="secondary" onClick={() => this.navigate("/home?type=" + this.typeNumber)}>Go Back</Button>
-                    </Col>
-                </Row>
+                <Container>
+                    {navigate}
+                    {this.getDeleteModal()}
+                    {this.getConfirmModal()}
+                    {this.getTable()}
+                    <Row>
+                        <Col>
+                            {this.getPagination()}
+                        </Col>
+                        <Col>
+                            {this.getDeletButton()}
+                        </Col>
+                        <Col>
+                            <Button variant="secondary" onClick={() => this.navigate("/home?type=" + this.typeNumber)}>Go Back</Button>
+                        </Col>
+                    </Row>
+                </Container>
             </Fragment>
         );
     }

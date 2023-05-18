@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Navigate } from "react-router-dom";
 import UserDetailsOffCanvas from "../Elements/userDetails";
 import React from "react";
-import { Badge, Button, Col, Form, Row, Toast, ToastContainer } from "react-bootstrap";
+import { Badge, Button, Col, Container, Form, Row, Toast, ToastContainer } from "react-bootstrap";
 import { render } from "react-dom";
 
 interface ItemEditorState {
@@ -212,10 +212,12 @@ abstract class ItemEditor extends React.Component<{}, ItemEditorState> {
     render() {
         return (
             <Fragment>
+                <Container>
                 {this.state.navigate}
                 {this.getTitleElement()}
                 {this.getFormElement()}
                 {this.getToastContainer()}
+                </Container>
             </Fragment>
         )
     }
