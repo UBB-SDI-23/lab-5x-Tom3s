@@ -583,11 +583,14 @@ class PGService {
 
         const token = jwt.sign(data, jwtSecretKey);
 
+        const pageLength = this.userRepository.getUserPageLength(userId);
+
         return {
             "sessiontoken": token,
             "role": role,
             "userid": userId,
-            "username": username
+            "username": username,
+            "pagelength": pageLength
         };
     }
 
@@ -698,6 +701,20 @@ class PGService {
         verifyUserDetails(details);
 
         this.userRepository.updateUserDetails(id, details);
+    }
+
+    updateAllUserPageLengths(token: string, pagelength: number): void {
+        const sessionDetails = this.verifyToken(token);
+
+        if (sessionDetails === null) {
+            throw new Error("Invalid token");
+        }
+
+        if (sessionDetails.role !== "admin") {
+            throw new Error("Only an admin can modify the default pagelength");
+        }
+
+        this.userRepository.setDefaultUserPageLength(pagelength);
     }
 }
 

@@ -47,7 +47,7 @@ require('dotenv').config();
 
 const service = new PGService();
 
-setupRoutes(app);
+setupRoutes(app, service);
 
 setupSwagger(app);
 

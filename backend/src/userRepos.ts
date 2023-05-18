@@ -88,8 +88,26 @@ class UserRepository {
     }
 
     updateUserDetails(id: number, details: any): void {
-        const query = "UPDATE userdetails SET nickname = $1, email = $2, birthday = $3, gender = $4, eyecolor = $5 WHERE userid = $6";
-        const values = [details.nickname, details.email, details.birthday, details.gender, details.eyecolor, id];
+        const query = "UPDATE userdetails SET nickname = $1, email = $2, birthday = $3, gender = $4, eyecolor = $5, pagelength = $6 WHERE userid = $7";
+        const values = [details.nickname, details.email, details.birthday, details.gender, details.eyecolor, details.pagelength, id];
+        this.client.query(query, values);
+    }
+
+    async getUserPageLength(id: number): Promise<number> {
+        const query = "SELECT pagelength FROM userdetails WHERE userid = $1";
+        const values = [id]
+        const result = await this.client.query(query, values);
+        if (result.rows[0].pagelength == null) {
+            const query2 = "SELECT default_pagelength FROM cache_table";
+            const result2 = await this.client.query(query2);
+            return result2.rows[0].default_pagelength;
+        }
+        return result.rows[0].pagelength;
+    }
+
+    setDefaultUserPageLength(pagelength: number): void {
+        const query = "UPDATE cache_table SET default_pagelength = $1";
+        const values = [pagelength];
         this.client.query(query, values);
     }
 }
