@@ -36,9 +36,14 @@ function setupRoutes(app: Express, service: PGService) {
             type: 'boolean'
         }
         */
-        var query = req.query;
+        const query = req.query;
         if (query.page) {
-            var pageNumber = parseInt(query.page as string);
+            const pageNumber = parseInt(query.page as string);
+            if (query.pageLength) {
+                const pageLength = parseInt(query.pageLength as string);
+                res.send(await service.getPageOfBoxes(pageNumber, pageLength));
+                return;
+            }
             res.send(await service.getPageOfBoxes(pageNumber));
             return;
         }
@@ -255,9 +260,14 @@ function setupRoutes(app: Express, service: PGService) {
             type: 'boolean'
         }
         */
-        var query = req.query;
+        const query = req.query;
         if (query.page) {
-            var pageNumber = parseInt(query.page as string);
+            const pageNumber = parseInt(query.page as string);
+            if (query.pageLength) {
+                const pageLength = parseInt(query.pageLength as string);
+                res.send(await service.getPageOfWrappers(pageNumber, pageLength));
+                return;
+            }
             res.send(await service.getPageOfWrappers(pageNumber));
             return;
         }
@@ -466,9 +476,14 @@ function setupRoutes(app: Express, service: PGService) {
             type: 'boolean'
         }
         */
-        var query = req.query;
+        const query = req.query;
         if (query.page) {
-            var pageNumber = parseInt(query.page as string);
+            const pageNumber = parseInt(query.page as string);
+            if (query.pageLength) {
+                const pageLength = parseInt(query.pageLength as string);
+                res.send(await service.getPageOfSuppliers(pageNumber, pageLength));
+                return;
+            }
             res.send(await service.getPageOfSuppliers(pageNumber));
             return;
         }
@@ -758,9 +773,14 @@ function setupRoutes(app: Express, service: PGService) {
             type: 'boolean'
         }
         */
-        var query = req.query;
+        const query = req.query;
         if (query.page) {
-            var pageNumber = parseInt(query.page as string);
+            const pageNumber = parseInt(query.page as string);
+            if (query.pageLength) {
+                const pageLength = parseInt(query.pageLength as string);
+                res.send(await service.getPageOfCombos(pageNumber, pageLength));
+                return;
+            }
             res.send(await service.getPageOfCombos(pageNumber));
             return;
         }
@@ -1177,6 +1197,34 @@ function setupRoutes(app: Express, service: PGService) {
         try {
             await service.updateUserDetails(sessiontoken, id, details);
             res.status(200).send('Updated user details');
+        }
+        catch (error: any) {
+            res.status(403).send(error.message);
+        }
+    });
+
+    // PUT /api/users/pagelength - updates all user's page length
+    app.put('/api/users/pagelength/:length', async (req, res) => {
+        /*
+        #swagger.tags = ['Users']
+        #swagger.description = 'Endpoint to update all user\'s page length'
+        #swagger.parameters['length'] = {
+            in: 'path',
+            description: 'Page length (int)'
+        }
+        #swagger.parameters['sessiontoken'] = {
+            in: 'header',
+            description: 'Session token (string)'
+        }
+        #swagger.responses[200] = { description: 'Updated all user\'s page length' }
+        #swagger.responses[403] = { description: 'Not authorized' }
+        */
+        const length = parseInt(req.params.length);
+        const sessiontoken = req.headers.sessiontoken as string;
+
+        try {
+            await service.updateAllUserPageLengths(sessiontoken, length);
+            res.status(200).send('Updated all user\'s page length');
         }
         catch (error: any) {
             res.status(403).send(error.message);
