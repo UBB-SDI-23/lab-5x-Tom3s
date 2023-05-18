@@ -97,10 +97,11 @@ class UserRepository {
         const query = "SELECT pagelength FROM userdetails WHERE userid = $1";
         const values = [id]
         const result = await this.client.query(query, values);
-        if (result.rows[0].pagelength == null) {
-            const query2 = "SELECT default_pagelength FROM cache_table";
+        console.log(result.rows[0]);
+        if (result.rows[0].pagelength === null) {
+            const query2 = "SELECT value FROM cache_table WHERE key = 'default_pagelength'";
             const result2 = await this.client.query(query2);
-            return result2.rows[0].default_pagelength;
+            return result2.rows[0].value;
         }
         return result.rows[0].pagelength;
     }

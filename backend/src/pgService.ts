@@ -583,7 +583,9 @@ class PGService {
 
         const token = jwt.sign(data, jwtSecretKey);
 
-        const pageLength = this.userRepository.getUserPageLength(userId);
+        const pageLength = await this.userRepository.getUserPageLength(userId);
+
+        console.log("pagelength: " + pageLength);
 
         return {
             "sessiontoken": token,
