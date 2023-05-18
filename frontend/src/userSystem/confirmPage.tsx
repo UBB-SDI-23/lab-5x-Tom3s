@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom"
 import { apiAccess } from "../models/endpoints";
 
@@ -33,30 +33,32 @@ const ConfirmPage = () => {
 
     return (
         <Fragment>
-            {
-                loading ?
-                    <div className="d-flex justify-content-center">
-                        <div className="spinner-border" role="status">
-                            <span className="visually-hidden">Loading...</span>
+            <Container>
+                {
+                    loading ?
+                        <div className="d-flex justify-content-center">
+                            <div className="spinner-border" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
                         </div>
-                    </div>
-                    :
-                    (
-                        accepted ?
-                            <div>
-                                <h1>Account confirmed!</h1>
-                                <Button onClick={() => navigate("/login")}>Go to login</Button>
-                            </div>
-                            :
-                            <div>
-                                <h1>Account not confirmed!</h1>
-                                <br />
-                                <p>{response}</p>
-                                <Button onClick={() => navigate("/register")}>Go to register</Button>
-                            </div>
-                    )
+                        :
+                        (
+                            accepted ?
+                                <div>
+                                    <h1>Account confirmed!</h1>
+                                    <Button onClick={() => navigate("/login")}>Go to login</Button>
+                                </div>
+                                :
+                                <div>
+                                    <h1>Account not confirmed!</h1>
+                                    <br />
+                                    <p>{response}</p>
+                                    <Button onClick={() => navigate("/register")}>Go to register</Button>
+                                </div>
+                        )
 
-            }
+                }
+            </Container>
         </Fragment>
     )
 }

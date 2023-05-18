@@ -1,0 +1,8 @@
+backend/diagrams/**/*
+backend/databaseScripts/**/*
+backend/databaseScripts/
+backend/mockData/**/*
+backend/mockData/
+**/*.session.sql
+**/*.sql
+**/*.py

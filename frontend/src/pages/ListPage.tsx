@@ -1,5 +1,5 @@
 import { useState, Fragment, useEffect } from "react";
-import { ToggleButtonGroup, ToggleButton, Button, Row, Col, Offcanvas, ListGroup } from "react-bootstrap";
+import { ToggleButtonGroup, ToggleButton, Button, Row, Col, Offcanvas, ListGroup, Container } from "react-bootstrap";
 import { BoxList, WrapperList, SupplierList, ComboList } from "../ListDisplays/ListClasses";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { destroyLocalSessionDetails } from "../models/entities";
@@ -55,22 +55,24 @@ const ListPage = () => {
 
     return (
         <Fragment>
-            <Row>
-                <Col className="d-flex justify-content-center">
-                    <ToggleButtonGroup type="radio" name="options" defaultValue={listType}>
-                        <ToggleButton variant="outline-secondary" id="tbg-radio-1" value={1} onClick={() => setListType(1)}>Boxes</ToggleButton>
-                        <ToggleButton variant="outline-secondary" id="tbg-radio-2" value={2} onClick={() => setListType(2)}>Wrappers</ToggleButton>
-                        <ToggleButton variant="outline-secondary" id="tbg-radio-3" value={3} onClick={() => setListType(3)}>Supplier</ToggleButton>
-                        <ToggleButton variant="outline-secondary" id="tbg-radio-4" value={4} onClick={() => setListType(4)}>Combos</ToggleButton>
-                    </ToggleButtonGroup>
-                </Col>
+            <Container>
+                <Row>
+                    <Col className="d-flex justify-content-center">
+                        <ToggleButtonGroup type="radio" name="options" defaultValue={listType}>
+                            <ToggleButton variant="outline-secondary" id="tbg-radio-1" value={1} onClick={() => setListType(1)}>Boxes</ToggleButton>
+                            <ToggleButton variant="outline-secondary" id="tbg-radio-2" value={2} onClick={() => setListType(2)}>Wrappers</ToggleButton>
+                            <ToggleButton variant="outline-secondary" id="tbg-radio-3" value={3} onClick={() => setListType(3)}>Supplier</ToggleButton>
+                            <ToggleButton variant="outline-secondary" id="tbg-radio-4" value={4} onClick={() => setListType(4)}>Combos</ToggleButton>
+                        </ToggleButtonGroup>
+                    </Col>
 
-                <Col className="d-flex justify-content-end">
-                    
-                </Col>
+                    <Col className="d-flex justify-content-end">
 
-            </Row>
-            {list}
+                    </Col>
+
+                </Row>
+                {list}
+            </Container>
         </Fragment>
     );
 };
