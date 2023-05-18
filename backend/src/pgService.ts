@@ -706,6 +706,11 @@ class PGService {
     }
 
     updateAllUserPageLengths(token: string, pagelength: number): void {
+
+        if (pagelength <= 0 || pagelength > 50) {
+            throw new Error("Invalid Page Length");
+        }
+
         const sessionDetails = this.verifyToken(token);
 
         if (sessionDetails === null) {

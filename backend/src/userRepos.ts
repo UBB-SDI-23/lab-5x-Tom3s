@@ -70,7 +70,13 @@ class UserRepository {
         const query = "SELECT u.username, u.role, ud.userid, ud.email, ud.birthday, ud.gender, ud.nickname, ud.eyecolor, ud.pagelength FROM users u LEFT JOIN userdetails ud ON u.id = ud.userid WHERE u.id = $1;";
         const values = [id];
         const result = await this.client.query(query, values);
-        return result.rows[0] as UserDetails;
+        const user = result.rows[0];
+        if (user.pagelength === null) {
+            const query2 = "SELECT value FROM cache_table WHERE key = 'default_pagelength'";
+            const result2 = await this.client.query(query2);
+            user.pagelength = parseInt(result2.rows[0].value);
+        }
+        return user as UserDetails;
     }
 
     async getUsernameById(id: number): Promise<string> {
@@ -101,13 +107,13 @@ class UserRepository {
         if (result.rows[0].pagelength === null) {
             const query2 = "SELECT value FROM cache_table WHERE key = 'default_pagelength'";
             const result2 = await this.client.query(query2);
-            return result2.rows[0].value;
+            return parseInt(result2.rows[0].value);
         }
         return result.rows[0].pagelength;
     }
 
     setDefaultUserPageLength(pagelength: number): void {
-        const query = "UPDATE cache_table SET default_pagelength = $1";
+        const query = "UPDATE cache_table SET value = $1 WHERE key = 'default_pagelength'";
         const values = [pagelength];
         this.client.query(query, values);
     }
