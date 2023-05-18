@@ -1,7 +1,7 @@
 import swaggerUi from 'swagger-ui-express';
 import { Express, Request, Response } from 'express';
 
-function initSwagger(app: Express, port: number) {
+function initSwagger(app: Express) {
     const swaggerAutogen = require('swagger-autogen')()
 
     const outputFile = './swagger_output.json'
@@ -13,7 +13,7 @@ function initSwagger(app: Express, port: number) {
             title: 'API Documentation for Boxes app',
             description: 'Description',
         },
-        host: '34.32.135.255:80',
+        host: process.env.BACKEND_HOST + ':80',
         schemes: ['http'],
     };
 
@@ -23,7 +23,7 @@ function initSwagger(app: Express, port: number) {
 // import swaggerFile from './swagger_output.json';
 import fs from 'fs';
 
-function applySwagger(app: Express, port: number) {
+function applySwagger(app: Express) {
     var swaggerFile = JSON.parse(fs.readFileSync('./src/swagger_output.json', 'utf-8'))
     // Swagger UI
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
@@ -35,8 +35,8 @@ function applySwagger(app: Express, port: number) {
     });
 }
 
-function setupSwagger(app: Express, port: number) {
-    initSwagger(app, port);
+function setupSwagger(app: Express) {
+    initSwagger(app);
     // applySwagger(app, port);
     // try applying swagger every second until it works
 
@@ -44,7 +44,7 @@ function setupSwagger(app: Express, port: number) {
 
     var tryApplySwagger = function () {
         try {
-            applySwagger(app, port);
+            applySwagger(app);
             console.log('Swagger applied');
             clearInterval(repeat);
           } catch (error) {
