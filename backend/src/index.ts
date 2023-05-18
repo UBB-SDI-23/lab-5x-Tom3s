@@ -40,7 +40,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'sessiontoken']
 }));
 
-const port = parseInt(process.env.DEFAULT_PORT || "80");
+const port = parseInt(process.env.DEFAULT_PORT || "3000");
 app.use(express.json());
 
 require('dotenv').config();
