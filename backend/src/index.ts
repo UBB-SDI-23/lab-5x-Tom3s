@@ -40,14 +40,14 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'sessiontoken']
 }));
 
-const port = parseInt(process.env.DEFAULT_PORT || "3000");
+const port = parseInt(process.env.DEFAULT_PORT || "80");
 app.use(express.json());
 
 require('dotenv').config();
 
 const service = new PGService();
 
-setupRoutes(app);
+setupRoutes(app, service);
 
 setupSwagger(app);
 
